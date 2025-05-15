@@ -1,12 +1,11 @@
-import { Outlet } from "react-router-dom";
-
 import styled from "styled-components";
 import NavBar from "../component/navbar/NavBar";
 import Footer from "../component/footer/Footer";
+import Main from "../adminComponent/main/Main";
 
 const StyledAppLayout = styled.div`
   width: 100%;
-  height: auto;
+  height: 100vh;
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: auto 1fr auto;
@@ -26,7 +25,7 @@ function AppLayout() {
     <>
       <StyledAppLayout>
         <NavBar />
-        <Outlet />
+        <Main />
         <Footer />
       </StyledAppLayout>
     </>

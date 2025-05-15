@@ -145,6 +145,12 @@ select:focus {
   outline-offset: -1px;
 }
 
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
+}
+
 table {
     width: 100%;
     border-collapse: collapse;

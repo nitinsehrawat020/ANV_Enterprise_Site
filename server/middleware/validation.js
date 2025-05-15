@@ -11,14 +11,8 @@ export function validateRegisterUser(req, res, next) {
     if (!firstName || !lastName || !email || !password || !confirmedPassword) {
       return res.status(400).json({
         status: "error",
+        error: true,
         message: "please provide all the fields",
-        success: false,
-      });
-    }
-    if (password.length < 6) {
-      return res.status(400).json({
-        status: "error",
-        message: "password should be at least 6 characters long",
         success: false,
       });
     }
@@ -26,6 +20,13 @@ export function validateRegisterUser(req, res, next) {
       return res.status(400).json({
         status: "error",
         message: "password and confirmed password should be same",
+        success: false,
+      });
+    }
+    if (password.length < 6) {
+      return res.status(400).json({
+        status: "error",
+        message: "password should be at least 6 characters long",
         success: false,
       });
     }
@@ -39,7 +40,7 @@ export function validateRegisterUser(req, res, next) {
     next();
   } catch (error) {
     console.log(error);
-    res.status(500).json({
+    return res.status(500).json({
       status: "error",
       message: "Internal server error",
       success: false,

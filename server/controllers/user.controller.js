@@ -16,17 +16,24 @@ import mongoose from "mongoose";
 
 export async function registerUserController(req, res) {
   try {
-    const { firstName, lastName, email, password, mobileNumber } = req.body;
+    const {
+      firstName,
+      lastName,
+      email,
+      password,
+      mobileNumber,
+      addressDetails,
+    } = req.body;
 
-    UserModel.findOne({ email }).then((user) => {
-      if (user) {
-        return res.status(400).json({
-          status: "error",
-          message: `${user.email} already exist please use different email`,
-          success: false,
-        });
-      }
-    });
+    const user = await UserModel.findOne({ email });
+
+    if (user) {
+      return res.status(400).json({
+        status: "error",
+        message: `${user.email} already exist please use different email`,
+        success: false,
+      });
+    }
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
     const payload = {
@@ -35,6 +42,7 @@ export async function registerUserController(req, res) {
       email,
       password: hashedPassword,
       mobileNumber,
+      addressDetails,
     };
 
     const newUser = new UserModel(payload);
@@ -51,7 +59,7 @@ export async function registerUserController(req, res) {
       }),
     });
 
-    res.status(200).json({
+    return res.status(200).json({
       status: "success",
       message: "user registered successfully",
       success: true,
@@ -100,6 +108,7 @@ export async function verifyEmailController(req, res) {
 export async function loginUserController(req, res) {
   try {
     const { email, password } = req.body;
+    console.log(email, password);
 
     if (!email || !password) {
       return res.status(400).json({
@@ -153,11 +162,7 @@ export async function loginUserController(req, res) {
       message: "User login successfully",
       error: false,
       success: true,
-      data: {
-        user,
-        accessToken,
-        refreshToken,
-      },
+      data: { accessToken, refreshToken },
     });
   } catch (error) {
     return res
@@ -326,7 +331,7 @@ export async function verifyForgetPasswordOtp(req, res) {
     const currentTime = new Date().toISOString();
 
     if (user.forgetPasswordExpire < currentTime) {
-      res.status(400).json({
+      return res.status(400).json({
         message: "otp is expired",
         error: true,
         success: false,
@@ -334,7 +339,7 @@ export async function verifyForgetPasswordOtp(req, res) {
     }
 
     if (otp !== user.forgetPaswordOtp) {
-      res.status(400).json({
+      return res.status(400).json({
         message: "kindly enter the correct otp",
         error: true,
         success: false,

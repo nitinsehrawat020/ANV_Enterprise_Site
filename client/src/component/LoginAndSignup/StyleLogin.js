@@ -1,7 +1,8 @@
+import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 export const LoginSignupContainer = styled.div`
   width: 100%;
-  max-width: 1200px;
+  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -20,8 +21,8 @@ export const LoginSignupContainer = styled.div`
   }
 `;
 export const LoginContainer = styled.div`
-  align-self: stretch;
-  min-height: 536px;
+  height: fit-content;
+  width: fit-content;
 
   display: flex;
   justify-content: center;
@@ -39,8 +40,9 @@ export const LoginContainer = styled.div`
   }
 `;
 export const SignupContainer = styled.div`
-  align-self: stretch;
   display: flex;
+  width: fit-content;
+  height: fit-content;
   justify-content: center;
   align-items: center;
   flex-direction: column;
@@ -57,70 +59,9 @@ export const SignupContainer = styled.div`
   }
 `;
 
-export const OverlayContainer = styled.div`
-  align-self: stretch;
-  width: 100vw;
-  min-height: 600px;
-  max-width: 590px;
-
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  align-items: center;
-
-  background-color: var(--color-background-400);
-  padding: 1rem;
-
-  position: absolute;
-  z-index: 10;
-  transform: ${(props) =>
-    props.active ? "translate(300px, -0px)" : "translate(-270px, -0px)"};
-  transition: transform 0.5s ease-in-out;
-  transition-delay: 0.1s;
-  border-radius: ${(props) =>
-    props.active
-      ? "0 var(--br-l) var(--br-l) 0"
-      : " var(--br-l) 0 0 var(--br-l) "};
-
-  .image-container {
-    position: relative;
-    width: 100%;
-    height: 100%;
-  }
-
-  .image-container img {
-    position: absolute;
-    top: -150px;
-    left: 100px;
-    width: 90%;
-    transition: opacity 0.5s ease-in-out;
-    opacity: 0;
-  }
-
-  .image-container img.active {
-    opacity: 1;
-  }
-
-  @media (max-width: 1024px) {
-    display: none;
-    position: fixed;
-    max-width: 612px;
-    height: 535px;
-    border-radius: 0 0 var(--br-l) var(--br-l);
-    transform: translate(0px, -550px);
-
-    ${(props) => props.active && "transform: translate(0px, -550px)"}
-
-    .image-container img {
-      display: none;
-      width: 100%;
-      top: 50px;
-      left: 0;
-    }
-  }
-`;
-
 export const StyledFrom = styled.form`
+  /* width: min-content;
+  height: min-content; */
   display: flex;
   flex-wrap: wrap;
   /* flex-direction: column; */
@@ -128,7 +69,7 @@ export const StyledFrom = styled.form`
   align-items: center;
   width: 500px;
   padding: 0.4rem;
-  gap: 0.5rem;
+  gap: 1rem;
   p {
     display: flex;
     flex-direction: column;
@@ -141,7 +82,6 @@ export const StyledFrom = styled.form`
     flex-direction: column;
     align-items: start;
     justify-content: center;
-    width: 80%;
   }
 
   @media (max-width: 1024px) {
@@ -168,12 +108,13 @@ export const StyledFrom = styled.form`
       flex-direction: column;
       align-items: center;
       justify-content: start;
-      width: 80%;
+      width: 90%;
     }
   }
 `;
 export const StyledInput = styled.input`
   width: 190px;
+  height: 40px;
   padding: 0.4rem;
   border: none;
   border-radius: 5px;
@@ -194,14 +135,20 @@ export const StyledInput = styled.input`
   ${(props) =>
     props.id === "address" &&
     `
-  width: 390px;
-  padding: 0.4rem;
+  width: 400px;
+  
 `} 
 ${(props) =>
     props.hi === "login" &&
     `
     width: 80%;
     padding: 1rem;
+  `}
+  ${(props) =>
+    props.disabled &&
+    `
+    background-color: var(--color-primary-00);
+
   `}
 
   @media (max-width: 1024px) {
@@ -233,4 +180,60 @@ export const Label = styled.label`
   font-size: 1rem;
   font-family: var(--font-roboto);
   padding: 0.5rem;
+`;
+
+export const ForgotNavLink = styled(NavLink)`
+  display: block;
+  margin-right: auto;
+`;
+
+export const StyledLoginForm = styled.form`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 500px;
+  padding: 0.4rem;
+  gap: 1rem;
+
+  p {
+    align-self: flex-end;
+    margin-right: 50px;
+  }
+`;
+
+export const EmailLabel = styled.label`
+  color: var(--color-white-500);
+  align-self: flex-start;
+  margin-left: 40px;
+  font-size: 1rem;
+  font-family: var(--font-roboto);
+  padding: 0.5rem;
+`;
+
+export const StyledOtpForm = styled.form`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 500px;
+  padding: 0.4rem;
+  gap: 1rem;
+  p {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 4px;
+    border: 2px solid var(--color-background-400);
+    border-radius: 5px;
+  }
+  span {
+    width: 250px;
+    text-align: center;
+  }
+  input {
+    color: var(--color-white-50);
+    font-size: 0.8rem;
+  }
 `;

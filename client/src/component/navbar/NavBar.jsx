@@ -46,7 +46,7 @@ function NavBar() {
           </NavItem>
         </NavMenu>
         <NavBtn>
-          <NavBtnLink type="signup" to="/login">
+          <NavBtnLink type="signup" to="/signup">
             Sign Up{" "}
           </NavBtnLink>
           <NavBtnLink type="login" to="/login">
