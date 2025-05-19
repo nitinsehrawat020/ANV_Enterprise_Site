@@ -15,7 +15,6 @@ function VerifyOtp() {
   const location = useLocation();
   const email = location?.state || "";
   const navigate = useNavigate();
-  console.log(email);
 
   useEffect(() => {
     if (!email) {

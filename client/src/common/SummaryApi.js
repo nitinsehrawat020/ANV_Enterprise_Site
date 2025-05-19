@@ -9,6 +9,10 @@ const SummaryApi = {
     url: "/api/user/login",
     method: "post",
   },
+  Logout: {
+    url: "/api/user/logout",
+    method: "get",
+  },
   password: {
     url: "/api/user/forget-password",
     method: "put",
@@ -24,6 +28,10 @@ const SummaryApi = {
   refreshToken: {
     url: "/api/user/refresh-token",
     method: "post",
+  },
+  getUser: {
+    url: "/api/user/userInfo",
+    method: "get",
   },
   getWorker: {
     url: "api/worker/getWorker/681909a9e429bc250e2c4fa5",

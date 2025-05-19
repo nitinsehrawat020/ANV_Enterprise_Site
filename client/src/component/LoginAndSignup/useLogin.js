@@ -3,13 +3,16 @@ import { useNavigate } from "react-router-dom";
 import {
   forgotPasswordApi,
   loginApi,
+  logoutUser,
   ResetPasswordApi,
   submitOtpApi,
 } from "../../services/userApi";
 import toast from "react-hot-toast";
+import { useQueryClient } from "@tanstack/react-query";
 
 export function useLogin() {
-  const navigation = useNavigate();
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   const { mutate: login, isLoading } = useMutation({
     mutationFn: ({ email, password }) => loginApi({ email, password }),
@@ -17,12 +20,13 @@ export function useLogin() {
       toast.success(user.data.message);
       localStorage.setItem("accessToken", user.data.data.accessToken);
       localStorage.setItem("refreshToken", user.data.data.refreshToken);
-      console.log(user);
+      navigate("/");
     },
     onError: (error) => {
       console.log(error);
     },
   });
+
   return { login, isLoading };
 }
 
@@ -63,7 +67,7 @@ export function useResetPassword() {
   const { mutate: resetPassword, isLoading } = useMutation({
     mutationFn: ({ email, newPassword, confirmedNewPassword }) =>
       ResetPasswordApi({ email, newPassword, confirmedNewPassword }),
-    onSuccess: (res) => {
+    onSuccess: () => {
       navigate("/login");
     },
     onError: (err) => {
@@ -72,4 +76,31 @@ export function useResetPassword() {
     },
   });
   return { resetPassword, isLoading };
+}
+export function useLogout() {
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
+
+  const { mutate: logout, isLoading } = useMutation({
+    mutationFn: logoutUser,
+    onSuccess: () => {
+      queryClient.setQueryData(["user"], null);
+      queryClient.removeQueries({ queryKey: ["user"] });
+
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("refreshToken");
+
+      navigate("/");
+      toast.success("Logged out successfully");
+    },
+    onError: (err) => {
+      console.log(err);
+      toast.error(err.message || "Logout failed");
+
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("refreshToken");
+      queryClient.removeQueries({ queryKey: ["user"] });
+    },
+  });
+  return { logout, isLoading };
 }

@@ -5,7 +5,7 @@ import {
   ModleContainer,
   CardBox,
   Title,
-  BackgroundConnect,
+
   // BackgroundConnect,
 } from "./ShopingStyle";
 import TitleCard from "./TitleCard";
@@ -13,7 +13,6 @@ import TitleCard from "./TitleCard";
 function MoldingDesign() {
   return (
     <ModleContainer reverse="true">
-      <BackgroundConnect />
       <CardBox>
         <TitleCard src="pictures/banner/image1.webp" />
         <TitleCard src="pictures/banner/image2.webp" />

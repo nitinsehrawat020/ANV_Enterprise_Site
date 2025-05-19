@@ -237,3 +237,10 @@ export const StyledOtpForm = styled.form`
     font-size: 0.8rem;
   }
 `;
+
+export const FullPage = styled.div`
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;

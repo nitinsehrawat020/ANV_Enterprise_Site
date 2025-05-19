@@ -44,7 +44,7 @@ export const Nav = styled.nav`
 export const NavContainer = styled.div`
   display: flex;
   justify-content: space-between;
-
+  align-items: center;
   height: auto;
   z-index: 1;
   width: 100%;
@@ -183,4 +183,56 @@ export const NavBtnLink = styled(NavLink)`
       @media ${device.tablet} {
       }
     `}
+`;
+export const AccountContainer = styled.div`
+  position: relative;
+`;
+export const AccountMenu = styled.div`
+  width: 160px;
+  background-color: var(--color-background-400);
+  position: absolute;
+  top: 50px;
+  right: -10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding: 10px;
+  gap: 0.8rem;
+  border-radius: 0px 0px 8px 8px;
+`;
+export const AccountButton = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 2px solid var(--color-background-800);
+  padding: 4px;
+  border-radius: 8px;
+`;
+export const Group1 = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-direction: column;
+`;
+
+export const Divider = styled.div`
+  width: 100%;
+  height: 2px;
+  background-color: white;
+  opacity: 0.2;
+`;
+
+export const FavDesign = styled.div`
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  left: 80px;
+  gap: 10px;
+  border: 2px solid var(--color-background-800);
+  border-radius: 8px;
 `;

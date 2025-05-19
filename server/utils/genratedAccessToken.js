@@ -16,7 +16,7 @@ const generatedAccessToken = async (userId) => {
     const token = jwt.sign(
       { userId },
       secret,
-      { expiresIn: "1h" } // Access token typically has shorter expiry
+      { expiresIn: "1d" } // Access token typically has shorter expiry
     );
 
     return token;

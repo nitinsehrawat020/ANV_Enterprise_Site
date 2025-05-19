@@ -5,7 +5,7 @@ import Axios from "../util/Axios";
 export async function registerUserApi(data) {
   try {
     await Axios({ ...SummaryApi.register, data: data })
-      .then((res) => {
+      .then(() => {
         toast.success("user register");
       })
       .catch((err) => {
@@ -96,9 +96,36 @@ export async function ResetPasswordApi({
       .catch((error) => {
         toast.error(error.response.data.message || "issue in submitOtpApi");
       });
+    return res;
   } catch (error) {
     console.log(error);
 
     throw new Error(error);
+  }
+}
+
+export async function getCurrentUser() {
+  try {
+    const res = await Axios({
+      ...SummaryApi.getUser,
+    });
+
+    return res.data.data;
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
+}
+
+export async function logoutUser() {
+  try {
+    const res = await Axios({
+      ...SummaryApi.Logout,
+    });
+
+    return res.data.data;
+  } catch (error) {
+    console.log(error);
+    throw error;
   }
 }

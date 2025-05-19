@@ -5,7 +5,7 @@ import {
   ModleContainer,
   CardBox,
   Title,
-  BackgroundConnect,
+
   // BackgroundConnect,
 } from "./ShopingStyle";
 import TitleCard from "./TitleCard";
@@ -13,8 +13,6 @@ import TitleCard from "./TitleCard";
 function FalseCeilDesign() {
   return (
     <ModleContainer>
-      <BackgroundConnect />
-
       <Heading as="h3">
         <ModleTitle>
           <Title>

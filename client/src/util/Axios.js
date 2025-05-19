@@ -20,17 +20,17 @@ Axios.interceptors.request.use(
   }
 );
 
-Axios.interceptors.request.use(
+Axios.interceptors.response.use(
   (response) => {
     return response;
   },
   async (error) => {
     let originRequest = error.config;
 
-    if (error.response.status === 401 && !originRequest.retry) {
-      originRequest.retry = true;
+    if (error.response?.status === 401 && !originRequest._retry) {
+      originRequest._retry = true;
 
-      const refreshToken = localStorage.get("refreshToken");
+      const refreshToken = localStorage.getItem("refreshToken");
 
       if (refreshToken) {
         const newAccessToken = await refreshAccessToken(refreshToken);
@@ -58,6 +58,7 @@ const refreshAccessToken = async (refreshToken) => {
     return accessToken;
   } catch (error) {
     console.log(error);
+    return Promise.reject(error);
   }
 };
 

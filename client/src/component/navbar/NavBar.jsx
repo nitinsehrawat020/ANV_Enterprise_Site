@@ -1,5 +1,6 @@
 import { FaBars } from "react-icons/fa6";
 import { ImCross } from "react-icons/im";
+import { FaAngleDown, FaAngleUp, FaHeart } from "react-icons/fa6";
 
 import {
   NavMenu,
@@ -10,12 +11,24 @@ import {
   NavLinks,
   NavBtn,
   NavBtnLink,
+  AccountButton,
+  AccountContainer,
+  FavDesign,
 } from "./StyleNavBar";
 import Logo from "./Logo";
 import Aside from "../aside/Aside";
 import { useState } from "react";
+import { useUser } from "../LoginAndSignup/useUser";
+import LoginDropdown from "./LoginDropdown";
+import { useOutsideClick } from "../../hooks/useOutsideClick,js";
 
 function NavBar() {
+  const { user, isAdminAuthenticated } = useUser();
+
+  const [accountToggle, setAccountToggle] = useState(false);
+  const ref = useOutsideClick(() => {
+    setAccountToggle(false);
+  });
   const [menuToggle, setMenuToggle] = useState("false");
   function openMenu() {
     setMenuToggle("true");
@@ -45,14 +58,35 @@ function NavBar() {
             <NavLinks to="aboutUs"> About Us</NavLinks>
           </NavItem>
         </NavMenu>
-        <NavBtn>
-          <NavBtnLink type="signup" to="/signup">
-            Sign Up{" "}
-          </NavBtnLink>
-          <NavBtnLink type="login" to="/login">
-            Login{" "}
-          </NavBtnLink>
-        </NavBtn>
+
+        <FavDesign>
+          <FaHeart color="pink" /> Favorite
+        </FavDesign>
+
+        {user?._id ? (
+          <AccountContainer ref={ref}>
+            <AccountButton onClick={() => setAccountToggle((prev) => !prev)}>
+              <img src={user.avatar} width="35px" />
+              Account {accountToggle ? <FaAngleUp /> : <FaAngleDown />}
+            </AccountButton>
+
+            {accountToggle && (
+              <LoginDropdown
+                onFlip={setAccountToggle}
+                isAdmin={isAdminAuthenticated}
+              />
+            )}
+          </AccountContainer>
+        ) : (
+          <NavBtn>
+            <NavBtnLink type="signup" to="/signup">
+              Sign Up{" "}
+            </NavBtnLink>
+            <NavBtnLink type="login" to="/login">
+              Login{" "}
+            </NavBtnLink>
+          </NavBtn>
+        )}
         <MobileIcon>
           {menuToggle === "true" ? (
             <ImCross onClick={closeMenu} />

@@ -4,6 +4,7 @@ import Home from "./Pages/Home";
 import GlobalStyle from "./Styles/GlobalStyle";
 import { Toaster } from "react-hot-toast";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 import { PrimeReactProvider } from "primereact/api";
 
@@ -23,6 +24,8 @@ import Login from "./Pages/Login";
 import Signup from "./Pages/Signup";
 import VerifyOtp from "./Pages/VerifyOtp";
 import ChangePassword from "./Pages/ChangePassword";
+import ProtectedRoute from "./ui/ProtectedRoute";
+import AdminProtectedRoute from "./ui/AdminProtectedRoute";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -38,22 +41,39 @@ function App() {
       <StyleSheetManager shouldForwardProp={shouldForwardProp}>
         <GlobalStyle />
         <QueryClientProvider client={queryClient}>
+          <ReactQueryDevtools initialIsOpen={false} />
           <PrimeReactProvider>
             <BrowserRouter>
               <Routes>
-                <Route element={<UserAppLayout />}>
+                <Route
+                  element={
+                    <ProtectedRoute>
+                      <UserAppLayout />
+                    </ProtectedRoute>
+                  }
+                >
                   <Route path="/" element={<Home />} />
                   <Route path="/designFalseCeil" element={<DesignForeCeil />} />
                   <Route path="/designMolding" element={<DesignMolding />} />
                   <Route path="/aboutUs" element={<AboutUs />} />
-                  <Route path="/login" element={<Login />} />
-                  <Route path="/signup" element={<Signup />} />
+
                   <Route path="*" element={<Home />} />
                   <Route path="/forgotPassword" element={<ForgotPassword />} />
                   <Route path="/verifyOtp" element={<VerifyOtp />} />
                   <Route path="/changePassword" element={<ChangePassword />} />
+                  <Route path="/logot" />
                 </Route>
-                <Route element={<AdminAppLayout />}>
+                <Route element={<UserAppLayout />}>
+                  <Route path="/login" element={<Login />} />
+                  <Route path="/signup" element={<Signup />} />
+                </Route>
+                <Route
+                  element={
+                    <AdminProtectedRoute>
+                      <AdminAppLayout />
+                    </AdminProtectedRoute>
+                  }
+                >
                   <Route path="/dashboard" element={<Dashboard />} />
                   <Route path="/worker" element={<Workers />} />
                   <Route path="/site" element={<Sites />} />

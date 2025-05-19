@@ -15,6 +15,7 @@ import {
   refreshToken,
   addTofav,
   removeFromFav,
+  userInfo,
 } from "../controllers/user.controller.js";
 import auth from "../middleware/auth.js";
 import upload from "../middleware/multer.js";
@@ -39,5 +40,6 @@ userRouter.put("/reset-password", resetPassword);
 userRouter.post("/refresh-token", refreshToken);
 userRouter.post("/add-to-fav/:designId", auth, addTofav);
 userRouter.post("/remove-from-fav/:designId", auth, removeFromFav);
+userRouter.get("/userInfo", auth, userInfo);
 
 export default userRouter;

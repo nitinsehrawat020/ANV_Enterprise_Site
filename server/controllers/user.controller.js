@@ -108,7 +108,6 @@ export async function verifyEmailController(req, res) {
 export async function loginUserController(req, res) {
   try {
     const { email, password } = req.body;
-    console.log(email, password);
 
     if (!email || !password) {
       return res.status(400).json({
@@ -345,6 +344,11 @@ export async function verifyForgetPasswordOtp(req, res) {
         success: false,
       });
     }
+
+    const updateUser = await UserModel.findByIdAndUpdate(user?._id, {
+      forgetPasswordExpire: null,
+      forgetPaswordOtp: "",
+    });
     return res.status(200).json({
       message: "otp verify successfully",
       error: false,
@@ -413,7 +417,6 @@ export async function refreshToken(req, res) {
   try {
     const refreshToken =
       req.cookies.refreshToken || req?.header?.authorization?.split(" ")[1];
-    console.log(refreshToken);
 
     if (!refreshToken) {
       return res.status(401).json({
@@ -422,7 +425,7 @@ export async function refreshToken(req, res) {
         error: true,
       });
     }
-    const verifyToken = await jwt.verify(
+    const verifyToken = jwt.verify(
       refreshToken,
       process.env.JWT_REFRESH_TOKEN_SECRET
     );
@@ -435,7 +438,8 @@ export async function refreshToken(req, res) {
       });
     }
 
-    const userId = verifyToken._id;
+    const userId = verifyToken.userId;
+
     const cookiesOptions = {
       httpOnly: true,
       secure: true,
@@ -562,6 +566,57 @@ export async function removeFromFav(req, res) {
   } catch (error) {
     console.log(error);
     return res.status(500).json({
+      message: error.message || error,
+      success: false,
+      error: true,
+    });
+  }
+}
+
+export async function userInfo(req, res) {
+  try {
+    const userId = req.userId;
+    const user = await UserModel.findById(userId);
+    if (!user) {
+      return res.status(400).json({
+        message: "User not Found",
+        success: false,
+        error: true,
+      });
+    }
+    const {
+      _id,
+      firstName,
+      lastName,
+      email,
+      avatar,
+      mobileNumber,
+      status,
+      addressDetails,
+      userSite,
+      role,
+    } = user;
+    return res.status(200).json({
+      message: "user fetch successfully",
+      success: true,
+      error: false,
+      data: {
+        _id,
+        firstName,
+        lastName,
+        email,
+        avatar,
+        mobileNumber,
+        status,
+        addressDetails,
+        userSite,
+        role,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+
+    res.status(500).json({
       message: error.message || error,
       success: false,
       error: true,
