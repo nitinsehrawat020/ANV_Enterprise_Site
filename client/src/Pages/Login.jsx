@@ -1,9 +1,9 @@
 import Logo from "../component/navbar/Logo";
 import Heading from "../ui/Heading";
 import {
+  ForgotNavLink,
   LoginContainer,
   LoginSignupContainer,
-  StyledFrom,
   StyledInput,
   StyledLoginForm,
 } from "../component/LoginAndSignup/StyleLogin";
@@ -31,8 +31,8 @@ function Login() {
     <LoginSignupContainer>
       <LoginContainer>
         <Logo />
-        <Heading as="h2">Welcome Back!</Heading>
-        <Heading as="h3">Login to your account</Heading>
+        <Heading as="h3">Welcome Back!</Heading>
+        <Heading as="h4">Login to your account</Heading>
 
         <StyledLoginForm onSubmit={handleSubmit(onSubmit)} type="fp">
           <StyledInput
@@ -50,7 +50,10 @@ function Login() {
           />
 
           <p>
-            <NavLink to="/forgotPassword"> Forgot Password?</NavLink>{" "}
+            <ForgotNavLink to="/forgotPassword">
+              {" "}
+              Forgot Password?
+            </ForgotNavLink>{" "}
           </p>
           <StyledInput
             type="submit"

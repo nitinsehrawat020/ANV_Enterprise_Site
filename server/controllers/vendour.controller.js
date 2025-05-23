@@ -94,6 +94,7 @@ export async function updateTransaction(req, res) {
   try {
     const vendourId = req.params.vendourId;
     const { date, amount, status, items } = req.body;
+    console.log(items[0].itemList);
 
     if (!amount || !status) {
       return res.status(400).json({
@@ -130,9 +131,9 @@ export async function updateTransaction(req, res) {
         });
       });
     } else {
-      items.foreach((item) => {
-        item.itemList.foreach(async (cItem) => {
-          vendour.itemCosting.foreach((vItem) => {
+      items.map((item) => {
+        item.itemList.map(async (cItem) => {
+          vendour.itemCosting.map((vItem) => {
             if (cItem.name === vItem.name) {
               if (cItem.price !== vItem.price) vItem.price = cItem.price;
             }

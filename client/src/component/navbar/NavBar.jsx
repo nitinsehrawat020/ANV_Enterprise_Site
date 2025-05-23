@@ -14,15 +14,19 @@ import {
   AccountButton,
   AccountContainer,
   FavDesign,
+  FavAndAccountContainer,
+  Divider,
 } from "./StyleNavBar";
 import Logo from "./Logo";
 import Aside from "../aside/Aside";
 import { useState } from "react";
 import { useUser } from "../LoginAndSignup/useUser";
 import LoginDropdown from "./LoginDropdown";
-import { useOutsideClick } from "../../hooks/useOutsideClick,js";
+import useMobile from "../../hooks/useMobile.jsx";
+import { useOutsideClick } from "../../hooks/useOutsideClick.jsx";
 
 function NavBar() {
+  const [isMobile] = useMobile();
   const { user, isAdminAuthenticated } = useUser();
 
   const [accountToggle, setAccountToggle] = useState(false);
@@ -59,34 +63,38 @@ function NavBar() {
           </NavItem>
         </NavMenu>
 
-        <FavDesign>
-          <FaHeart color="pink" /> Favorite
-        </FavDesign>
+        <FavAndAccountContainer>
+          <FavDesign>
+            <FaHeart color="pink" />
+            {isMobile ? "" : "Favorite"}
+          </FavDesign>
 
-        {user?._id ? (
-          <AccountContainer ref={ref}>
-            <AccountButton onClick={() => setAccountToggle((prev) => !prev)}>
-              <img src={user.avatar} width="35px" />
-              Account {accountToggle ? <FaAngleUp /> : <FaAngleDown />}
-            </AccountButton>
+          {user?._id ? (
+            <AccountContainer ref={ref}>
+              <AccountButton onClick={() => setAccountToggle((prev) => !prev)}>
+                <img src={user.avatar} width="35px" />
+                {isMobile ? "" : "Account"}{" "}
+                {accountToggle ? <FaAngleUp /> : <FaAngleDown />}
+              </AccountButton>
 
-            {accountToggle && (
-              <LoginDropdown
-                onFlip={setAccountToggle}
-                isAdmin={isAdminAuthenticated}
-              />
-            )}
-          </AccountContainer>
-        ) : (
-          <NavBtn>
-            <NavBtnLink type="signup" to="/signup">
-              Sign Up{" "}
-            </NavBtnLink>
-            <NavBtnLink type="login" to="/login">
-              Login{" "}
-            </NavBtnLink>
-          </NavBtn>
-        )}
+              {accountToggle && (
+                <LoginDropdown
+                  onFlip={setAccountToggle}
+                  isAdmin={isAdminAuthenticated}
+                />
+              )}
+            </AccountContainer>
+          ) : (
+            <NavBtn>
+              <NavBtnLink type="signup" to="/signup">
+                Sign Up{" "}
+              </NavBtnLink>
+              <NavBtnLink type="login" to="/login">
+                Login{" "}
+              </NavBtnLink>
+            </NavBtn>
+          )}
+        </FavAndAccountContainer>
         <MobileIcon>
           {menuToggle === "true" ? (
             <ImCross onClick={closeMenu} />

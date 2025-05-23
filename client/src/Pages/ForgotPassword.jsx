@@ -2,11 +2,10 @@ import Logo from "../component/navbar/Logo";
 import Heading from "../ui/Heading";
 import {
   EmailLabel,
-  Label,
-  LoginContainer,
+  ForgotPasswordContainer,
   LoginSignupContainer,
+  StyledForgotPasswordForm,
   StyledInput,
-  StyledLoginForm,
 } from "../component/LoginAndSignup/StyleLogin";
 import { useForm } from "react-hook-form";
 import { useForgotPassword } from "../component/LoginAndSignup/useLogin";
@@ -30,30 +29,32 @@ function ForgotPassword() {
 
   return (
     <LoginSignupContainer>
-      <LoginContainer>
+      <ForgotPasswordContainer>
         <Logo />
         <Heading as="h2">Forgot Your Password?</Heading>
 
-        <StyledLoginForm onSubmit={handleSubmit(onSubmit)} type="fp">
-          <EmailLabel htmlFor="email">Enter the email</EmailLabel>
-          <StyledInput
-            type="email"
-            placeholder="Email"
-            hi="login"
-            id="email"
-            {...register("email", { required: "Email is required" })}
-          />
+        <StyledForgotPasswordForm onSubmit={handleSubmit(onSubmit)} type="fp">
+          <p>
+            <EmailLabel htmlFor="email">Enter Email</EmailLabel>
+            <StyledInput
+              type="email"
+              placeholder="Email"
+              hi="login"
+              id="email"
+              {...register("email", { required: "Email is required" })}
+            />
+          </p>
           <StyledInput
             type="submit"
-            value={isLoading ? "Logging in..." : "Login"}
+            value={isLoading ? "Sending Otp..." : "Send Otp"}
             disabled={isLoading}
           />
-        </StyledLoginForm>
+        </StyledForgotPasswordForm>
 
         <p>
           Already have an account? <NavLink to="/login"> Login </NavLink>
         </p>
-      </LoginContainer>
+      </ForgotPasswordContainer>
     </LoginSignupContainer>
   );
 }

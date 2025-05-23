@@ -3,6 +3,7 @@ import Heading from "../ui/Heading";
 import {
   LoginContainer as ChangePasswordConatiner,
   LoginSignupContainer as Container,
+  ForgotPasswordContainer,
   StyledInput,
   StyledOtpForm,
 } from "../component/LoginAndSignup/StyleLogin";
@@ -44,13 +45,13 @@ function ChangePassword() {
 
   return (
     <Container>
-      <ChangePasswordConatiner>
+      <ForgotPasswordContainer>
         <Logo />
         <Heading as="h2">Change Password</Heading>
 
         <StyledOtpForm onSubmit={handleSubmit(onSubmit)}>
           <p>
-            <span>Reseting Password for :- </span>
+            <span>Email :- </span>
             <StyledInput
               type="email"
               placeholder="Email"
@@ -62,7 +63,7 @@ function ChangePassword() {
             />
           </p>
           <p>
-            <span>Enter new password:- </span>
+            <span> New password:- </span>
             <StyledInput
               type="password"
               placeholder="password"
@@ -72,7 +73,7 @@ function ChangePassword() {
             />
           </p>
           <p>
-            <span>Re-Enter new password:- </span>
+            <span>Re-Enter password:- </span>
             <StyledInput
               type="password"
               placeholder="re-password"
@@ -91,7 +92,7 @@ function ChangePassword() {
         <p>
           Already have an account? <NavLink to="/login"> Login </NavLink>
         </p>
-      </ChangePasswordConatiner>
+      </ForgotPasswordContainer>
     </Container>
   );
 }

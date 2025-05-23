@@ -5,10 +5,12 @@ import toast from "react-hot-toast";
 
 export function useSignup() {
   const navigate = useNavigate();
-  const { mutate: registerUser, isLoading } = useMutation({
+  const { mutate: registerUser, isPending: isLoading } = useMutation({
     mutationFn: (data) => registerUserApi(data),
     onSuccess: (res) => {
-      if (res || res?.data?.error || res?.error || res?.status === 400) {
+      console.log(res);
+
+      if (!res || res?.data?.error || res?.error || res?.status === 400) {
         toast.error(res?.data?.message || "Registration failed");
         return;
       }
@@ -16,8 +18,8 @@ export function useSignup() {
       navigate("/login");
     },
     onError: (err) => {
-      // console.log(err);
-      //   toast.error(err);
+      console.log(err);
+      toast.error(err);
     },
   });
   return { registerUser, isLoading };

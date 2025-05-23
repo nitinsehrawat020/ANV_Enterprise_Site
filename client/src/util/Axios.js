@@ -12,7 +12,6 @@ Axios.interceptors.request.use(
     if (accessToken) {
       config.headers.Authorization = `Bearer ${accessToken}`;
     }
-
     return config;
   },
   (err) => {
@@ -25,40 +24,64 @@ Axios.interceptors.response.use(
     return response;
   },
   async (error) => {
-    let originRequest = error.config;
+    const originalRequest = error.config;
 
-    if (error.response?.status === 401 && !originRequest._retry) {
-      originRequest._retry = true;
+    // Only handle 401 errors for token refresh
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
 
-      const refreshToken = localStorage.getItem("refreshToken");
+      try {
+        const refreshToken = localStorage.getItem("refreshToken");
 
-      if (refreshToken) {
+        if (!refreshToken) {
+          // No refresh token, clear auth and reject original error
+          localStorage.removeItem("accessToken");
+          localStorage.removeItem("refreshToken");
+          return Promise.reject(error);
+        }
+
         const newAccessToken = await refreshAccessToken(refreshToken);
 
         if (newAccessToken) {
-          originRequest.headers.Authorization = `Bearer ${newAccessToken}`;
-          return Axios(originRequest);
+          // Update header and retry original request
+          originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+          return Axios(originalRequest);
+        } else {
+          // Refresh failed, clear auth and reject original error
+          localStorage.removeItem("accessToken");
+          localStorage.removeItem("refreshToken");
+          return Promise.reject(error);
         }
+      } catch (refreshError) {
+        // Refresh failed, clear auth and reject original error
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("refreshToken");
         return Promise.reject(error);
       }
     }
+
+    // For all other errors (including non-401), pass through unchanged
+    return Promise.reject(error);
   }
 );
 
 const refreshAccessToken = async (refreshToken) => {
   try {
-    const res = await Axios({
-      ...SummaryApi.refreshToken,
+    // Use base axios to avoid interceptor loops
+    const res = await axios({
+      url: `${BASE_URL}${SummaryApi.refreshToken.url}`,
+      method: SummaryApi.refreshToken.method,
       headers: {
         Authorization: `Bearer ${refreshToken}`,
       },
     });
+
     const accessToken = res.data.data.accessToken;
     localStorage.setItem("accessToken", accessToken);
     return accessToken;
   } catch (error) {
-    console.log(error);
-    return Promise.reject(error);
+    console.log("Token refresh failed:", error);
+    return null; // Return null instead of rejecting
   }
 };
 

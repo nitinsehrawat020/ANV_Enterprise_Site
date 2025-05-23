@@ -12,9 +12,8 @@ import { useQueryClient } from "@tanstack/react-query";
 
 export function useLogin() {
   const navigate = useNavigate();
-  const queryClient = useQueryClient();
 
-  const { mutate: login, isLoading } = useMutation({
+  const { mutate: login, isPending: isLoading } = useMutation({
     mutationFn: ({ email, password }) => loginApi({ email, password }),
     onSuccess: (user) => {
       toast.success(user.data.message);
@@ -23,7 +22,7 @@ export function useLogin() {
       navigate("/");
     },
     onError: (error) => {
-      console.log(error);
+      toast.error(error.response.data.message);
     },
   });
 
@@ -33,30 +32,30 @@ export function useLogin() {
 export function useForgotPassword() {
   const navigate = useNavigate();
 
-  const { mutate: forgotPassword, isLoading } = useMutation({
+  const { mutate: forgotPassword, isPending: isLoading } = useMutation({
     mutationFn: ({ email }) => forgotPasswordApi({ email }),
     onSuccess: (res, variables) => {
       navigate("/verifyOtp", { state: variables.email });
     },
-    onError: (err) => {
-      console.log(err);
-      toast.error(err.message);
+    onError: (error) => {
+      toast.error(
+        error?.response?.data?.message || error || "issue in userApi"
+      );
     },
   });
   return { forgotPassword, isLoading };
 }
 export function useVeriftOtp() {
   const navigate = useNavigate();
-  const { mutate: verifyOtp, isLoading } = useMutation({
+  const { mutate: verifyOtp, isPending: isLoading } = useMutation({
     mutationFn: ({ email, otp }) => submitOtpApi({ email, otp }),
     onSuccess: (res, variabels) => {
       navigate("/changePassword", {
         state: { email: variabels.email, data: res.data },
       });
     },
-    onError: (err) => {
-      console.log(err);
-      toast.error(err.message);
+    onError: (error) => {
+      toast.error(error?.response?.data?.message);
     },
   });
   return { verifyOtp, isLoading };
@@ -64,15 +63,14 @@ export function useVeriftOtp() {
 
 export function useResetPassword() {
   const navigate = useNavigate();
-  const { mutate: resetPassword, isLoading } = useMutation({
+  const { mutate: resetPassword, isPending: isLoading } = useMutation({
     mutationFn: ({ email, newPassword, confirmedNewPassword }) =>
       ResetPasswordApi({ email, newPassword, confirmedNewPassword }),
     onSuccess: () => {
       navigate("/login");
     },
-    onError: (err) => {
-      console.log(err);
-      toast.error(err.message);
+    onError: (error) => {
+      toast.error(error.response.data.message || "issue in submitOtpApi");
     },
   });
   return { resetPassword, isLoading };
@@ -81,7 +79,7 @@ export function useLogout() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-  const { mutate: logout, isLoading } = useMutation({
+  const { mutate: logout, isPending: isLoading } = useMutation({
     mutationFn: logoutUser,
     onSuccess: () => {
       queryClient.setQueryData(["user"], null);

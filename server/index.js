@@ -14,7 +14,7 @@ app.use(
     credentials: true,
     method: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["content-Type", "Authorization"],
-    origin: process.env.FRONDEND_URL,
+    origin: ["http://localhost:5173", "http://192.168.1.2:5173"],
   })
 );
 

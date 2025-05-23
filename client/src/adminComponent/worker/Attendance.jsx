@@ -8,7 +8,7 @@ import {
 } from "./StyleWorker";
 import Modal from "../../ui/Modal";
 import AttendanceModal from "./AttendanceModal";
-import { useOutsideClick } from "../../hooks/useOutsideClick,js";
+import { useOutsideClick } from "../../hooks/useOutsideClick.jsx";
 
 function Attendance({ WorkerData, sites }) {
   const [attendanceDropdown, setAttendanceDropdown] = useState(false);

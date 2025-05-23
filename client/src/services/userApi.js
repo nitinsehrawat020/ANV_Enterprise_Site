@@ -19,26 +19,17 @@ export async function registerUserApi(data) {
 }
 
 export async function loginApi({ email, password }) {
-  try {
-    const res = await Axios({
-      ...SummaryApi.login,
-      data: { email, password },
+  const res = await Axios({
+    ...SummaryApi.login,
+    data: { email, password },
+  })
+    .then((res) => {
+      return res;
     })
-      .then((res) => {
-        return res;
-      })
-      .catch((err) => {
-        console.log(err);
-        toast.error(err.response.data.message);
-
-        throw new Error("user cannot login");
-      });
-    return res;
-  } catch (error) {
-    console.log(error);
-
-    throw new Error("user cannot login");
-  }
+    .catch((err) => {
+      throw err;
+    });
+  return res;
 }
 
 export async function forgotPasswordApi({ email }) {
@@ -51,32 +42,26 @@ export async function forgotPasswordApi({ email }) {
       return res;
     })
     .catch((error) => {
-      console.log(error);
-      toast.error(error?.message || "issue in userApi");
+      toast.error(error);
+      throw error;
     });
 
   return res;
 }
 
 export async function submitOtpApi({ email, otp }) {
-  try {
-    const res = await Axios({
-      ...SummaryApi.submitOtp,
-      data: { email, otp },
+  const res = await Axios({
+    ...SummaryApi.submitOtp,
+    data: { email, otp },
+  })
+    .then((res) => {
+      toast.success(res.data.message);
+      return res;
     })
-      .then((res) => {
-        toast.success(res.data.message);
-        return res;
-      })
-      .catch((error) => {
-        toast.error(error.response.data.message || "issue in submitOtpApi");
-      });
-    return res;
-  } catch (error) {
-    console.log(error);
-
-    throw new Error(error);
-  }
+    .catch((error) => {
+      throw error;
+    });
+  return res;
 }
 
 export async function ResetPasswordApi({
@@ -84,48 +69,43 @@ export async function ResetPasswordApi({
   newPassword,
   confirmedNewPassword,
 }) {
-  try {
-    const res = Axios({
-      ...SummaryApi.resetPassword,
-      data: { email, newPassword, confirmedNewPassword },
+  const res = Axios({
+    ...SummaryApi.resetPassword,
+    data: { email, newPassword, confirmedNewPassword },
+  })
+    .then((res) => {
+      return res;
     })
-      .then((res) => {
-        toast.success(res.data.message);
-        return res;
-      })
-      .catch((error) => {
-        toast.error(error.response.data.message || "issue in submitOtpApi");
-      });
-    return res;
-  } catch (error) {
-    console.log(error);
-
-    throw new Error(error);
-  }
+    .catch((error) => {
+      throw error;
+    });
+  return res;
 }
 
 export async function getCurrentUser() {
-  try {
-    const res = await Axios({
-      ...SummaryApi.getUser,
+  const res = await Axios({
+    ...SummaryApi.getUser,
+  })
+    .then((res) => {
+      return res;
+    })
+    .catch((error) => {
+      throw error;
     });
 
-    return res.data.data;
-  } catch (err) {
-    console.log(err);
-    throw err;
-  }
+  return res.data.data;
 }
 
 export async function logoutUser() {
-  try {
-    const res = await Axios({
-      ...SummaryApi.Logout,
+  const res = await Axios({
+    ...SummaryApi.Logout,
+  })
+    .then((res) => {
+      return res;
+    })
+    .catch((error) => {
+      throw error;
     });
 
-    return res.data.data;
-  } catch (error) {
-    console.log(error);
-    throw error;
-  }
+  return res.data.data;
 }

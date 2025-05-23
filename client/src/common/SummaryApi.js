@@ -37,6 +37,11 @@ const SummaryApi = {
     url: "api/worker/getWorker/681909a9e429bc250e2c4fa5",
     method: "post",
   },
+
+  getDesign: {
+    url: "/api/design/get-all-designs",
+    method: "get",
+  },
 };
 
 export default SummaryApi;

@@ -91,14 +91,14 @@ function App() {
                   duration: 3000,
                 },
                 error: {
-                  duration: 5000,
+                  duration: 7000,
                 },
                 style: {
                   fontSize: "16px",
                   maxWidth: "500px",
                   padding: "16px 24px",
                   backgroundColor: "var(--color-background-200)",
-                  color: "var(--color-background-700)",
+                  color: "var(--color-white-200)",
                 },
               }}
             />

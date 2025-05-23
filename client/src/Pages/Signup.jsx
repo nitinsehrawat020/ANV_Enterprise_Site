@@ -9,10 +9,10 @@ import {
 import Heading from "../ui/Heading";
 import Logo from "../component/navbar/Logo";
 import { NavLink } from "react-router-dom";
+
+import { useSignup } from "../component/LoginAndSignup/useSignup";
 import Axios from "../util/Axios";
 import SummaryApi from "../common/SummaryApi";
-import toast from "react-hot-toast";
-import { useSignup } from "../component/LoginAndSignup/useSignup";
 
 function Signup() {
   const { register, handleSubmit, reset } = useForm();
@@ -97,7 +97,7 @@ function Signup() {
               {...register("confirmedPassword")}
             />
           </p>
-          <StyledInput type="submit" value="Sign up" />
+          <StyledInput type="submit" value="Sign up" disabled={isLoading} />
         </StyledFrom>
         <p>
           Already have an account? <NavLink to="/login"> Login </NavLink>

@@ -1,6 +1,7 @@
 import Logo from "../component/navbar/Logo";
 import Heading from "../ui/Heading";
 import {
+  ForgotPasswordContainer,
   LoginContainer,
   LoginSignupContainer,
   StyledInput,
@@ -40,13 +41,13 @@ function VerifyOtp() {
 
   return (
     <LoginSignupContainer>
-      <LoginContainer>
+      <ForgotPasswordContainer>
         <Logo />
         <Heading as="h2">Enter the otp</Heading>
 
         <StyledOtpForm onSubmit={handleSubmit(onSubmit)}>
           <p>
-            <span>Reseting Password for :- </span>
+            <span>Email </span>
             <StyledInput
               type="email"
               placeholder="Email"
@@ -58,7 +59,7 @@ function VerifyOtp() {
             />
           </p>
           <p>
-            <span>Enter the otp :- </span>
+            <span>Enter Otp </span>
             <StyledInput
               type="number"
               placeholder="otp"
@@ -69,7 +70,7 @@ function VerifyOtp() {
           </p>
           <StyledInput
             type="submit"
-            value={isLoading ? "Logging in..." : "Submit Otp"}
+            value={isLoading ? "Submiting Otp..." : "Submit Otp"}
             disabled={isLoading}
           />
         </StyledOtpForm>
@@ -77,7 +78,7 @@ function VerifyOtp() {
         <p>
           Already have an account? <NavLink to="/login"> Login </NavLink>
         </p>
-      </LoginContainer>
+      </ForgotPasswordContainer>
     </LoginSignupContainer>
   );
 }

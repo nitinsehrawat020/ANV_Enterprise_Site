@@ -124,7 +124,7 @@ export const NavBtn = styled.div`
   align-items: center;
 
   @media ${device.tablet} {
-    margin-right: 3rem;
+    display: none;
   }
 
   @media ${device.mobile} {
@@ -209,6 +209,9 @@ export const AccountButton = styled.div`
   border: 2px solid var(--color-background-800);
   padding: 4px;
   border-radius: 8px;
+  @media ${device.tablet} {
+    display: none;
+  }
 `;
 export const Group1 = styled.div`
   display: flex;
@@ -226,13 +229,23 @@ export const Divider = styled.div`
 `;
 
 export const FavDesign = styled.div`
-  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 8px;
-  left: 80px;
+  right: 30px;
   gap: 10px;
   border: 2px solid var(--color-background-800);
   border-radius: 8px;
+
+  @media ${device.tablet} {
+    position: relative;
+  }
+`;
+
+export const FavAndAccountContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
 `;
