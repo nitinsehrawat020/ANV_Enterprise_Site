@@ -3,24 +3,23 @@ import SummaryApi from "../common/SummaryApi";
 import Axios from "../util/Axios";
 
 export async function registerUserApi(data) {
-  try {
-    await Axios({ ...SummaryApi.register, data: data })
-      .then(() => {
-        toast.success("user register");
-      })
-      .catch((err) => {
-        toast.error(err?.response?.data?.message);
+  const res = await Axios({ ...SummaryApi.user.register, data: data })
+    .then((res) => {
+      toast.success("user register");
+      console.log(res);
+      return res.data.data;
+    })
+    .catch((err) => {
+      toast.error(err?.response?.data?.message);
 
-        throw new Error(err);
-      });
-  } catch (error) {
-    throw new Error(error);
-  }
+      throw err;
+    });
+  return res.data.data;
 }
 
 export async function loginApi({ email, password }) {
   const res = await Axios({
-    ...SummaryApi.login,
+    ...SummaryApi.user.login,
     data: { email, password },
   })
     .then((res) => {
@@ -34,7 +33,7 @@ export async function loginApi({ email, password }) {
 
 export async function forgotPasswordApi({ email }) {
   const res = await Axios({
-    ...SummaryApi.password,
+    ...SummaryApi.user.password,
     data: { email },
   })
     .then((res) => {
@@ -51,7 +50,7 @@ export async function forgotPasswordApi({ email }) {
 
 export async function submitOtpApi({ email, otp }) {
   const res = await Axios({
-    ...SummaryApi.submitOtp,
+    ...SummaryApi.user.submitOtp,
     data: { email, otp },
   })
     .then((res) => {
@@ -70,7 +69,7 @@ export async function ResetPasswordApi({
   confirmedNewPassword,
 }) {
   const res = Axios({
-    ...SummaryApi.resetPassword,
+    ...SummaryApi.user.resetPassword,
     data: { email, newPassword, confirmedNewPassword },
   })
     .then((res) => {
@@ -84,7 +83,7 @@ export async function ResetPasswordApi({
 
 export async function getCurrentUser() {
   const res = await Axios({
-    ...SummaryApi.getUser,
+    ...SummaryApi.user.getUser,
   })
     .then((res) => {
       return res;
@@ -98,7 +97,30 @@ export async function getCurrentUser() {
 
 export async function logoutUser() {
   const res = await Axios({
-    ...SummaryApi.Logout,
+    ...SummaryApi.user.Logout,
+  })
+    .then((res) => {
+      return res;
+    })
+    .catch((error) => {
+      throw error;
+    });
+
+  return res.data.data;
+}
+
+export async function changeAvatarApi(data) {
+  if (!(data instanceof File)) {
+    console.log("issue");
+  }
+
+  const formData = new FormData();
+
+  formData.append("avatar", data);
+
+  const res = await Axios({
+    ...SummaryApi.user.changeAvatar,
+    data: formData,
   })
     .then((res) => {
       return res;

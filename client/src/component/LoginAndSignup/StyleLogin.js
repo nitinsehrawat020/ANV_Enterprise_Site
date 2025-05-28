@@ -212,15 +212,25 @@ export const LoginContainer = styled.div`
     border-radius: var(--br-l) var(--br-l) 0 0;
   }
   @media ${device.tablet} {
-    grid-area: content;
     padding: 5rem;
-
+    width: 400px;
     border-radius: var(--br-l) var(--br-l) 0 0;
+    input {
+      width: 200px;
+    }
+    ${(props) =>
+      props.type === "submit" &&
+      `
+    width: 450px;
+    background-color: var(--color-primary-500);
+    color: var(--color-white-500);
+    cursor: pointer;
+  `}
   }
   @media ${device.mobile} {
     grid-area: content;
     padding: 2rem;
-
+    width: 300px;
     border-radius: var(--br-l) var(--br-l) 0 0;
   }
 `;
@@ -243,6 +253,12 @@ export const StyledLoginForm = styled.form`
   p {
     align-self: flex-end;
     margin-right: 100px;
+  }
+
+  @media ${device.tablet} {
+    p {
+      margin-right: 140px;
+    }
   }
 `;
 

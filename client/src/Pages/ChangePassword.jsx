@@ -51,7 +51,7 @@ function ChangePassword() {
 
         <StyledOtpForm onSubmit={handleSubmit(onSubmit)}>
           <p>
-            <span>Email :- </span>
+            <span>Email </span>
             <StyledInput
               type="email"
               placeholder="Email"
@@ -63,7 +63,7 @@ function ChangePassword() {
             />
           </p>
           <p>
-            <span> New password:- </span>
+            <span> New password </span>
             <StyledInput
               type="password"
               placeholder="password"
@@ -73,7 +73,7 @@ function ChangePassword() {
             />
           </p>
           <p>
-            <span>Re-Enter password:- </span>
+            <span>Re-Enter password </span>
             <StyledInput
               type="password"
               placeholder="re-password"

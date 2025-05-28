@@ -36,7 +36,7 @@ function Aside({ display, onClose }) {
 
         {user?._id ? (
           <>
-            <ListLink onClick={onClose} to="/myAccount">
+            <ListLink onClick={onClose} to={`/myAccount/${user.name}`}>
               <ListItem>My Account</ListItem>
             </ListLink>
             <ListLink onClick={onClose} to="/order">

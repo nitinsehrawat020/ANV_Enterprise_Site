@@ -117,6 +117,16 @@ export const NavLinks = styled(NavLink)`
     border-radius: 8px;
     font-size: 1rem;
   }
+  ${(props) =>
+    props.to === "favorite" &&
+    css`
+      &.active {
+        border-bottom: 0px solid var(--color-primary-500);
+        background-image: none;
+        border-radius: 8px;
+        font-size: 1rem;
+      }
+    `}
 `;
 
 export const NavBtn = styled.div`
@@ -189,7 +199,7 @@ export const AccountContainer = styled.div`
 `;
 export const AccountMenu = styled.div`
   width: 160px;
-  background-color: var(--color-background-400);
+  background-color: var(--color-background-200);
   position: absolute;
   top: 50px;
   right: -10px;

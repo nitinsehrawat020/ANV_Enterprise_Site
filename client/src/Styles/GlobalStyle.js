@@ -24,6 +24,7 @@ const GlobalStyle = createGlobalStyle`
 
 //text
 --color-white-50:rgb(238, 238, 238);
+--color-white-100:rgb(139, 139, 139);
 --color-white-500: #fff;
 
 --color-black-500: #000;
@@ -40,6 +41,12 @@ const GlobalStyle = createGlobalStyle`
 --color-input:#A0864B;
 
 --backdrop-color: rgba(0, 0, 0, 0.3);
+
+--color-white: #fff;
+--color-darkgray: #bda8a8;
+--color-black: #000;
+--color-darkslategray: #454545;
+
 
 
 
@@ -96,6 +103,7 @@ body{
     background-color: #464646;
     font-family: var(--font-roboto);
     color: var(--color-white-500);
+    margin: 0; line-height: normal;
 }
 
 a {

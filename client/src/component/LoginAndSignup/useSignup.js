@@ -8,18 +8,12 @@ export function useSignup() {
   const { mutate: registerUser, isPending: isLoading } = useMutation({
     mutationFn: (data) => registerUserApi(data),
     onSuccess: (res) => {
-      console.log(res);
-
       if (!res || res?.data?.error || res?.error || res?.status === 400) {
         toast.error(res?.data?.message || "Registration failed");
         return;
       }
       toast.success("user register succesfully");
       navigate("/login");
-    },
-    onError: (err) => {
-      console.log(err);
-      toast.error(err);
     },
   });
   return { registerUser, isLoading };

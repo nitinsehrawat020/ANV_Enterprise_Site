@@ -43,33 +43,36 @@ export async function registerUserController(req, res) {
       password: hashedPassword,
       mobileNumber,
       addressDetails,
+      avatar:
+        "https://res.cloudinary.com/docjwachm/image/upload/v1748441791/default-avatar_zmzw5z.webp",
     };
 
     const newUser = new UserModel(payload);
-    const save = await newUser.save();
-
-    const verifyEmaiurl = `${process.env.FRONDEND_URL}/verify-email=${save.id}}`;
+    const savedUser = await newUser.save();
+    const verifyEmaiurl = `${process.env.FRONDEND_URL}/verify-email=${savedUser.id}}`;
 
     const verifyEmail = await sendMail({
       sendTo: email,
       subject: "Welcome to our ANV Enterprise",
       html: verifyEmailTemplate({
         name: firstName,
-        url: `http://localhost:5000/api/user/verify-email/${save._id}`,
+        url: `http://localhost:5000/api/user/verify-email/${savedUser._id}`,
       }),
     });
+
+    const newFavorite = new FavoriteModel({
+      userId: savedUser._id,
+      designId: [],
+    });
+    const savedFavorite = await newFavorite.save();
+
+    savedUser.favDesign = savedFavorite._id;
+    await savedUser.save();
 
     return res.status(200).json({
       status: "success",
       message: "user registered successfully",
       success: true,
-      data: {
-        firstName,
-        lastName,
-        email,
-        password,
-        mobileNumber,
-      },
     });
   } catch (error) {
     console.log(error);
@@ -209,6 +212,7 @@ export async function uploadAvatarController(req, res) {
   try {
     const userId = req.userId;
     const image = req.file;
+    console.log("image ", image);
 
     const upload = await uploadImageClodinary(image, "avatar");
 
@@ -557,7 +561,7 @@ export async function removeFromFav(req, res) {
         );
 
         return res.status(200).json({
-          message: "succes",
+          message: "success",
           success: true,
           error: false,
           user: user,
@@ -576,7 +580,10 @@ export async function removeFromFav(req, res) {
 export async function userInfo(req, res) {
   try {
     const userId = req.userId;
-    const user = await UserModel.findById(userId);
+    const user = await UserModel.findById(userId).populate(
+      "favDesign",
+      "designId"
+    );
     if (!user) {
       return res.status(400).json({
         message: "User not Found",
@@ -584,6 +591,9 @@ export async function userInfo(req, res) {
         error: true,
       });
     }
+
+    const favDesign = user.favDesign.designId;
+
     const {
       _id,
       firstName,
@@ -611,11 +621,34 @@ export async function userInfo(req, res) {
         addressDetails,
         userSite,
         role,
+        favDesign,
       },
     });
   } catch (error) {
     console.log(error);
 
+    res.status(500).json({
+      message: error.message || error,
+      success: false,
+      error: true,
+    });
+  }
+}
+export async function favDesign(req, res) {
+  try {
+    const userId = req.userId;
+
+    const favDesign = await FavoriteModel.findOne({
+      userId: new mongoose.Types.ObjectId(userId),
+    }).populate({ path: "designId", model: "design" });
+
+    return res.status(200).json({
+      message: "favdesign fetch Succesfully",
+      success: true,
+      error: false,
+      data: favDesign.designId,
+    });
+  } catch (error) {
     res.status(500).json({
       message: error.message || error,
       success: false,

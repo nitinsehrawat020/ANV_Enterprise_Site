@@ -15,7 +15,6 @@ import {
   AccountContainer,
   FavDesign,
   FavAndAccountContainer,
-  Divider,
 } from "./StyleNavBar";
 import Logo from "./Logo";
 import Aside from "../aside/Aside";
@@ -64,10 +63,12 @@ function NavBar() {
         </NavMenu>
 
         <FavAndAccountContainer>
-          <FavDesign>
-            <FaHeart color="pink" />
-            {isMobile ? "" : "Favorite"}
-          </FavDesign>
+          <NavLinks to="favorite">
+            <FavDesign>
+              <FaHeart color="#6c9eca" />
+              {isMobile ? "" : "Favorites"}
+            </FavDesign>
+          </NavLinks>
 
           {user?._id ? (
             <AccountContainer ref={ref}>

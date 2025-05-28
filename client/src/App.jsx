@@ -26,6 +26,12 @@ import VerifyOtp from "./Pages/VerifyOtp";
 import ChangePassword from "./Pages/ChangePassword";
 import ProtectedRoute from "./ui/ProtectedRoute";
 import AdminProtectedRoute from "./ui/AdminProtectedRoute";
+import Favorite from "./Pages/Favorite";
+// import MyAccount from "./Pages/MyAccount";
+import MyAccountLayout from "./ui/MyAccountLayout";
+import AccountInfo from "./component/myAccount/AccountInfo";
+import LoginChangePassword from "./component/myAccount/LoginChangePassword";
+import DeleteUserAccount from "./component/myAccount/DeleteUserAccount";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -61,7 +67,14 @@ function App() {
                   <Route path="/forgotPassword" element={<ForgotPassword />} />
                   <Route path="/verifyOtp" element={<VerifyOtp />} />
                   <Route path="/changePassword" element={<ChangePassword />} />
-                  <Route path="/logot" />
+                  <Route path="/favorite" element={<Favorite />} />
+                  <Route element={<MyAccountLayout />}>
+                    <Route path="/MyAccount/info" element={<AccountInfo />} />
+                    <Route
+                      path="/MyAccount/changePassword"
+                      element={<LoginChangePassword />}
+                    />
+                  </Route>
                 </Route>
                 <Route element={<UserAppLayout />}>
                   <Route path="/login" element={<Login />} />

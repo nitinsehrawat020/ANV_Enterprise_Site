@@ -83,41 +83,65 @@ export const CardContainer = styled.div`
 `;
 
 export const StyleCard = styled.div`
-  width: 250px;
-  min-width: 250px;
+  width: 210px;
+  min-width: 220px;
   height: 250px;
   display: flex;
   flex-direction: column;
-  justify-content: start;
+  justify-content: center;
   align-items: center;
-  background-image: url(${(props) => props.img});
-  background-size: cover;
-  background-position: center;
-  padding: 0.4rem 0rem;
-  border-radius: 15px;
+  background-color: var(--color-background-400);
+
+  border-radius: 16px;
   color: var(--color-white-500);
   text-align: center;
   cursor: pointer;
   transition: box-shadow 0.5s ease-in-out;
+  gap: 0.6rem;
+  padding: 0.6rem;
   &:hover {
     box-shadow: var(--shadow-lg);
   }
 `;
 
+export const ImageContainerCard = styled.div`
+  width: 200px;
+  height: 240px;
+  background-image: url(${(props) => props.image});
+  background-size: cover;
+  /* background-repeat: no-repeat; */
+  border-radius: 12px;
+`;
+
 export const CardInformation = styled.div`
+  width: 100%;
   display: flex;
   flex-direction: row;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   background-color: var(--color-background-400);
-  padding: 0.5rem 1rem;
-  gap: 0.4rem;
+  /* gap: 0.4rem; */
   font-size: 0.6rem;
   border-radius: var(--br-l);
-
+  /* margin-left: 15px; */
+  /* padding: 0rem 0.4rem; */
   @media ${device.phnAndTab} {
     padding: 0.2rem 0.5rem;
     gap: 0.2rem;
+  }
+`;
+export const GroupDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-self: start;
+  justify-content: center;
+  align-items: start;
+
+  h3 {
+    font-size: 14px;
+  }
+  p {
+    font-size: 12px;
   }
 `;
 
