@@ -118,10 +118,15 @@ export const StyledInput = styled.input`
   padding: 0.4rem;
   border: none;
   border-radius: 5px;
-  background-color: var(--color-background-500);
+  background-color: var(--color-background-800);
   color: var(--color-white-500);
   font-size: 1rem;
   font-family: var(--font-roboto);
+
+  &:disabled {
+    color: var(--color-white-50);
+    background-color: var(--color-background-500);
+  }
 
   ${(props) =>
     props.type === "submit" &&

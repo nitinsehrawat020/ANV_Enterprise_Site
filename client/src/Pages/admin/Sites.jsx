@@ -12,7 +12,7 @@ function Sites({ sites, workers }) {
         activeCategory={activeCategory}
         setActiveCategory={setActiveCategory}
       />
-      <SitesCard sites={sites} workers={workers} />
+      <SitesCard workers={workers} />
     </Content>
   );
 }

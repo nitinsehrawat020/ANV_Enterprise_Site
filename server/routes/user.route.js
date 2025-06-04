@@ -17,6 +17,7 @@ import {
   removeFromFav,
   userInfo,
   favDesign,
+  changePassword,
 } from "../controllers/user.controller.js";
 import auth from "../middleware/auth.js";
 import upload from "../middleware/multer.js";
@@ -35,6 +36,7 @@ userRouter.put(
   uploadAvatarController
 );
 userRouter.put("/update-user", auth, updateUserDetialsController);
+userRouter.put("/changePassword", auth, changePassword);
 userRouter.put("/forget-password", forgetPasswordController);
 userRouter.put("/verify-forget-password-otp", verifyForgetPasswordOtp);
 userRouter.put("/reset-password", resetPassword);

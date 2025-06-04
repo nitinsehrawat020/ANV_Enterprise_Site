@@ -1,5 +1,10 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { changeAvatarApi, getCurrentUser } from "../../services/userApi";
+import {
+  changeAvatarApi,
+  changePasswordApi,
+  getCurrentUser,
+  updateUserApi,
+} from "../../services/userApi";
 import toast from "react-hot-toast";
 
 export function useUser() {
@@ -12,9 +17,6 @@ export function useUser() {
     enabled: !!token,
 
     onError: () => {
-      // Clear tokens if request fails (token expired, etc)
-      localStorage.removeItem("accessToken");
-      localStorage.removeItem("refreshToken");
       queryClient.setQueryData(["user"], null);
     },
   });
@@ -45,4 +47,40 @@ export function useChangeAvatar() {
     },
   });
   return { changeAvatar, isLoading, error };
+}
+export function useUpdateUser() {
+  const queryClient = useQueryClient();
+
+  const {
+    mutate: updateUser,
+    isPending: isLoading,
+    error,
+  } = useMutation({
+    mutationFn: (data) => updateUserApi(data),
+    onSuccess: (res) => {
+      toast.success(" user updated succesfully");
+      queryClient.invalidateQueries("user");
+    },
+    onError: (err) => {
+      toast.error(err.response.data.message);
+    },
+  });
+  return { updateUser, isLoading, error };
+}
+
+export function useChangePassword() {
+  const {
+    mutate: changePassword,
+    isPending: isLoading,
+    error,
+  } = useMutation({
+    mutationFn: (data) => changePasswordApi(data),
+    onSuccess: (res) => {
+      toast.success(" password changed succesfully");
+    },
+    onError: (err) => {
+      toast.error(err.response.data.message);
+    },
+  });
+  return { changePassword, isLoading, error };
 }

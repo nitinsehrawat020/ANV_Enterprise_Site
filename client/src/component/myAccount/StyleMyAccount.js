@@ -1,5 +1,5 @@
 import { NavLink } from "react-router-dom";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { device } from "../../Styles/Theme";
 export const AccountContainer = styled.div`
   width: 100%;
@@ -99,7 +99,7 @@ export const StyleAccountInfo = styled.div`
   height: 100%;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  grid-template-rows: 150px 1fr;
+  grid-template-rows: 100px 1fr;
   //prettier-ignore
   grid-template-areas: 
   "title title"
@@ -113,7 +113,10 @@ export const Header = styled.div`
   width: 100%;
   justify-content: center;
   align-items: center;
-  padding: 1rem;
+
+  flex-direction: column;
+  gap: 12px;
+  border-bottom: 2px solid var(--color-white-100);
 
   h2 {
     background-color: var(--color-background-800);
@@ -184,17 +187,75 @@ export const AvatarButton = styled.div`
   }
 `;
 
+export const ChnageInfoDiv = styled.div`
+  grid-area: changeInfo;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+`;
+export const EditFormContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 1.5rem;
+  background-color: var(--color-background-200);
+  border-radius: 8px;
+  gap: 8px;
+`;
+export const EditButton = styled.button`
+  ${(props) =>
+    props.variant === "filled" &&
+    css`
+      & {
+        align-self: flex-end;
+        border-radius: var(--br-m);
+        background-color: ${props.color ? props.color : "var(--color-primary)"};
+        overflow: hidden;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        padding: var(--padding-xs-1) var(--padding-xs-1);
+        cursor: pointer;
+        font-size: ${props.size ? `${props.size}rem` : "1rem"};
+        border: none;
+        transition: all 0.3s ease;
+        margin-right: 0px;
+
+        @media ${device.laptop} {
+          font-size: ${props.size ? `${props.size / 1.5}rem` : "0.75rem"};
+        }
+        @media ${device.tablet} {
+          font-size: ${props.size ? `${props.size / 1.5}rem` : "0.75rem"};
+        }
+        @media ${device.mobile} {
+          font-size: ${props.size ? `${props.size / 2}rem` : "0.75rem"};
+        }
+      }
+      &:hover {
+        background-color: ${props.hoverColor
+          ? props.hoverColor
+          : "var(--color-primary)"};
+        border: 2px solid var(--color-primary);
+        background-color: transparent;
+        color: var(--color-primary);
+      }
+    `}
+`;
 export const InfoForm = styled.form`
   width: min-content;
   height: min-content;
   display: flex;
-  flex-wrap: wrap;
-  /* flex-direction: column; */
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   width: 500px;
   padding: 0.4rem;
   gap: 1rem;
+  border: 2px solid var(--color-background-800);
+  border-radius: 8px;
   p {
     display: flex;
     flex-direction: column;
@@ -264,9 +325,41 @@ export const InfoForm = styled.form`
   }
 `;
 
-export const StyleInput = styled.div`
-  width: 190px;
-  color: var(--color-white-50);
-  padding: 8px;
-  background-color: var(--color-background-200);
+export const StyleChangePassword = styled.div`
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  flex-direction: column;
+`;
+
+export const StylePasswordHeader = styled.div`
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  flex-direction: column;
+  gap: 12px;
+  border-bottom: 2px solid var(--color-white-100);
+
+  h2 {
+    background-color: var(--color-background-800);
+    padding: 8px;
+    border-radius: 8px;
+  }
+`;
+export const ChangePasswordFormContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+`;
+
+export const ChangePasswordForm = styled.form`
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;

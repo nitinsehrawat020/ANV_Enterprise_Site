@@ -7,22 +7,8 @@ import {
   StyleAccountContent,
   StyleAccountNavigation,
 } from "../component/myAccount/StyleMyAccount";
-import Spinner from "./Spinner";
-import toast from "react-hot-toast";
-import { useEffect } from "react";
 
 function MyAccountLayout() {
-  const navigate = useNavigate();
-  const { user, isLoading } = useUser();
-
-  useEffect(() => {
-    if (!user) {
-      toast.error("kindly login");
-      navigate("/");
-    }
-  }, [user, navigate]);
-
-  if (isLoading) return <Spinner />;
   return (
     <AccountContainer>
       <StyleAccountNavigation>

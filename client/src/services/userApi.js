@@ -131,3 +131,32 @@ export async function changeAvatarApi(data) {
 
   return res.data.data;
 }
+
+export async function updateUserApi(data) {
+  const res = await Axios({
+    ...SummaryApi.user.updateUser,
+    data: data,
+  })
+    .then((res) => {
+      return res;
+    })
+    .catch((error) => {
+      throw error;
+    });
+
+  return res.data.data;
+}
+export async function changePasswordApi(data) {
+  const res = await Axios({
+    ...SummaryApi.user.changePassword,
+    data: data,
+  })
+    .then((res) => {
+      return res;
+    })
+    .catch((error) => {
+      throw error;
+    });
+
+  return res.data.data;
+}

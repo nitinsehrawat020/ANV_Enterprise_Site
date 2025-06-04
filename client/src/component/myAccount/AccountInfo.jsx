@@ -1,27 +1,36 @@
 import Heading from "../../ui/Heading";
-import { Divider } from "../navbar/StyleNavBar";
 import { useUser } from "../LoginAndSignup/useUser";
 import {
   AvatarDiv,
   ChangeAvatarConatiner,
+  ChnageInfoDiv,
   // ContentConatiner,
   Header,
-  InfoForm,
   StyleAccountInfo,
   StyleAvatar,
   // StyleInput,
 } from "./StyleMyAccount";
-import { useForm } from "react-hook-form";
-import { Label, StyledInput } from "../LoginAndSignup/StyleLogin";
+
 import { Button } from "../../ui/Button";
 import Modal from "../../ui/Modal";
 
 import ChnageAvatarModel from "./ChnageAvatarModel";
+import ChangeInforForm from "./ChangeInforForm";
+import { useEffect } from "react";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 function AccountInfo() {
+  const navigate = useNavigate();
+
   const { user, isLoading } = useUser();
 
-  const { register, handleSubmit } = useForm();
+  useEffect(() => {
+    if (!user) {
+      toast.error("kindly login");
+      navigate("/");
+    }
+  }, [user, navigate]);
 
   if (isLoading) {
     return <div>Loading account information...</div>;
@@ -52,53 +61,9 @@ function AccountInfo() {
           </StyleAvatar>
         </ChangeAvatarConatiner>
 
-        <InfoForm onSubmit={handleSubmit}>
-          <p>
-            <Label htmlFor="firstName">First Name</Label>
-            <StyledInput
-              type="text"
-              placeholder="First Name"
-              id="firstName"
-              {...register("firstName")}
-            />
-          </p>
-          <p>
-            <Label htmlFor="lastName">Last Name</Label>
-            <StyledInput
-              type="text"
-              placeholder="Last Name"
-              id="lastName"
-              {...register("lastName")}
-            />
-          </p>
-          <p>
-            <Label htmlFor="phoneNumber">Phone Number</Label>
-            <StyledInput
-              type="number"
-              placeholder="Phone Number"
-              id="phoneNumber"
-              {...register("mobileNumber")}
-            />
-          </p>
-          <p>
-            <Label htmlFor="email">Email</Label>
-            <StyledInput
-              type="email"
-              placeholder="Email"
-              id="email"
-              {...register("email")}
-            />
-          </p>
-          <span>
-            <Label htmlFor="address">Address</Label>
-            <StyledInput
-              type="text"
-              placeholder="Address"
-              id="address"
-              {...register("addressDetails")}
-            />
-          </span>
-        </InfoForm>
+        <ChnageInfoDiv>
+          <ChangeInforForm />
+        </ChnageInfoDiv>
       </StyleAccountInfo>
     </Modal>
   );

@@ -24,6 +24,8 @@ Axios.interceptors.response.use(
     return response;
   },
   async (error) => {
+    console.log(error);
+
     const originalRequest = error.config;
 
     // Only handle 401 errors for token refresh
@@ -69,11 +71,12 @@ const refreshAccessToken = async (refreshToken) => {
   try {
     // Use base axios to avoid interceptor loops
     const res = await axios({
-      url: `${BASE_URL}${SummaryApi.refreshToken.url}`,
-      method: SummaryApi.refreshToken.method,
+      url: `${BASE_URL}${SummaryApi.user.refreshToken.url}`,
+      method: SummaryApi.user.refreshToken.method,
       headers: {
         Authorization: `Bearer ${refreshToken}`,
       },
+      withCredentials: true,
     });
 
     const accessToken = res.data.data.accessToken;

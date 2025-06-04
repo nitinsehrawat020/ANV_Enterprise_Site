@@ -11,8 +11,6 @@ import Logo from "../component/navbar/Logo";
 import { NavLink } from "react-router-dom";
 
 import { useSignup } from "../component/LoginAndSignup/useSignup";
-import Axios from "../util/Axios";
-import SummaryApi from "../common/SummaryApi";
 
 function Signup() {
   const { register, handleSubmit, reset } = useForm();

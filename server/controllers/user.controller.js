@@ -34,7 +34,7 @@ export async function registerUserController(req, res) {
         success: false,
       });
     }
-    const salt = await bcrypt.genSalt(10);
+    const salt = await bcrypt.genSalt(32);
     const hashedPassword = await bcrypt.hash(password, salt);
     const payload = {
       firstName,
@@ -207,12 +207,10 @@ export async function logoutController(request, response) {
   }
 }
 
-//upload user avatar
 export async function uploadAvatarController(req, res) {
   try {
     const userId = req.userId;
     const image = req.file;
-    console.log("image ", image);
 
     const upload = await uploadImageClodinary(image, "avatar");
 
@@ -241,7 +239,7 @@ export async function updateUserDetialsController(req, res) {
   try {
     const userId = req.userId;
 
-    const { firstName, lastName, phoneNumber, avatar } = req.body;
+    const { firstName, lastName, phoneNumber, address } = req.body;
 
     const updateUser = await UserModel.updateOne(
       { _id: userId },
@@ -249,7 +247,7 @@ export async function updateUserDetialsController(req, res) {
         ...(firstName && { firstName: firstName }),
         ...(lastName && { lastName: lastName }),
         ...(phoneNumber && { mobileNumber: phoneNumber }),
-        ...(avatar && { avatar: avatar }),
+        ...(address && { address: address }),
       }
     );
 
@@ -627,7 +625,7 @@ export async function userInfo(req, res) {
   } catch (error) {
     console.log(error);
 
-    res.status(500).json({
+    return res.status(500).json({
       message: error.message || error,
       success: false,
       error: true,
@@ -649,6 +647,67 @@ export async function favDesign(req, res) {
       data: favDesign.designId,
     });
   } catch (error) {
+    res.status(500).json({
+      message: error.message || error,
+      success: false,
+      error: true,
+    });
+  }
+}
+
+export async function changePassword(req, res) {
+  try {
+    const userId = req.userId;
+    const { curPassword, newPassword, confirmedNewPassword } = req.body;
+
+    if (!curPassword || !newPassword || !confirmedNewPassword) {
+      return res.status(400).json({
+        message: "kindly provide all the required field",
+        success: false,
+        error: true,
+      });
+    }
+
+    const user = await UserModel.findById(userId);
+
+    if (!user) {
+      return res.status(400).json({
+        message: "cant find user with user ",
+        success: false,
+        error: true,
+      });
+    }
+
+    const checkPassword = await bcrypt.compare(curPassword, user.password);
+
+    if (!checkPassword) {
+      return res
+        .status(400)
+        .json({ message: "Invalid password", error: true, success: false });
+    }
+    if (newPassword !== confirmedNewPassword) {
+      res.status(400).json({
+        message: "password and confirmed password did not match!",
+        error: true,
+        success: false,
+      });
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(newPassword, salt);
+
+    const update = await UserModel.findByIdAndUpdate(user._id, {
+      password: hashedPassword,
+    });
+
+    return res.status(200).json({
+      message: "password reset succesfully",
+      error: false,
+      success: true,
+    });
+  } catch (error) {
+    console.log(error);
+
     res.status(500).json({
       message: error.message || error,
       success: false,

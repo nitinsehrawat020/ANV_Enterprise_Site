@@ -42,6 +42,14 @@ const SummaryApi = {
       url: "/api/user/upload-avatar",
       method: "put",
     },
+    updateUser: {
+      url: "/api/user/update-user",
+      method: "put",
+    },
+    changePassword: {
+      url: "/api/user/changePassword",
+      method: "put",
+    },
   },
   design: {
     getAllDesign: {
@@ -72,6 +80,32 @@ const SummaryApi = {
       url: `/api/user/remove-from-fav/${designId}`,
       method: "post",
     }),
+  },
+  site: {
+    register: {
+      url: "/api/site/register-site",
+      method: "post",
+    },
+    updateWorkProgress: (siteId) => ({
+      url: `update-work-progress/${siteId}`,
+      method: "post",
+    }),
+    addInventoryItem: (siteId) => ({
+      url: `/api/site/add-item-to-inventory/${siteId}`,
+      method: "post",
+    }),
+    removeInventoryItem: (siteId) => ({
+      url: `/api/site/remove-item-from-inventory/${siteId}`,
+      method: "post",
+    }),
+    addPayment: (siteId) => ({
+      url: `/api/site/add-payment-log/${siteId}`,
+      method: "post",
+    }),
+    getSite: {
+      url: "/api/site/get-sites",
+      method: "get",
+    },
   },
 };
 

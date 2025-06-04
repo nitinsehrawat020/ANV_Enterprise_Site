@@ -21,6 +21,7 @@ function SiteCardDetails({ site, workers }) {
   const siteWorkerList = workers.filter((worker) => {
     return Object.values(worker.attendance).at(-1).site === site.name;
   });
+  console.log(site);
 
   return (
     <Modal>
@@ -50,7 +51,7 @@ function SiteCardDetails({ site, workers }) {
             </Graphs>
             <LastPayment>
               <Heading as="h4">Last Payment:-</Heading>
-              <p>{site.paymentLog.at(-1).date}</p>
+              <p>{site?.paymentLog?.at(-1)?.date || "No Payment Yet"}</p>
             </LastPayment>
             <LastWorkerContainer>
               <Heading as="h4">Last Workers</Heading>
@@ -63,7 +64,7 @@ function SiteCardDetails({ site, workers }) {
             <InformationSection>
               <Payment>
                 Payment Received:-{" "}
-                {formatCurrencty(+site.payment.receivedPayment)}
+                {formatCurrencty(+site?.payment?.receivedPayment || 0)}
               </Payment>
               <LastWorkingDay> Last Working Day:- </LastWorkingDay>
             </InformationSection>

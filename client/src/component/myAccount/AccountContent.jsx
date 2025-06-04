@@ -1,11 +1,7 @@
 import { Outlet } from "react-router-dom";
 
 function AccountContent() {
-  return (
-    <>
-      <Outlet />
-    </>
-  );
+  return <Outlet />;
 }
 
 export default AccountContent;

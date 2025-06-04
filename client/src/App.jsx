@@ -31,7 +31,7 @@ import Favorite from "./Pages/Favorite";
 import MyAccountLayout from "./ui/MyAccountLayout";
 import AccountInfo from "./component/myAccount/AccountInfo";
 import LoginChangePassword from "./component/myAccount/LoginChangePassword";
-import DeleteUserAccount from "./component/myAccount/DeleteUserAccount";
+import UserProtectedRoute from "./ui/UserProtectedRoute";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -62,19 +62,35 @@ function App() {
                   <Route path="/designFalseCeil" element={<DesignForeCeil />} />
                   <Route path="/designMolding" element={<DesignMolding />} />
                   <Route path="/aboutUs" element={<AboutUs />} />
-
-                  <Route path="*" element={<Home />} />
                   <Route path="/forgotPassword" element={<ForgotPassword />} />
                   <Route path="/verifyOtp" element={<VerifyOtp />} />
                   <Route path="/changePassword" element={<ChangePassword />} />
                   <Route path="/favorite" element={<Favorite />} />
-                  <Route element={<MyAccountLayout />}>
-                    <Route path="/MyAccount/info" element={<AccountInfo />} />
+                  {/* My Account Section - This is the parent route for /myAccount/* */}
+                  <Route
+                    path="/myAccount" // Define the base path for this section
+                    element={
+                      <UserProtectedRoute>
+                        {" "}
+                        {/* Protects all /myAccount/* routes */}
+                        <MyAccountLayout />{" "}
+                        {/* Provides layout for all /myAccount/* routes */}
+                      </UserProtectedRoute>
+                    }
+                  >
+                    {/* Child routes are relative to "/myAccount" */}
+                    {/* This will match /myAccount or /myAccount/ */}
+                    <Route index element={<AccountInfo />} />
+                    {/* This will match /myAccount/info - consider if 'index' is better for the default view */}
+                    <Route path="info" element={<AccountInfo />} />
                     <Route
-                      path="/MyAccount/changePassword"
+                      path="changePassword"
                       element={<LoginChangePassword />}
                     />
+                    {/* Add other /myAccount sub-routes here, e.g.: */}
+                    {/* <Route path="delete-account" element={<DeleteUserAccount />} /> */}
                   </Route>
+                  <Route path="*" element={<Home />} /> {/* Wildcard route */}
                 </Route>
                 <Route element={<UserAppLayout />}>
                   <Route path="/login" element={<Login />} />
