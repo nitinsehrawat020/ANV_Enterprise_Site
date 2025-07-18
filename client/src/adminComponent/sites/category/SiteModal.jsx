@@ -6,9 +6,11 @@ import UpdateDetails from "./UpdateDetails";
 import { useState } from "react";
 import SeeDetails from "./SeeDetails";
 
+import { IoArrowBack } from "react-icons/io5";
+
 const ModalContainer = styled.div`
-  width: 800px;
-  height: 600px;
+  width: 1200px;
+  height: 800px;
   display: grid;
   grid-template-columns: ${(props) => (props.seeDetails ? "1fr" : "1fr 1fr")};
   grid-template-rows: ${(props) =>
@@ -44,11 +46,10 @@ const SiteName = styled.div`
   grid-area: siteName;
   display: flex;
   align-items: center;
-  justify-content: end;
+  justify-content: space-between;
   border-radius: var(--br-l);
 
   h3 {
-    margin-right: 30%;
   }
 `;
 
@@ -111,16 +112,39 @@ const SeeDetailsButton = styled.div`
   }
 `;
 
-function SiteModal({ site, workers }) {
+const CloseButton = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  background-color: var(--color-red-500);
+  border: 2px solid var(--color-red-300);
+  border-radius: var(--br-l);
+  cursor: pointer;
+  color: white;
+  font-size: 30px;
+
+  &:hover {
+    background-color: var(--color-red-600);
+    border: 2px solid var(--color-red-400);
+  }
+`;
+
+function SiteModal({ site, onClose }) {
   const [seeDetails, setSeeDetails] = useState(false);
+
   return (
     <ModalContainer seeDetails={seeDetails}>
       <SiteName>
-        {" "}
+        <CloseButton onClick={onClose}>
+          <IoArrowBack />
+        </CloseButton>{" "}
         <Heading as="h3">{capitalizeFirstLetter(site.name)}</Heading>
-        <SeeDetailsButton onClick={() => setSeeDetails((value) => !value)}>
-          {seeDetails ? "Hide Details" : "See Details"}
-        </SeeDetailsButton>
+        <div style={{ display: "flex", gap: "0.5rem" }}>
+          <SeeDetailsButton onClick={() => setSeeDetails((value) => !value)}>
+            {seeDetails ? "Hide Details" : "See Details"}
+          </SeeDetailsButton>
+        </div>
       </SiteName>
       {seeDetails ? (
         <SeeDetails site={site} />
@@ -129,7 +153,7 @@ function SiteModal({ site, workers }) {
           <Inventory>
             <Heading as="h4">Inventory</Heading>
             <TableContainer>
-              <table>
+              <table key={`inventory-${site._id}`}>
                 <thead>
                   <tr>
                     <th>Item Name</th>
@@ -138,7 +162,7 @@ function SiteModal({ site, workers }) {
                 </thead>
                 <tbody>
                   {site.inventory.map((item) => (
-                    <tr key={item.name}>
+                    <tr key={item._id}>
                       <td>{item.name}</td>
                       <td>{item.quantity}</td>
                     </tr>
@@ -147,7 +171,7 @@ function SiteModal({ site, workers }) {
               </table>
             </TableContainer>
           </Inventory>
-          <CostMakingDetails site={site} workers={workers} />
+          <CostMakingDetails site={site} />
 
           <PaymentDetails>
             <Heading as="h4">Payment Details</Heading>
@@ -164,10 +188,10 @@ function SiteModal({ site, workers }) {
                 <tbody>
                   {site.paymentLog.map((payment, index) => (
                     <tr key={index}>
-                      <td>{payment.date}</td>
+                      <td>{new Date(payment.date).toLocaleDateString()}</td>
                       <td>{payment.amount}</td>
                       <td>{payment.mode}</td>
-                      <td>{payment.to}</td>
+                      <td>{payment.receiver}</td>
                     </tr>
                   ))}
                 </tbody>

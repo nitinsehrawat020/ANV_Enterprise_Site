@@ -4,7 +4,7 @@ import { setupMonthlyAttendanceScheduler } from "../utils/updateWorkerAttdance.j
 dotenv.config();
 
 if (!process.env.MONGODB_URI) {
-  throw new error("please provide mongo db url");
+  throw new Error("please provide mongo db url");
 }
 
 async function connectDb() {

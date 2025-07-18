@@ -10,8 +10,33 @@ import {
 } from "./StyleVendours";
 import Heading from "../../ui/Heading";
 import { Button } from "../../ui/Button";
+import { useForm } from "react-hook-form";
+import { useState } from "react";
+import { useSite } from "../../hooks/useSite";
+import RenderTransactionForm from "./RenderTransactionForm";
+import RendourItemForm from "./RendourItemForm";
 
-function VendourModal({ vendour }) {
+function VendourModal({ vendour, onBack }) {
+  const { register, handleSubmit, reset } = useForm();
+  const { sites, isLoading } = useSite();
+
+  const [transactionData, setTransactionData] = useState({
+    date: "",
+    site: "",
+    noOfItem: 0,
+    status: "paid",
+    items: [],
+  });
+
+  // UI state
+  const [currentStep, setCurrentStep] = useState("transaction");
+  const [itemsAdded, setItemsAdded] = useState(0);
+
+  if (isLoading) return;
+  // Handle transaction form submission
+
+  // each item hadel here
+
   return (
     <ModalContainer>
       <MaterialList>
@@ -34,7 +59,7 @@ function VendourModal({ vendour }) {
               </thead>
               <tbody>
                 {transaction.items.map((item) => (
-                  <tr key={item.id}>
+                  <tr key={item._id}>
                     <td>{item.name}</td>
                     <td>{item.price}</td>
                     <td>{item.quantity}</td>
@@ -51,34 +76,36 @@ function VendourModal({ vendour }) {
           </TransactionBox>
         ))}
       </MaterialList>
+
       <PurchaseItem>
-        <Heading as="h4"> Purchase Item</Heading>
-        <form>
-          <p>
-            <label htmlFor="material">item </label>
-            <input type="text" id="material" name="material" required />
-          </p>
-          <p>
-            <label htmlFor="price">Price </label>
-            <input type="text" id="price" name="price" required />
-          </p>
-          <p>
-            <label htmlFor="quantity">Quantity </label>
-            <input type="text" id="quantity" name="quantity" required />
-          </p>
-          <p>
-            <label htmlFor="site">Site </label>
-            <input type="text" id="site" name="site" required />
-          </p>
-          <p>
-            <label htmlFor="status">Status </label>
-            <select id="status" name="status" required>
-              <option value="paid">Paid</option>
-              <option value="not paid">Not Paid</option>
-            </select>
-          </p>
-          <input type="submit" value="Add" />
-        </form>
+        <Heading as="h4">
+          {currentStep === "transaction"
+            ? "Transaction Details"
+            : `Add Item ${itemsAdded + 1} of ${transactionData.noOfItem}`}
+        </Heading>
+
+        {currentStep === "transaction" ? (
+          <RenderTransactionForm
+            handleSubmit={handleSubmit}
+            setTransactionData={setTransactionData}
+            setCurrentStep={setCurrentStep}
+            reset={reset}
+            register={register}
+            sites={sites}
+            transactionData={transactionData}
+          />
+        ) : (
+          <RendourItemForm
+            handleSubmit={handleSubmit}
+            reset={reset}
+            itemsAdded={itemsAdded}
+            transactionData={transactionData}
+            register={register}
+            setCurrentStep={setCurrentStep}
+            setItemsAdded={setItemsAdded}
+            setTransactionData={setTransactionData}
+          />
+        )}
       </PurchaseItem>
       <PaymentInfo>
         <Title>

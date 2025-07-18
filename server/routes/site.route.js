@@ -6,6 +6,7 @@ import {
   getAllSites,
   registerNewSite,
   removeItemFromInventory,
+  updateInventoryItem,
   updateworkProgress,
 } from "../controllers/site.controller.js";
 
@@ -14,6 +15,11 @@ const siteRoute = new Router();
 siteRoute.post("/register-site", adminAuth, registerNewSite);
 siteRoute.post("/update-work-progress/:siteId", adminAuth, updateworkProgress);
 siteRoute.post("/add-item-to-inventory/:siteId", adminAuth, addItemToInventory);
+siteRoute.post(
+  "/update-inventory-item/:siteId",
+  adminAuth,
+  updateInventoryItem
+);
 siteRoute.post(
   "/remove-item-from-inventory/:siteId",
   adminAuth,

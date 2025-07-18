@@ -12,7 +12,7 @@ import { useLogin } from "../component/LoginAndSignup/useLogin";
 import { NavLink } from "react-router-dom";
 
 function Login() {
-  const { register, handleSubmit, reset } = useForm();
+  const { register, handleSubmit, reset, error } = useForm();
 
   const { login, isLoading } = useLogin();
 

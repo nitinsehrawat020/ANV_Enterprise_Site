@@ -1,10 +1,9 @@
 import styled from "styled-components";
 import Heading from "../../../ui/Heading";
-
 import { useState } from "react";
 import UpdateInventory from "../updateSite/UpdateInventory";
+import AddInventory from "../updateSite/AddInventory";
 import UpdatePayment from "../updateSite/UpdatePayment";
-import { Update } from "@mui/icons-material";
 import UpdateDetail from "../updateSite/UpdateDetail";
 
 const StyledUpdateDetails = styled.div`
@@ -21,10 +20,8 @@ const StyledUpdateDetails = styled.div`
 `;
 
 const ButtonContainer = styled.div`
-  height: 100%;
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-column-gap: 2rem;
+  display: flex;
+
   align-content: center;
   justify-content: center;
   gap: 1rem 1rem;
@@ -51,25 +48,29 @@ const Button = styled.div`
 `;
 
 function UpdateDetails({ site }) {
-  const [updateContent, setUpdateContent] = useState("Details");
+  const [updateContent, setUpdateContent] = useState("Add Inventory");
 
   return (
     <StyledUpdateDetails>
       <Heading as="h4"> Update {updateContent}</Heading>
-      {updateContent === "Details" && (
-        <ButtonContainer>
-          <Button onClick={() => setUpdateContent("Inventory")}>
-            Update Inventory
-          </Button>
-          <Button onClick={() => setUpdateContent("Payment")}>
-            Add Payment
-          </Button>
-          <Button onClick={() => setUpdateContent("Detail")}>
-            Update Details
-          </Button>
-        </ButtonContainer>
+
+      <ButtonContainer>
+        <Button onClick={() => setUpdateContent("Add Inventory")}>
+          Add Inventory
+        </Button>
+        <Button onClick={() => setUpdateContent("UpdateInventory")}>
+          Update Inventory
+        </Button>
+        <Button onClick={() => setUpdateContent("Payment")}>Add Payment</Button>
+        <Button onClick={() => setUpdateContent("Detail")}>
+          Update Details
+        </Button>
+      </ButtonContainer>
+
+      {updateContent === "Add Inventory" && (
+        <AddInventory site={site} onUpdateContent={setUpdateContent} />
       )}
-      {updateContent === "Inventory" && (
+      {updateContent === "UpdateInventory" && (
         <UpdateInventory site={site} onUpdateContent={setUpdateContent} />
       )}
 

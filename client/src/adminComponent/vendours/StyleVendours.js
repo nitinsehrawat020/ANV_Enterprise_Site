@@ -39,8 +39,8 @@ export const InnerBox = styled.div`
 `;
 
 export const ModalContainer = styled.div`
-  width: 800px;
-  height: 500px;
+  width: 1300px;
+  height: 900px;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   grid-template-rows: repeat(2, 1fr);
@@ -114,13 +114,13 @@ export const PurchaseItem = styled.div`
 
   form {
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     gap: 0.5rem;
   }
   p {
-    width: 40%;
+    width: 100%;
     display: flex;
     flex-direction: column;
     justify-content: start;

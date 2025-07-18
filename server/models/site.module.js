@@ -3,6 +3,7 @@ const siteSchema = new mongoose.Schema(
   {
     name: { type: String, required: true },
     address: { type: String, ref: "address" },
+    phoneNumber: { type: Number, default: "" },
     workProgress: { type: Number, default: 0 },
     inventory: [
       {

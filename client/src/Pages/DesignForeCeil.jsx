@@ -10,8 +10,6 @@ import { useFalseCeil } from "../component/design/useDesign";
 import FiltersAndCategory from "../ui/FiltersAndCategory";
 
 function DesignForeCeil() {
-  const { data, isLoading } = useFalseCeil();
-
   return (
     <>
       <Main>
@@ -21,7 +19,7 @@ function DesignForeCeil() {
           <Category>
             <FiltersAndCategory />
           </Category>
-          <DesignCard data={data} isLoading={isLoading} />
+          <DesignCard />
         </StyleCardContainer>
       </Main>
     </>

@@ -366,7 +366,7 @@ export async function markAttendance(req, res) {
 
 export async function getAllWorker(req, res) {
   try {
-    const data = await WorkerModel.find();
+    const data = await WorkerModel.find().populate("attendance");
     return res.status(200).json({
       message: "data of the worker fetched",
       success: true,

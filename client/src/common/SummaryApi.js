@@ -87,11 +87,15 @@ const SummaryApi = {
       method: "post",
     },
     updateWorkProgress: (siteId) => ({
-      url: `update-work-progress/${siteId}`,
+      url: `/api/site/update-work-progress/${siteId}`,
       method: "post",
     }),
     addInventoryItem: (siteId) => ({
       url: `/api/site/add-item-to-inventory/${siteId}`,
+      method: "post",
+    }),
+    UpdateInventoryItem: (siteId) => ({
+      url: `/api/site/update-inventory-item/${siteId}`,
       method: "post",
     }),
     removeInventoryItem: (siteId) => ({
@@ -106,6 +110,30 @@ const SummaryApi = {
       url: "/api/site/get-sites",
       method: "get",
     },
+  },
+  worker: {
+    getWorker: {
+      url: "api/worker/getAllWorker",
+      method: "get",
+    },
+  },
+  vendour: {
+    getVendours: {
+      url: "api/vendour/get-vendour",
+      method: "get",
+    },
+    addVendours: {
+      url: "api/vendour/add-vendour",
+      method: "post",
+    },
+    updatePayment: (vendourId) => ({
+      url: `api/vendour/update-payment/${vendourId}`,
+      method: "put",
+    }),
+    updateTransaction: (vendourId) => ({
+      url: `api/vendour/update-transaction/${vendourId}`,
+      method: "put",
+    }),
   },
 };
 

@@ -271,6 +271,7 @@ export async function forgetPasswordController(req, res) {
     const { email } = req.body;
 
     const user = await UserModel.findOne({ email });
+    console.log(user);
 
     if (!user) {
       return res.status(400).json({
@@ -590,7 +591,7 @@ export async function userInfo(req, res) {
       });
     }
 
-    const favDesign = user.favDesign.designId;
+    const favDesign = user?.favDesign?.designId;
 
     const {
       _id,

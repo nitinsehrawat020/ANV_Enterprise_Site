@@ -13,7 +13,7 @@ function DesignInformation({ selectedItem }) {
     <>
       <InformationContainer>
         <ImageContainer>
-          <img src={selectedItem.img} alt={selectedItem.title} />
+          <img src={selectedItem.image} alt={selectedItem.title} />
         </ImageContainer>
         <Content>
           <Header>

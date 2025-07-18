@@ -69,6 +69,7 @@ export async function getDesignController(req, res) {
 export async function getMoldingDesignController(req, res) {
   try {
     const data = await DesignModel.find({ designType: "molding" });
+
     res.status(200).json({
       message: "all the designs fetched",
       success: true,

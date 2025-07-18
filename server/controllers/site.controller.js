@@ -92,6 +92,49 @@ export async function updateworkProgress(req, res) {
     });
   }
 }
+export async function updateInventoryItem(req, res) {
+  try {
+    const siteId = req.params.siteId;
+    const { name, newQuantity } = req.body;
+    const site = await SiteModel.findOne({ _id: siteId });
+    if (!site) {
+      return res.status(400).json({
+        message: "no site found with this id",
+        success: false,
+        error: true,
+      });
+    }
+    // Find the specific item in the inventory array
+    const inventoryItem = site.inventory.find((item) => item.name === name);
+
+    if (!inventoryItem) {
+      return res.status(400).json({
+        message: "no item found with this name",
+        success: false,
+        error: true,
+      });
+    }
+
+    // Update the quantity of the found item
+    inventoryItem.quantity = newQuantity;
+
+    // Save the parent site document, which persists the change in the inventory item
+    await site.save();
+
+    return res.status(200).json({
+      message: "inventory item quantity updated successfully",
+      success: true,
+      error: false,
+      data: inventoryItem,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: error.message || error,
+      success: false,
+      error: true,
+    });
+  }
+}
 
 export async function addItemToInventory(req, res) {
   try {
@@ -99,7 +142,6 @@ export async function addItemToInventory(req, res) {
 
     const { name, quantity } = req.body;
     const site = await SiteModel.findOne({ _id: siteId });
-    console.log(site.inventory);
 
     if (!site) {
       res.status(400).json({
@@ -108,7 +150,6 @@ export async function addItemToInventory(req, res) {
         error: true,
       });
     }
-    console.log(siteId);
 
     site.inventory.push({ name: name, quantity: quantity });
     await site.save();

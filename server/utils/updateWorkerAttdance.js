@@ -66,6 +66,7 @@ export function setupMonthlyAttendanceScheduler() {
             data.push({
               date: new Date(currentYear, currentMonth, day),
               value: "", // Default value
+              site: null, // Default null for foreign key reference
             });
           }
 

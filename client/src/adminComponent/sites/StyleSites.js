@@ -34,10 +34,10 @@ export const CategoryItem = styled.div`
 
 export const StyledSiteCard = styled.div`
   width: 100%;
-  max-width: 1200px;
+  /* max-width: 1200px; */
   display: flex;
   align-items: flex-start;
-  justify-content: start;
+  justify-content: center;
   height: 30px;
 `;
 export const SiteCardContainer = styled.div`

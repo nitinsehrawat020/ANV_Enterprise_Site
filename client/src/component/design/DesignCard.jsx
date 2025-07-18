@@ -11,10 +11,12 @@ import DesignInformation from "./DesignInformation";
 import Spinner from "../../ui/Spinner";
 import { useUser } from "../LoginAndSignup/useUser";
 import { FaHeart } from "react-icons/fa6";
-import { useAddFavDesign, useRemoveFavDesign } from "./useDesign";
+import { useAddFavDesign, useFalseCeil, useRemoveFavDesign } from "./useDesign";
 import toast from "react-hot-toast";
 
-function DesignCard({ data = [], isLoading }) {
+function DesignCard() {
+  const { data, isLoading } = useFalseCeil();
+
   const [selectedItem, setSelectedItem] = useState(null);
   const { user, isLoading: isLoadingUser } = useUser();
   const { addFavDesign } = useAddFavDesign();
@@ -23,14 +25,6 @@ function DesignCard({ data = [], isLoading }) {
   const favoriteDesignIds = useMemo(() => {
     return new Set(user?.favDesign?.map((id) => String(id)) || []);
   }, [user?.favDesign]);
-
-  if (isLoading || isLoadingUser) {
-    return <Spinner />;
-  }
-
-  if (!Array.isArray(data) || data.length === 0) {
-    return <div>No designs to display.</div>;
-  }
 
   function handleFavClick(e, itemId) {
     e.stopPropagation();
@@ -54,6 +48,14 @@ function DesignCard({ data = [], isLoading }) {
 
   function closeOverlay() {
     setSelectedItem(null);
+  }
+
+  if (isLoading || isLoadingUser) {
+    return <Spinner />;
+  }
+
+  if (!Array.isArray(data) || data.length === 0) {
+    return <div>No designs to display.</div>;
   }
 
   return (

@@ -15,7 +15,7 @@ export async function registerSite(data) {
 
   return res;
 }
-export async function updateWorkProgress({ data, siteId }) {
+export async function updateWorkProgressApi({ data, siteId }) {
   const res = await Axios({
     ...SummaryApi.site.updateWorkProgress(siteId),
     data: data,
@@ -40,6 +40,11 @@ export async function addInventoryItem({ data, siteId }) {
       return error;
     });
   return res;
+}
+export async function updateInventoryItem({ data, siteId }) {
+  const res = await Axios({
+    ...SummaryApi.site.updateInventoryItem,
+  });
 }
 
 export async function removeInventory({ data, siteId }) {

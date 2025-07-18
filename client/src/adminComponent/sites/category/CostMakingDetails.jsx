@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import Heading from "../../../ui/Heading";
 import { TableContainer } from "./SiteModal";
+import { useWorker } from "../../../hooks/useWorker";
 
 const CostMaking = styled.div`
   grid-area: costMaking;
@@ -18,49 +19,90 @@ const CostMaking = styled.div`
   }
 `;
 
-function CostMakingDetails({ site, workers }) {
+function CostMakingDetails({ site }) {
+  const { data: workers, isLoading } = useWorker();
+
+  if (isLoading) return;
+
   const countDaysWorked = (workers) => {
-    const siteWorkDays = {};
+    const siteWorkData = {};
 
     workers.forEach((worker) => {
-      Object.values(worker.attendance).forEach((attendance) => {
-        if (attendance.site === site.name) {
-          const workerType = worker.member_type;
-          const attendanceType = attendance.value;
+      worker.attendance.attendanceData.forEach((att) => {
+        att.data.forEach((attendance) => {
+          if (attendance.site === site._id) {
+            const workerType = worker.memberType;
+            const attendanceType = attendance.value;
 
-          if (!siteWorkDays[workerType]) {
-            siteWorkDays[workerType] = {
-              full_present: 0,
-              night: 0,
-              half_day: 0,
-              present: 0,
-              absent: 0,
-            };
-          }
+            if (!siteWorkData[workerType]) {
+              siteWorkData[workerType] = {
+                full_present: 0,
+                night: 0,
+                half_day: 0,
+                present: 0,
+                absent: 0,
+              };
+            }
 
-          if (attendanceType in siteWorkDays[workerType]) {
-            siteWorkDays[workerType][attendanceType]++;
+            if (attendanceType in siteWorkData[workerType]) {
+              siteWorkData[workerType][attendanceType]++;
+            }
           }
-        }
+        });
       });
     });
 
-    return siteWorkDays;
+    return siteWorkData;
   };
-  const siteWorkDays = countDaysWorked(workers);
 
-  const workerCost =
-    siteWorkDays.worker?.full_present * 600 +
-    siteWorkDays.worker?.night * 800 +
-    siteWorkDays.worker?.half_day * 300 +
-    siteWorkDays.worker?.present * 400;
+  const countUniqueWorkers = (workers) => {
+    const workerCounts = {};
+    const uniqueWorkerSets = {};
 
-  const helperCost =
-    siteWorkDays.helper?.full_present * 400 +
-    siteWorkDays.helper?.night * 600 +
-    siteWorkDays.helper?.half_day * 200 +
-    siteWorkDays.helper?.present * 300 +
-    siteWorkDays.helper?.absent * 0;
+    workers.forEach((worker) => {
+      let hasWorkedOnSite = false;
+
+      worker.attendance.attendanceData.forEach((att) => {
+        att.data.forEach((attendance) => {
+          if (attendance.site === site._id) {
+            hasWorkedOnSite = true;
+          }
+        });
+      });
+
+      if (hasWorkedOnSite) {
+        const workerType = worker.memberType;
+
+        if (!uniqueWorkerSets[workerType]) {
+          uniqueWorkerSets[workerType] = new Set();
+        }
+
+        uniqueWorkerSets[workerType].add(worker._id);
+      }
+    });
+
+    Object.keys(uniqueWorkerSets).forEach((workerType) => {
+      workerCounts[workerType] = uniqueWorkerSets[workerType].size;
+    });
+
+    return { workerCounts, uniqueWorkerSets };
+  };
+
+  const siteWorkData = countDaysWorked(workers);
+
+  const { workerCounts, uniqueWorkerSets } = countUniqueWorkers(workers);
+
+  const workerDays =
+    (siteWorkData.worker?.full_present * 1.5 || 0) +
+    (siteWorkData.worker?.night * 2 || 0) +
+    (siteWorkData.worker?.half_day * 0.5 || 0) +
+    (siteWorkData.worker?.present * 1 || 0);
+
+  const helperDays =
+    (siteWorkData.helper?.full_present * 1.5 || 0) +
+    (siteWorkData.helper?.night * 2 || 0) +
+    (siteWorkData.helper?.half_day * 0.5 || 0) +
+    (siteWorkData.helper?.present * 1 || 0);
 
   return (
     <CostMaking>
@@ -79,29 +121,19 @@ function CostMakingDetails({ site, workers }) {
           <tbody>
             <tr>
               <td>Worker</td>
-              <td>NA</td>
-              <td>NA</td>
-              <td>
-                {siteWorkDays.worker?.full_present +
-                  siteWorkDays.worker?.night +
-                  siteWorkDays.worker?.half_day +
-                  siteWorkDays.worker?.present}
-              </td>
-              <td>{workerCost}</td>
+              <td>{workerCounts.worker || 0}</td>
+              <td>700</td>
+              <td>{workerDays}</td>
+              <td>{workerDays * 700}</td>
             </tr>
             <tr>
               <td>Helper</td>
-              <td>NA</td>
-              <td>NA</td>
-              <td>
-                {siteWorkDays.helper?.full_present +
-                  siteWorkDays.helper?.night +
-                  siteWorkDays.helper?.half_day +
-                  siteWorkDays.helper?.present}
-              </td>
-              <td>{helperCost}</td>
+              <td>{workerCounts.helper || 0}</td>
+              <td>350</td>
+              <td>{helperDays}</td>
+              <td>{helperDays * 350}</td>
             </tr>
-            {site.totalMaterialUsed.map((material) => (
+            {site?.totalMaterialUsed?.map((material) => (
               <tr key={material.name}>
                 <td>{material.name}</td>
                 <td>{material.quantity}</td>
@@ -116,10 +148,10 @@ function CostMakingDetails({ site, workers }) {
               <td></td>
               <td>Total</td>
               <td>
-                {workerCost +
-                  helperCost +
-                  site.totalMaterialUsed.reduce(
-                    (acc, material) => acc + material.quantity * material.cost,
+                {workerDays * 700 +
+                  helperDays * 350 +
+                  site?.totalMaterialUsed?.reduce(
+                    (acc, material) => acc + material?.quantity * material.cost,
                     0
                   )}
               </td>

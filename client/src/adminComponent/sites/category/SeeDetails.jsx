@@ -76,14 +76,11 @@ function SeeDetails({ site }) {
       <OwnerDetails>
         <Heading as="h4"> Owner Details</Heading>
         <Information>
-          <p>Name: {capitalizeFirstLetter(site.owner.name)}</p>
+          <p>Name: {capitalizeFirstLetter(site.name)}</p>
           <p>
-            Number :{" "}
-            <a href={`tel:${site.owner.phone_number}`}>
-              {site.owner.phone_number}
-            </a>
+            Number : <a href={`tel:${site.phoneNumber}`}>{site.phoneNumber}</a>
           </p>
-          <p>Payment: {site.payment.totalPayment}</p>
+          <p>Payment: {site.paymentDetails.totalPayment}</p>
         </Information>
       </OwnerDetails>
       <SitesDetials>
@@ -93,10 +90,10 @@ function SeeDetails({ site }) {
         </WorkType>
         <BuildingDetails>
           <Heading as="h4">Building Details</Heading>
-          Building for:- {site.buildingDetails.type}
           Area of Building:- {site.buildingDetails.area}
           Number of Floors:- {site.buildingDetails.floor}
-          flat Information:- {site.buildingDetails.flatsInfo.rooms}
+          flat Information:-
+          {site.buildingDetails.flatsInfo.rooms}
         </BuildingDetails>
       </SitesDetials>
     </StyledSeeDesign>

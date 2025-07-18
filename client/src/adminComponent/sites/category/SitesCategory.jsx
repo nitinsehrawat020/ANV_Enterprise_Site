@@ -7,7 +7,7 @@ const ActiveCategoryItem = styled(CategoryItem)`
 `;
 
 function SitesCategory({ setActiveCategory, activeCategory }) {
-  const categories = ["Active Sites", "Complete Sites", "Upcoming Sites"];
+  const categories = ["All", "Active", "Complete", "Upcoming"];
 
   return (
     <StyleCategory>

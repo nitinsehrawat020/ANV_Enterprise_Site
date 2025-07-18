@@ -28,7 +28,6 @@ Axios.interceptors.response.use(
 
     const originalRequest = error.config;
 
-    // Only handle 401 errors for token refresh
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
 

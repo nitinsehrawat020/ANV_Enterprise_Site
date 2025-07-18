@@ -1,7 +1,6 @@
-import styled from "styled-components";
-import { useEffect, useState } from "react";
-
 import { useForm } from "react-hook-form";
+import styled from "styled-components";
+import { useAddSiteInventory } from "../../../hooks/useSite";
 
 const StyledUpdateDetails = styled.div`
   width: 100%;
@@ -111,61 +110,30 @@ export const FormContainer = styled.div`
   }
 `;
 
-function UpdateInventory({ site }) {
-  const { register, handleSubmit, watch } = useForm({
-    defaultValues: {
-      name: site?.inventory[0]?.name,
-    },
-  });
-  const [quantity, setQuantity] = useState(site?.inventory[0]?.quantity || "");
+function AddInventory({ site }) {
+  const { register, handleSubmit } = useForm();
+  const { addInventoryItem, isLoading } = useAddSiteInventory();
 
-  const watchselect = watch("name");
-
-  useEffect(() => {
-    const item = site.inventory.find((item) => item.name === watchselect);
-    console.log(item);
-
-    if (item) {
-      setQuantity(item.quantity);
-    }
-  }, [watchselect, site.inventory]);
-
-  const onSubmit = (data) => {};
+  const onSubmit = (data) => {
+    addInventoryItem({ data, siteId: site._id });
+  };
   return (
     <StyledUpdateDetails>
       <FormContainer>
         <form onSubmit={handleSubmit(onSubmit)}>
           <p>
-            <label htmlFor="name">Select Item</label>
-            <select
-              {...register("name")}
-              defaultValue={site?.inventory[0]?.name}
-            >
-              {site.inventory.map((item, index) => (
-                <option key={index} value={item?.name}>
-                  {item?.name}
-                </option>
-              ))}
-            </select>
+            <label htmlFor="name">Name</label>
+            <input type="text" {...register("name")} />
           </p>
           <p>
-            <label htmlFor="quantity">Current Quantity</label>
-            <input type="text" value={quantity} disabled />
+            <label htmlFor="quantity">Quantity</label>
+            <input type="number" {...register("quantity")} />
           </p>
-          <p>
-            <label htmlFor="quantity">New Quantity</label>
-            <input
-              type="text"
-              {...register("quantity")}
-              placeholder="Enter new quantity"
-            />
-          </p>
-
-          <input type="submit" value="Update Inventory" />
+          <input type="submit" value="Add" />
         </form>
       </FormContainer>
     </StyledUpdateDetails>
   );
 }
 
-export default UpdateInventory;
+export default AddInventory;

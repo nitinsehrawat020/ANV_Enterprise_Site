@@ -18,7 +18,6 @@ app.use(
   })
 );
 
-// import all routes
 import userRoutes from "./routes/user.route.js";
 import designRouter from "./routes/design.route.js";
 import siteRoute from "./routes/site.route.js";
@@ -32,7 +31,6 @@ app.use(helmet({ contentSecurityPolicy: false }));
 
 const PORT = 5000;
 
-// use all routes
 app.use("/api/user", userRoutes);
 app.use("/api/design", designRouter);
 app.use("/api/site", siteRoute);

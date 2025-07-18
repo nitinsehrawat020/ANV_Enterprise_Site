@@ -3,8 +3,8 @@ import SitesCard from "../../adminComponent/sites/category/SitesCard";
 import SitesCategory from "../../adminComponent/sites/category/SitesCategory";
 import { Content } from "./Style";
 
-function Sites({ sites, workers }) {
-  const [activeCategory, setActiveCategory] = useState("Active Sites");
+function Sites() {
+  const [activeCategory, setActiveCategory] = useState("All");
 
   return (
     <Content>
@@ -12,7 +12,7 @@ function Sites({ sites, workers }) {
         activeCategory={activeCategory}
         setActiveCategory={setActiveCategory}
       />
-      <SitesCard workers={workers} />
+      <SitesCard activeCategory={activeCategory} />
     </Content>
   );
 }

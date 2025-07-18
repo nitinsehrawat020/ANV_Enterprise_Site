@@ -66,31 +66,24 @@ function App() {
                   <Route path="/verifyOtp" element={<VerifyOtp />} />
                   <Route path="/changePassword" element={<ChangePassword />} />
                   <Route path="/favorite" element={<Favorite />} />
-                  {/* My Account Section - This is the parent route for /myAccount/* */}
+
                   <Route
-                    path="/myAccount" // Define the base path for this section
+                    path="/myAccount"
                     element={
                       <UserProtectedRoute>
-                        {" "}
-                        {/* Protects all /myAccount/* routes */}
                         <MyAccountLayout />{" "}
-                        {/* Provides layout for all /myAccount/* routes */}
                       </UserProtectedRoute>
                     }
                   >
-                    {/* Child routes are relative to "/myAccount" */}
-                    {/* This will match /myAccount or /myAccount/ */}
                     <Route index element={<AccountInfo />} />
-                    {/* This will match /myAccount/info - consider if 'index' is better for the default view */}
+
                     <Route path="info" element={<AccountInfo />} />
                     <Route
                       path="changePassword"
                       element={<LoginChangePassword />}
                     />
-                    {/* Add other /myAccount sub-routes here, e.g.: */}
-                    {/* <Route path="delete-account" element={<DeleteUserAccount />} /> */}
                   </Route>
-                  <Route path="*" element={<Home />} /> {/* Wildcard route */}
+                  <Route path="*" element={<Home />} />
                 </Route>
                 <Route element={<UserAppLayout />}>
                   <Route path="/login" element={<Login />} />
@@ -140,10 +133,9 @@ function App() {
 
 function shouldForwardProp(propName, target) {
   if (typeof target === "string") {
-    // For HTML elements, forward the prop if it is a valid HTML attribute
     return isPropValid(propName);
   }
-  // For other elements, forward all props
+
   return true;
 }
 
