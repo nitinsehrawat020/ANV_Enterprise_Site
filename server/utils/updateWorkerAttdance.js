@@ -63,20 +63,46 @@ export function setupMonthlyAttendanceScheduler() {
           const data = [];
 
           for (let day = 1; day <= daysInMonth; day++) {
+            // Create date using ISO string format to avoid timezone issues
+            const year = currentYear;
+            const month = String(currentMonth + 1).padStart(2, "0"); // currentMonth is 0-indexed, so add 1
+            const dayStr = String(day).padStart(2, "0");
+
+            // Create date from ISO string to ensure correct date
+            const dateForDay = new Date(
+              `${year}-${month}-${dayStr}T00:00:00.000Z`
+            );
+
             data.push({
-              date: new Date(currentYear, currentMonth, day),
-              value: "", // Default value
-              site: null, // Default null for foreign key reference
+              date: dateForDay,
+              value: "not_available",
+              site: null,
             });
           }
 
           // Add the new month to attendance data
           attendance.attendanceData.push({
             month: monthNames[currentMonth],
+            summary: {
+              full_present: 0,
+              night: 0,
+              half_day: 0,
+              present: 0,
+              absent: 0,
+            },
             data: data,
           });
-
+          if (attendance.attendanceData.at(-2)) {
+            attendance.attendanceData.at(-2).payment = worker.payment;
+          }
           await attendance.save();
+          (worker.payment = {
+            totalSalary: 0,
+            advance: 0,
+            weeklyGiven: 0,
+            remainingBal: 0,
+          }),
+            await worker.save();
 
           await WorkerModel.findByIdAndUpdate(worker._id, {
             attendance: attendance._id,

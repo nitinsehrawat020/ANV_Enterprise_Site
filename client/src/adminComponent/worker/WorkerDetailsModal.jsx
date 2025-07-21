@@ -7,6 +7,9 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import PaymentInfoDetails from "./PaymentInfoDetails";
 import AttendanceDetails from "./AttendanceDetails";
+import { CloseButton } from "../vendours/StyleVendours";
+import { IoArrowBack } from "react-icons/io5";
+import { capitalizeFirstLetter } from "../../util/helper";
 
 const ModalContainer = styled.div`
   display: grid;
@@ -41,12 +44,14 @@ const ModalContainer = styled.div`
 
 const Title = styled.div`
   grid-area: title;
+  width: 100%;
   display: flex;
-  justify-content: center;
+  justify-content: start;
   align-items: center;
-  flex-direction: column;
+  flex-direction: row;
+  gap: 420px;
 
-  background-color: var(--color-background-200);
+  /* background-color: var(--color-background-200); */
   border-radius: var(--br-l);
   box-shadow: var(--shadow-md);
   padding: 0.5rem;
@@ -161,7 +166,7 @@ const Form = styled.form`
   }
 `;
 
-function WorkerDetailsModal({ worker }) {
+function WorkerDetailsModal({ worker, onClose }) {
   const [addInventory, setAddInventory] = useState(false);
   const { register, handleSubmit } = useForm();
 
@@ -185,7 +190,10 @@ function WorkerDetailsModal({ worker }) {
   return (
     <ModalContainer>
       <Title>
-        <Heading as="h3">{worker.name}</Heading>
+        <CloseButton onClick={onClose}>
+          <IoArrowBack />
+        </CloseButton>{" "}
+        <Heading as="h3">{capitalizeFirstLetter(worker.name)}</Heading>
       </Title>
       <Attendance>
         <AttendanceDetails worker={worker} />

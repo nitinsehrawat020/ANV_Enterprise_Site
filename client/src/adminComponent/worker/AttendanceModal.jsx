@@ -4,6 +4,7 @@ import RenderRow from "./RenderRow";
 import { getTodayFormattedDate } from "../../util/helper";
 import MobileAttdanceSheet from "./MobileAttdanceSheet";
 import { salaryAmount } from "../../data/setting";
+import { useWorkerAttendance } from "../../hooks/useWorker";
 
 const ModalContainer = styled.div`
   height: 400px;
@@ -116,6 +117,7 @@ const DesktopAttendanceSheet = styled.div`
 
 function AttendanceModal({ day, WorkerData, sites }) {
   const { register, handleSubmit, reset } = useForm();
+  const { updateAttendance, isLoading } = useWorkerAttendance();
 
   // Function to organize form data by worker ID
   const organizeFormData = (formData) => {
@@ -129,15 +131,14 @@ function AttendanceModal({ day, WorkerData, sites }) {
     });
 
     workerIds.forEach((workerId) => {
-      const attendanceValue = formData[`attendance${workerId}`];
-      const siteValue = formData[`site${workerId}`];
+      const attendanceValue = formData[`attendance_${workerId}`];
+      const siteValue = formData[`site_${workerId}`];
 
       if (isValidWorkerData.call(this, attendanceValue, siteValue)) {
         workerData.push({
-          workerId: parseInt(workerId),
-          attendance: attendanceValue,
+          workerId: workerId,
+          value: attendanceValue,
           site: siteValue || "",
-          date: day,
         });
       }
     });
@@ -157,21 +158,18 @@ function AttendanceModal({ day, WorkerData, sites }) {
   const onSubmit = (data) => {
     const organizedData = organizeFormData(data);
 
-    // Now you can use organizedData to update worker attendance records
-    organizedData.forEach((workerData) => {
-      // Find the worker by ID
-      const worker = WorkerData.find((w) => w.id === workerData.workerId);
+    let formattedDate;
+    if (day === "Today" || day === "today") {
+      formattedDate = new Date().toISOString().split("T")[0];
+    } else {
+      formattedDate = new Date(day).toISOString().split("T")[0];
+    }
 
-      if (workerData.attendance && workerData.attendance === " ") return;
-
-      if (worker) {
-        // Update attendance for the specified date
-        worker.attendance[workerData.date] = {
-          value: workerData.attendance,
-          site: workerData.site,
-        };
-      }
-    });
+    const payload = {
+      date: formattedDate,
+      workers: organizedData,
+    };
+    updateAttendance({ payload });
 
     reset();
   };

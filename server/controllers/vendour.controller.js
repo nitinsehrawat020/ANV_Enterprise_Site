@@ -36,7 +36,7 @@ export async function addVendour(req, res) {
 
 export async function getVendours(req, res) {
   try {
-    const data = await VendoursModel.find();
+    const data = await VendoursModel.find().populate("transaction.items.site");
 
     res.status(200).json({
       message: "all the vendours data has been fetched",
@@ -45,6 +45,8 @@ export async function getVendours(req, res) {
       data: data,
     });
   } catch (error) {
+    console.log(error);
+
     res.status(500).json({
       message: error.message || error,
       success: false,
@@ -159,6 +161,50 @@ export async function updateTransaction(req, res) {
 
     return res.status(200).json({
       message: "transaction added succesfully",
+      success: true,
+      error: false,
+    });
+  } catch (error) {
+    console.log(error);
+
+    res.status(500).json({
+      message: error.message || error,
+      success: false,
+      error: true,
+    });
+  }
+}
+export async function updatePaymentHistory(req, res) {
+  try {
+    const vendourId = req.params.vendourId;
+    const { date, amount, mode } = req.body;
+    console.log(vendourId);
+
+    if (!amount || !mode) {
+      return res.status(400).json({
+        message: "kindly provide all the required field",
+        success: false,
+        error: true,
+      });
+    }
+
+    const vendour = await VendoursModel.findById(vendourId);
+
+    if (!vendour) {
+      return res.status(400).json({
+        message: "no vendour found!!",
+        success: false,
+        error: true,
+      });
+    }
+
+    const payload = { date, amount, mode };
+
+    vendour.paymentHistory.push(payload);
+    await vendour.save();
+
+    return res.status(200).json({
+      message: "payment history updated succesfully",
       success: true,
       error: false,
     });

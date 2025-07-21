@@ -18,7 +18,11 @@ const siteSchema = new mongoose.Schema(
     },
     lastWorkingDate: { type: Date },
     costMaking: [{ type: Object }],
-    status: { type: String, enum: ["active", "inactive"], default: "active" },
+    status: {
+      type: String,
+      enum: ["active", "complete", "upcoming"],
+      default: "active",
+    },
     workType: { type: String, default: "" },
     buildingDetails: {
       area: { type: String, default: "" },

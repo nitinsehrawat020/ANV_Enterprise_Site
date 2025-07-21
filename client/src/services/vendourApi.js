@@ -20,6 +20,7 @@ export async function addVendourApi({ data }) {
     .catch((err) => {
       return err;
     });
+  return res.data.data;
 }
 
 export async function updatePaymentApi({ data, vendourId }) {
@@ -33,15 +34,30 @@ export async function updatePaymentApi({ data, vendourId }) {
     .catch((err) => {
       return err;
     });
+  return res.data.data;
 }
 
-export async function updatetransaction({ data, vendourId }) {
+export async function updateTransactionApi({ data, vendourId }) {
   const res = await Axios({
     ...SummaryApi.vendour.updateTransaction(vendourId),
     data,
   })
     .then((res) => {
       return res;
+    })
+    .catch((err) => {
+      return err;
+    });
+  return res.data.data;
+}
+
+export async function updatePaymentHistoryApi({ data, vendourId }) {
+  const res = await Axios({
+    ...SummaryApi.vendour.updateHistoryPayment(vendourId),
+    data: data,
+  })
+    .then((res) => {
+      return res.data.data;
     })
     .catch((err) => {
       return err;

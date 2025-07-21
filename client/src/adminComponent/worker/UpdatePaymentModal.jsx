@@ -4,6 +4,11 @@ import { useForm } from "react-hook-form";
 import DesktopTable from "./DesktopTable";
 import MobileForm from "./MobileForm";
 import { formatDate } from "../../util/helper";
+import { useState } from "react";
+import {
+  useUpdateWedesdayPayment,
+  useUpdateworkerPayment,
+} from "../../hooks/useWorker";
 
 const ModelContainer = styled.div`
   height: 400px;
@@ -55,104 +60,79 @@ export const TableContainer = styled.div`
 
 function UpdatePaymentModal({ workerData }) {
   const { register, handleSubmit, reset } = useForm();
+  const { updateWednesdayPayment } = useUpdateWedesdayPayment();
+  const { updateWorkerPayment } = useUpdateworkerPayment();
 
-  const updateWednesdayPayment = () => {
-    console.log("Wednesday Payment Updated");
+  // State to trigger reset of DesktopTable
+  const [resetTrigger, setResetTrigger] = useState(0);
 
+  const WednesdayPayment = () => {
     // Update Wednesday Payment
-    workerData.forEach((worker) => {
-      const payment = {
-        date: formatDate(new Date()),
-        amount: 1000,
-        paymentType: "cash",
-        paymentFor: "weekly",
-      };
-      worker.paymentLog.push(payment);
-      worker.payment.weeklyGiven += payment.amount;
-    });
-    console.log(workerData);
+    updateWednesdayPayment({ data: { date: new Date() } });
   };
 
-  const onSubmit = (data) => {
-    console.log(data);
+  const onSubmit = async (data) => {
+    console.log("Form data:", data);
 
-    //collecting all the data about payment of 1 worker
-    const payments = [
-      {
-        id: +data.workerId_1,
-        amount: +data.amount_1,
-        date: formatDate(new Date(data.date_1)),
-        paymentFor: data.paymentFor_1,
-      },
-      {
-        id: +data.workerId_2,
-        amount: +data.amount_2,
-        date: formatDate(new Date(data.date_2)),
-        paymentFor: data.paymentFor_2,
-      },
-      {
-        id: +data.workerId_3,
-        amount: +data.amount_3,
-        date: formatDate(new Date(data.date_3)),
-        paymentFor: data.paymentFor_3,
-      },
-      {
-        id: +data.workerId_4,
-        amount: +data.amount_4,
-        date: formatDate(new Date(data.date_4)),
-        paymentFor: data.paymentFor_4,
-      },
-      {
-        id: +data.workerId_5,
-        amount: +data.amount_5,
-        date: formatDate(new Date(data.date_5)),
-        paymentFor: data.paymentFor_5,
-      },
-      {
-        id: +data.workerId_6,
-        amount: +data.amount_6,
-        date: formatDate(new Date(data.date_6)),
-        paymentFor: data.paymentFor_6,
-      },
-    ];
-    console.log(payments);
+    // Simple function to collect all entered worker payments
+    const getWorkerPayments = () => {
+      const payments = [];
 
-    //updating the payment log of the worker
-    payments.forEach((payment) => {
-      if (isValidPayment(payment)) {
-        const worker = workerData.find((worker) => worker.id === payment.id);
-        if (worker) {
-          worker.paymentLog.push(payment);
-          updateWorkerPayment.call(worker, payment);
+      // Find all workerId fields in the form data
+      Object.keys(data).forEach((key) => {
+        if (key.startsWith("workerId_")) {
+          const index = key.split("_")[1]; // Get the number part
+          const workerId = data[`workerId_${index}`];
+          const amount = data[`amount_${index}`];
+          const date = data[`date_${index}`];
+          const paymentFor = data[`paymentFor_${index}`];
+
+          // Only include if worker is selected and amount is entered
+          if (workerId && amount && parseFloat(amount) > 0) {
+            payments.push({
+              workerId: workerId,
+              amount: parseFloat(amount),
+              date: date || formatDate(new Date()),
+              paymentFor: paymentFor || "Payment",
+            });
+          }
         }
-        console.log(worker);
+      });
+
+      return payments;
+    };
+
+    const workerPayments = getWorkerPayments();
+    console.log("Worker payments array:", workerPayments);
+    console.log(`Total payments: ${workerPayments.length}`);
+
+    // Submit to API if we have valid payments
+    if (workerPayments.length > 0) {
+      try {
+        updateWorkerPayment({ data: { workers: workerPayments } });
+        console.log("Payments submitted successfully");
+
+        // Reset the form data
+        reset();
+
+        // Trigger reset of DesktopTable by incrementing the resetTrigger
+        setResetTrigger((prev) => prev + 1);
+      } catch (error) {
+        console.error("Error submitting payments:", error);
+        alert("Error submitting payments. Please try again.");
       }
-    });
-    reset();
-  };
-
-  //checking if the payment is valid or not
-  const isValidPayment = (payment) => {
-    return payment.id && payment.amount && payment.date && payment.paymentFor;
-  };
-
-  //updating the worker payment
-  const updateWorkerPayment = function (payment) {
-    if (payment.paymentFor === "weekly") {
-      this.payment.weeklyGiven += payment.amount;
-    } else if (payment.paymentFor === "advance") {
-      this.payment.advance += payment.amount;
-    } else if (payment.paymentFor === "salary") {
-      this.payment.totalSalery -= payment.amount;
+    } else {
+      alert("Please select workers and enter payment amounts");
     }
   };
+
   return (
     <ModelContainer>
       <Header>
         <Heading as="h3" className="heading">
           Update Payment
         </Heading>
-        <Wednesday onClick={updateWednesdayPayment}>
+        <Wednesday onClick={WednesdayPayment}>
           Update Wednesday Payment
         </Wednesday>
       </Header>
@@ -162,12 +142,13 @@ function UpdatePaymentModal({ workerData }) {
             register={register}
             workerData={workerData}
             today={formatDate(new Date())}
+            resetTrigger={resetTrigger}
           />
           <MobileForm
             register={register}
             workerData={workerData}
             today={formatDate(new Date())}
-            updateWednesdayPayment={updateWednesdayPayment}
+            updateWednesdayPayment={WednesdayPayment}
           />
         </form>
       </TableContainer>

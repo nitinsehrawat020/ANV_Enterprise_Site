@@ -10,30 +10,48 @@ import Modal from "../../ui/Modal";
 import AttendanceModal from "./AttendanceModal";
 import { useOutsideClick } from "../../hooks/useOutsideClick.jsx";
 
-function Attendance({ WorkerData, sites }) {
+function Attendance({ workers, sites }) {
   const [attendanceDropdown, setAttendanceDropdown] = useState(false);
   const ref = useOutsideClick(() => setAttendanceDropdown(false));
 
   const WorkersAttendance = useMemo(() => {
-    return WorkerData.map((worker) => {
-      const notAvailableDays = Object.keys(worker.attendance).filter(
-        (date) => worker.attendance[date].value === "not_available"
-      );
+    return workers.map((worker) => {
+      const notAvailableDays = [];
+
+      if (worker.attendance?.attendanceData) {
+        worker.attendance.attendanceData.forEach((monthData) => {
+          if (monthData.data && Array.isArray(monthData.data)) {
+            monthData.data.forEach((dayData) => {
+              if (dayData.value === "not_available") {
+                const formattedDate = new Date(dayData.date)
+                  .toISOString()
+                  .split("T")[0];
+                notAvailableDays.push(formattedDate);
+              }
+            });
+          }
+        });
+      }
+
       return {
         name: worker.name,
         notAvailableDays,
       };
     });
-  }, [WorkerData]);
+  }, [workers]);
 
   const uniqueNotAvailableDays = useMemo(() => {
+    const today = new Date().toISOString().split("T")[0];
+
     const daysSet = new Set();
     WorkersAttendance.forEach((worker) => {
       worker.notAvailableDays.forEach((day) => {
-        daysSet.add(day);
+        if (day < today) {
+          daysSet.add(day);
+        }
       });
     });
-    return [...daysSet];
+    return [...daysSet].sort();
   }, [WorkersAttendance]);
 
   return (
@@ -43,29 +61,42 @@ function Attendance({ WorkerData, sites }) {
         <PendingListButton
           onClick={() => setAttendanceDropdown((prev) => !prev)}
         >
-          View Pending List
+          View Pending List ({uniqueNotAvailableDays.length} pending)
         </PendingListButton>
+
         {attendanceDropdown && (
           <PendingList ref={ref}>
             <Modal.Open opens="TodayAttendance">
               <AttendanceButton>Today Attendance</AttendanceButton>
             </Modal.Open>
-            {uniqueNotAvailableDays.map((day, index) => (
-              <Modal.Open key={index} opens={day}>
-                <AttendanceButton>{day}</AttendanceButton>
-              </Modal.Open>
-            ))}
+
+            {uniqueNotAvailableDays.length > 0 ? (
+              uniqueNotAvailableDays.map((day, index) => (
+                <Modal.Open key={index} opens={day}>
+                  <AttendanceButton>
+                    {new Date(day).toLocaleDateString()}(
+                    {new Date(day).toLocaleDateString("en-US", {
+                      weekday: "short",
+                    })}
+                    )
+                  </AttendanceButton>
+                </Modal.Open>
+              ))
+            ) : (
+              <AttendanceButton disabled>
+                No pending attendance issues
+              </AttendanceButton>
+            )}
           </PendingList>
         )}
 
         <Modal.Window name="TodayAttendance">
-          <AttendanceModal WorkerData={WorkerData} day="Today" sites={sites} />
+          <AttendanceModal WorkerData={workers} day="Today" sites={sites} />
         </Modal.Window>
+
         {uniqueNotAvailableDays.map((day, index) => (
           <Modal.Window key={index} name={day}>
-            <AttendanceModal WorkerData={WorkerData} day={day} sites={sites}>
-              {day}
-            </AttendanceModal>
+            <AttendanceModal WorkerData={workers} day={day} sites={sites} />
           </Modal.Window>
         ))}
       </AttendanceBox>

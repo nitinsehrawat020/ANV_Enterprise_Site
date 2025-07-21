@@ -11,11 +11,10 @@ function RenderTransactionForm({
     setTransactionData({
       ...transactionData,
       date: data.date,
-      site: data.site,
-      noOfItem: parseInt(data.noOfItem) || 0,
+      noOfSites: parseInt(data.noOfSites) || 0,
       status: data.status,
     });
-    setCurrentStep("items");
+    setCurrentStep("sites");
     reset();
   };
   return (
@@ -25,23 +24,11 @@ function RenderTransactionForm({
         <input type="date" {...register("date")} required />
       </p>
       <p>
-        <label htmlFor="site">Site </label>
-        <select id="site" {...register("site")} required>
-          {sites.map((site) => {
-            return (
-              <option value={site.name} key={site._id}>
-                {site.name}
-              </option>
-            );
-          })}
-        </select>
-      </p>
-      <p>
-        <label htmlFor="noOfItem">Number Of Items </label>
+        <label htmlFor="noOfSites">Number of Sites </label>
         <input
           type="number"
-          id="noOfItem"
-          {...register("noOfItem")}
+          id="noOfSites"
+          {...register("noOfSites")}
           min="1"
           required
         />
@@ -53,7 +40,7 @@ function RenderTransactionForm({
           <option value="not paid">Not Paid</option>
         </select>
       </p>
-      <input type="submit" value="Next - Add Items" />
+      <input type="submit" value="Next - Add Sites" />
     </form>
   );
 }

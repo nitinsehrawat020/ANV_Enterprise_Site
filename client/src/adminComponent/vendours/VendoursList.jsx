@@ -26,7 +26,10 @@ function VendoursList() {
           </VendoursBox>
         ))
       ) : (
-        <VendourModal vendour={selectesVendour} onBack={selectesVendour} />
+        <VendourModal
+          vendour={selectesVendour}
+          onClose={() => setSelectedVendour("")}
+        />
       )}
     </StyledVendours>
   );

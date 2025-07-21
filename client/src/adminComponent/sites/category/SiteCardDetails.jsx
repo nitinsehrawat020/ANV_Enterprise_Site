@@ -17,7 +17,7 @@ import { Circle } from "rc-progress";
 import { useWorker } from "../../../hooks/useWorker";
 
 function SiteCardDetails({ site, onClick }) {
-  const { data: workers, isLoading: isWorkerLoading } = useWorker();
+  const { workers, isLoading: isWorkerLoading } = useWorker();
 
   if (isWorkerLoading) return;
 

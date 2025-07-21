@@ -1,7 +1,7 @@
 import VendoursList from "../../adminComponent/vendours/VendoursList";
 import { Content } from "./Style";
 
-function Vendours({ sites }) {
+function Vendours() {
   return (
     <Content>
       <VendoursList />

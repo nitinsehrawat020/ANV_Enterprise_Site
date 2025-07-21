@@ -1,7 +1,10 @@
 function RenderItemList({ transactionData }) {
-  console.log(transactionData);
-
-  if (transactionData.items.length === 0) {
+  // Safety checks
+  if (
+    !transactionData ||
+    !transactionData.sites ||
+    !Array.isArray(transactionData.sites)
+  ) {
     return (
       <div
         style={{
@@ -12,7 +15,35 @@ function RenderItemList({ transactionData }) {
           color: "#fff",
         }}
       >
-        <p>No items added yet</p>
+        <p>No transaction data available</p>
+      </div>
+    );
+  }
+
+  // Get current site items
+  const currentSite = transactionData.sites[transactionData.currentSiteIndex];
+  const currentSiteItems = currentSite?.items || [];
+
+  // Debug logging
+  console.log("RenderItemList Debug:", {
+    currentSiteIndex: transactionData.currentSiteIndex,
+    currentSite,
+    currentSiteItems,
+    sitesLength: transactionData.sites.length,
+  });
+
+  if (currentSiteItems.length === 0) {
+    return (
+      <div
+        style={{
+          padding: "1rem",
+          backgroundColor: "#464646",
+          borderRadius: "8px",
+          textAlign: "center",
+          color: "#fff",
+        }}
+      >
+        <p>No items added yet for {currentSite?.siteName || "this site"}</p>
       </div>
     );
   }
@@ -26,11 +57,13 @@ function RenderItemList({ transactionData }) {
         border: "1px solid #e0e0e0",
       }}
     >
-      <h5 style={{ marginTop: "0", marginBottom: "1rem" }}>Items Added:</h5>
+      <h5 style={{ marginTop: "0", marginBottom: "1rem" }}>
+        Items Added for {currentSite?.siteName || "Site"}:
+      </h5>
       <ul style={{ margin: "0", paddingLeft: "1.2rem" }}>
-        {transactionData.items.map((item, index) => (
+        {currentSiteItems.map((item, index) => (
           <li
-            key={item.id}
+            key={item.id || index}
             style={{ marginBottom: "0.5rem", lineHeight: "1.4" }}
           >
             <strong>
@@ -51,8 +84,8 @@ function RenderItemList({ transactionData }) {
         }}
       />
       <div style={{ textAlign: "right", fontWeight: "bold" }}>
-        Total: $
-        {transactionData.items
+        Site Total: $
+        {currentSiteItems
           .reduce((sum, item) => sum + item.price * item.quantity, 0)
           .toFixed(2)}
       </div>

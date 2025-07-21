@@ -77,6 +77,13 @@ export const MaterialList = styled.div`
     width: 0px;
     background: transparent;
   }
+  span {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    gap: 150px;
+  }
 `;
 
 export const TransactionBox = styled.div`
@@ -92,6 +99,28 @@ export const TransactionBox = styled.div`
   border-radius: 0.5rem;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   font-size: 0.8rem;
+
+  span {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+  }
+`;
+
+export const TableContainer = styled.div`
+  width: 100%;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  justify-content: start;
+  border: 1px solid black;
+  padding: 1rem;
+  gap: 12px;
+  background-color: var(--color-background-400);
 `;
 export const PurchaseItem = styled.div`
   grid-area: purchase-item;
@@ -171,9 +200,8 @@ export const PurchaseItem = styled.div`
 export const PaymentInfo = styled.div`
   grid-area: payment-info;
   display: flex;
-  align-self: stretch;
-  justify-self: stretch;
   flex-direction: column;
+  height: 500px; /* Add explicit height */
   justify-content: top;
   align-items: center;
   gap: 1rem;
@@ -191,21 +219,107 @@ export const PaymentInfo = styled.div`
   }
 `;
 
-export const ButtonGroup = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 1rem;
-`;
 export const Title = styled.div``;
 export const Content = styled.div`
   width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  height: 100%; /* Will fill PaymentInfo height */
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto 1fr;
+  grid-template-areas:
+    "totalBalance totalBalance"
+    "paymentHistory payPayment";
+  /* Remove flex-direction: column - not needed with grid */
   gap: 1rem;
   padding: 1rem;
   border-radius: 0.5rem;
+`;
+
+export const TotalBalanceConatiner = styled.div`
+  grid-area: totalBalance;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 0.5rem;
+`;
+
+export const PaymentHistoryContainer = styled.div`
+  grid-area: paymentHistory;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  border: 1px solid black;
+  width: 100%;
+  height: 100%;
+  min-height: 100px;
+  overflow-y: auto;
+
+  h4 {
+    width: 100%;
+    margin: 0 0 0.5rem 0;
+    padding: 0.5rem;
+    border-bottom: 1px solid #444;
+    text-align: center;
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 600;
+  }
+`;
+
+export const PayPaymentContainer = styled.div`
+  grid-area: payPayment;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  border: 1px solid black;
+  width: 100%;
+  height: 100%;
+  min-height: 100px; /* Ensure minimum height */
+  overflow-y: auto; /* Allow scrolling if content exceeds */
+  h4 {
+    width: 100%;
+    margin: 0 0 0.5rem 0;
+    padding: 0.5rem;
+    border-bottom: 1px solid #444;
+    text-align: center;
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 600;
+  }
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  p {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  select {
+    background-color: var(--color-background-500);
+  }
+  input[type="submit"] {
+    background-color: var(--color-primary-500);
+  }
+`;
+export const CloseButton = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  background-color: var(--color-red-500);
+  border: 2px solid var(--color-red-300);
+  border-radius: var(--br-l);
+  cursor: pointer;
+  color: white;
+  font-size: 30px;
+
+  &:hover {
+    background-color: var(--color-red-600);
+    border: 2px solid var(--color-red-400);
+  }
 `;

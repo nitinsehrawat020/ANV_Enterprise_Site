@@ -12,3 +12,43 @@ export async function getWorkerApi() {
     });
   return res.data.data;
 }
+
+export async function updateWorkerAttendance({ data }) {
+  const res = await Axios({ ...SummaryApi.worker.markAttendance, data: data })
+    .then((res) => {
+      return res;
+    })
+    .catch((error) => {
+      return error;
+    });
+  return res.data.data;
+}
+
+export async function updateWedesdayPaymentApi({ data }) {
+  const res = await Axios({
+    ...SummaryApi.worker.updateWednesdayPayment,
+    data: data,
+  })
+    .then((res) => {
+      console.log(res);
+
+      return res.data;
+    })
+    .catch((err) => {
+      return err;
+    });
+  return res;
+}
+export async function updateWorkerPaymentApi({ data }) {
+  const res = await Axios({
+    ...SummaryApi.worker.updatepayment,
+    data: data,
+  })
+    .then((res) => {
+      return res.data;
+    })
+    .catch((err) => {
+      return err;
+    });
+  return res;
+}

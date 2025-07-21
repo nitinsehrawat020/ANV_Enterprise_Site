@@ -4,29 +4,68 @@ import RenderItemList from "./RenderItemList";
 function RendourItemForm({
   handleSubmit,
   reset,
-  itemsAdded,
+  currentSiteItemsAdded,
   transactionData,
   register,
   setCurrentStep,
-  setItemsAdded,
+  setCurrentSiteItemsAdded,
   setTransactionData,
+  vendour,
 }) {
-  const isAllItemsAdded = itemsAdded >= transactionData.noOfItem;
+  const currentSite = transactionData.sites?.[transactionData.currentSiteIndex];
+  const totalItemsForCurrentSite = currentSite?.noOfItems || 0;
+  const isAllItemsAdded = currentSiteItemsAdded >= totalItemsForCurrentSite;
+
+  // Debug logging
+  console.log("RendourItemForm Debug:", {
+    currentSiteIndex: transactionData.currentSiteIndex,
+    sitesLength: transactionData.sites?.length,
+    currentSite,
+    currentSiteItemsAdded,
+    totalItemsForCurrentSite,
+  });
+
+  // Safety check - if no current site, return error message
+  if (!currentSite) {
+    return (
+      <div style={{ color: "red", padding: "1rem" }}>
+        Error: No current site found. Please go back and set up sites first.
+      </div>
+    );
+  }
+
   const handleItemSubmit = (data) => {
     const newItem = {
-      id: Date.now(),
+      id: Date.now(), // Simple ID generation
       name: data.itemName,
       price: parseFloat(data.price) || 0,
       quantity: parseInt(data.quantity) || 0,
-      site: transactionData.site,
     };
+
+    // Update the current site's items array
+    const updatedSites = [...transactionData.sites];
+
+    // Ensure the current site exists and has an items array
+    if (!updatedSites[transactionData.currentSiteIndex]) {
+      console.error(
+        "Current site index not found:",
+        transactionData.currentSiteIndex
+      );
+      return;
+    }
+
+    if (!updatedSites[transactionData.currentSiteIndex].items) {
+      updatedSites[transactionData.currentSiteIndex].items = [];
+    }
+
+    updatedSites[transactionData.currentSiteIndex].items.push(newItem);
 
     setTransactionData({
       ...transactionData,
-      items: [...transactionData.items, newItem],
+      sites: updatedSites,
     });
 
-    setItemsAdded(itemsAdded + 1);
+    setCurrentSiteItemsAdded(currentSiteItemsAdded + 1);
     reset();
   };
 
@@ -66,7 +105,7 @@ function RendourItemForm({
             </p>
             <input
               type="submit"
-              value={`Add Item (${itemsAdded}/${transactionData.noOfItem})`}
+              value={`Add Item (${currentSiteItemsAdded}/${totalItemsForCurrentSite})`}
             />
           </form>
         ) : (
@@ -83,8 +122,8 @@ function RendourItemForm({
               ✅ All Items Added!
             </h4>
             <p style={{ color: "#2e7d32", margin: "0.5rem 0" }}>
-              You have successfully added all {transactionData.noOfItem} items
-              to this transaction.
+              You have successfully added all {totalItemsForCurrentSite} items
+              for {currentSite?.siteName || "this site"}.
             </p>
           </div>
         )}
@@ -93,7 +132,9 @@ function RendourItemForm({
           isAllItemsAdded,
           setTransactionData,
           transactionData,
-          setItemsAdded,
+          setCurrentSiteItemsAdded,
+          currentSiteItemsAdded,
+          vendour,
         })}
       </div>
 

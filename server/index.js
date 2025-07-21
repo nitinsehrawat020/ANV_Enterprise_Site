@@ -38,7 +38,7 @@ app.use("/api/vendour", vendourRouter);
 app.use("/api/worker", workerRouter);
 
 app.get("/", (req, res) => {
-  res.status(500).json({
+  res.status(400).json({
     status: "error",
     message: "the request is send to the home route",
     success: false,

@@ -1,36 +1,42 @@
 import {
-  ButtonGroup,
+  CloseButton,
   Content,
   MaterialList,
   ModalContainer,
   PaymentInfo,
+  PayPaymentContainer,
   PurchaseItem,
+  TableContainer,
   Title,
+  TotalBalanceConatiner,
   TransactionBox,
 } from "./StyleVendours";
 import Heading from "../../ui/Heading";
-import { Button } from "../../ui/Button";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { useSite } from "../../hooks/useSite";
 import RenderTransactionForm from "./RenderTransactionForm";
+import RenderSiteForm from "./RenderSiteForm";
 import RendourItemForm from "./RendourItemForm";
+import PaymentHistory from "./PaymentHistory";
+import PayPayment from "./PayPayment";
+import { IoArrowBack } from "react-icons/io5";
 
-function VendourModal({ vendour, onBack }) {
+function VendourModal({ vendour, onClose }) {
   const { register, handleSubmit, reset } = useForm();
   const { sites, isLoading } = useSite();
 
   const [transactionData, setTransactionData] = useState({
     date: "",
-    site: "",
-    noOfItem: 0,
     status: "paid",
-    items: [],
+    noOfSites: 0,
+    sites: [], // Array of sites with their items
+    currentSiteIndex: 0,
   });
 
   // UI state
-  const [currentStep, setCurrentStep] = useState("transaction");
-  const [itemsAdded, setItemsAdded] = useState(0);
+  const [currentStep, setCurrentStep] = useState("transaction"); // "transaction", "sites", "items"
+  const [currentSiteItemsAdded, setCurrentSiteItemsAdded] = useState(0);
 
   if (isLoading) return;
   // Handle transaction form submission
@@ -40,48 +46,83 @@ function VendourModal({ vendour, onBack }) {
   return (
     <ModalContainer>
       <MaterialList>
-        <Heading as="h3">Material Details</Heading>
-        {vendour.transaction.map((transaction) => (
-          <TransactionBox key={transaction.id}>
-            <p>
-              Date: {transaction.date} || Status: {transaction.status}
-            </p>
+        <span>
+          <CloseButton onClick={onClose}>
+            <IoArrowBack />
+          </CloseButton>{" "}
+          <Heading as="h3">Material Details </Heading>
+        </span>
+        {vendour.transaction
+          .sort((a, b) => new Date(b.date) - new Date(a.date)) // Sort by date, newest first
+          .slice(0, 3) // Take only first 3 transactions
+          .map((transaction) => (
+            <TransactionBox key={transaction._id}>
+              <span>
+                <Heading as="h4">
+                  Date:
+                  {new Date(transaction.date).toLocaleDateString()}
+                </Heading>
+                <p>Status: {transaction.status}</p>
+                <p>Amount: {transaction.amount}</p>
+              </span>
+              {transaction.items.map((item, itemIndex) => (
+                <TableContainer
+                  key={itemIndex}
+                  style={{ marginBottom: "1rem" }}
+                >
+                  <h2>
+                    <b>Site: {item.site.name}</b>
+                  </h2>
 
-            <table>
-              <thead>
-                <tr>
-                  <th>Material</th>
-                  <th>Price</th>
-                  <th>Quantity</th>
-                  <th>Site</th>
-                  <th>Total</th>
-                </tr>
-              </thead>
-              <tbody>
-                {transaction.items.map((item) => (
-                  <tr key={item._id}>
-                    <td>{item.name}</td>
-                    <td>{item.price}</td>
-                    <td>{item.quantity}</td>
-                    <td>{item.site}</td>
-                    <td>{item.price * item.quantity}</td>
-                  </tr>
-                ))}
-                <tr>
-                  <td colSpan="4">Total</td>
-                  <td>{transaction.amount}</td>
-                </tr>
-              </tbody>
-            </table>
-          </TransactionBox>
-        ))}
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Material</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th>Total</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {item.itemList.map((listItem) => (
+                        <tr key={listItem._id}>
+                          <td>{listItem.name}</td>
+                          <td>${listItem.price}</td>
+                          <td>{listItem.quantity}</td>
+                          <td>${listItem.price * listItem.quantity}</td>
+                        </tr>
+                      ))}
+                      <tr>
+                        <td colSpan="3">Site Total</td>
+                        <td>
+                          $
+                          {item.itemList.reduce(
+                            (sum, listItem) =>
+                              sum + listItem.price * listItem.quantity,
+                            0
+                          )}
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </TableContainer>
+              ))}
+            </TransactionBox>
+          ))}
       </MaterialList>
-
       <PurchaseItem>
         <Heading as="h4">
           {currentStep === "transaction"
             ? "Transaction Details"
-            : `Add Item ${itemsAdded + 1} of ${transactionData.noOfItem}`}
+            : currentStep === "sites"
+            ? "Site Details"
+            : `Add Item ${currentSiteItemsAdded + 1} of ${
+                transactionData.sites[transactionData.currentSiteIndex]
+                  ?.noOfItems || 0
+              } for ${
+                transactionData.sites[transactionData.currentSiteIndex]
+                  ?.siteName || "Site"
+              }`}
         </Heading>
 
         {currentStep === "transaction" ? (
@@ -94,16 +135,27 @@ function VendourModal({ vendour, onBack }) {
             sites={sites}
             transactionData={transactionData}
           />
+        ) : currentStep === "sites" ? (
+          <RenderSiteForm
+            handleSubmit={handleSubmit}
+            setTransactionData={setTransactionData}
+            setCurrentStep={setCurrentStep}
+            reset={reset}
+            register={register}
+            sites={sites}
+            transactionData={transactionData}
+          />
         ) : (
           <RendourItemForm
             handleSubmit={handleSubmit}
             reset={reset}
-            itemsAdded={itemsAdded}
+            currentSiteItemsAdded={currentSiteItemsAdded}
             transactionData={transactionData}
             register={register}
             setCurrentStep={setCurrentStep}
-            setItemsAdded={setItemsAdded}
+            setCurrentSiteItemsAdded={setCurrentSiteItemsAdded}
             setTransactionData={setTransactionData}
+            vendour={vendour}
           />
         )}
       </PurchaseItem>
@@ -112,8 +164,8 @@ function VendourModal({ vendour, onBack }) {
           <Heading as="h4">Payment Information</Heading>
         </Title>
         <Content>
-          <p>
-            <label htmlFor="totalBalance">Total Balance </label>
+          <TotalBalanceConatiner>
+            <label htmlFor="totalBalance">Amount </label>
             <input
               type="text"
               id="totalBalance"
@@ -121,11 +173,9 @@ function VendourModal({ vendour, onBack }) {
               value={vendour.payment.totalBalance}
               readOnly
             />
-          </p>
-          <ButtonGroup>
-            <Button variant="filled">Pay Payment</Button>
-            <Button variant="filled">Payment History</Button>
-          </ButtonGroup>
+          </TotalBalanceConatiner>
+          <PaymentHistory vendour={vendour} />
+          <PayPayment vendour={vendour} />
         </Content>
       </PaymentInfo>
     </ModalContainer>

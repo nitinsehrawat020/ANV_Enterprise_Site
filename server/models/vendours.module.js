@@ -14,7 +14,7 @@ const vendoursSchema = new mongoose.Schema(
         status: { type: String, default: "" },
         items: [
           {
-            site: { type: mongoose.Schema.ObjectId, ref: "site" },
+            site: { type: mongoose.Schema.Types.ObjectId, ref: "site" },
             itemList: [
               {
                 name: { type: String },
@@ -24,6 +24,13 @@ const vendoursSchema = new mongoose.Schema(
             ],
           },
         ],
+      },
+    ],
+    paymentHistory: [
+      {
+        date: { type: Date, default: null },
+        amount: { type: Number, default: 0 },
+        mode: { type: String },
       },
     ],
     itemCosting: [{ name: { type: String }, price: { type: Number } }],

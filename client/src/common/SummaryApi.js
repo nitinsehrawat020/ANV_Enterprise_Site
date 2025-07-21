@@ -116,6 +116,18 @@ const SummaryApi = {
       url: "api/worker/getAllWorker",
       method: "get",
     },
+    markAttendance: {
+      url: "/api/worker/mark-attendance",
+      method: "put",
+    },
+    updateWednesdayPayment: {
+      url: "/api/worker/update-wednesday-payment",
+      method: "put",
+    },
+    updatepayment: {
+      url: "/api/worker/update-payment",
+      method: "put",
+    },
   },
   vendour: {
     getVendours: {
@@ -132,6 +144,10 @@ const SummaryApi = {
     }),
     updateTransaction: (vendourId) => ({
       url: `api/vendour/update-transaction/${vendourId}`,
+      method: "put",
+    }),
+    updateHistoryPayment: (vendourId) => ({
+      url: `api/vendour/update-paymentHistory/${vendourId}`,
       method: "put",
     }),
   },

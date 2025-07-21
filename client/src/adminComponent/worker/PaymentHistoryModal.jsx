@@ -66,11 +66,12 @@ function PaymentHistoryModal({ workerData }) {
         name: worker.name,
         date: payment.date,
         amount: payment.amount,
+        paymentFor: payment.paymentFor,
       }))
     );
 
     return worker.sort((a, b) => {
-      return new Date(a.date) - new Date(b.date);
+      return new Date(b.date) - new Date(a.date);
     });
   }, [workerData]);
   return (
@@ -82,6 +83,7 @@ function PaymentHistoryModal({ workerData }) {
             <tr>
               <th>Worker Name</th>
               <th>Payment Date</th>
+              <th>Payment For</th>
               <th>Amount</th>
             </tr>
           </thead>
@@ -89,7 +91,8 @@ function PaymentHistoryModal({ workerData }) {
             {sortedWorker.map((worker, index) => (
               <tr key={index}>
                 <td>{worker.name}</td>
-                <td>{worker.date}</td>
+                <td>{new Date(worker.date).toLocaleDateString()}</td>
+                <td>{worker.paymentFor}</td>
                 <td>{worker.amount}</td>
               </tr>
             ))}

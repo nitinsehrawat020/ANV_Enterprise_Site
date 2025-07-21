@@ -7,7 +7,8 @@ import {
   getWorker,
   markAttendance,
   removeInventoryItem,
-  updatePaymentLog,
+  updatePayment,
+  updateWednesdayPayment,
 } from "../controllers/worker.controller.js";
 import upload from "../middleware/multer.js";
 
@@ -25,9 +26,14 @@ workerRouter.put(
   adminAuth,
   removeInventoryItem
 );
-workerRouter.put("/update-paymentlog/:workerId", adminAuth, updatePaymentLog);
-workerRouter.put("/mark-attendance/:workerId", adminAuth, markAttendance);
+workerRouter.put("/update-payment", adminAuth, updatePayment);
+workerRouter.put("/mark-attendance", adminAuth, markAttendance);
 workerRouter.get("/getAllWorker", adminAuth, getAllWorker);
 workerRouter.get("/getWorker/:workerId", adminAuth, getWorker);
+workerRouter.put(
+  "/update-wednesday-payment",
+  adminAuth,
+  updateWednesdayPayment
+);
 
 export default workerRouter;

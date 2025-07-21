@@ -20,7 +20,7 @@ const CostMaking = styled.div`
 `;
 
 function CostMakingDetails({ site }) {
-  const { data: workers, isLoading } = useWorker();
+  const { workers, isLoading } = useWorker();
 
   if (isLoading) return;
 

@@ -30,10 +30,11 @@ const workerSchema = new mongoose.Schema(
       },
     ],
     payment: {
-      totalSalery: { type: Number },
-      advance: { type: Number },
-      weeklyGiven: { type: Number },
-      remainingBal: { type: Number },
+      totalSalary: { type: Number, default: 0 },
+      advance: { type: Number, default: 0 },
+      weeklyGiven: { type: Number, default: 0 },
+      remainingBal: { type: Number, default: 0 },
+      salaryGiven: { type: Number, default: 0 },
     },
     paymentLog: [
       {

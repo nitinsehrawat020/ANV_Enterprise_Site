@@ -4,6 +4,14 @@ const attendanceSchema = new mongoose.Schema({
   attendanceData: [
     {
       month: { type: String },
+      summary: {
+        full_present: { type: Number, default: 0 },
+        night: { type: Number, default: 0 },
+        half_day: { type: Number, default: 0 },
+        present: { type: Number, default: 0 },
+        absent: { type: Number, default: 0 },
+      },
+      payment: { type: Object, default: null },
       data: [
         {
           date: { type: Date },

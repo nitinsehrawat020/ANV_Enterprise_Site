@@ -1,48 +1,79 @@
+import { useVendourTransaction } from "../hooks/useVendour";
+
 function NavigationButtonVendour({
   setCurrentStep,
   isAllItemsAdded,
   setTransactionData,
   transactionData,
-  setItemsAdded,
+  setCurrentSiteItemsAdded,
+  currentSiteItemsAdded, // eslint-disable-line no-unused-vars
+  vendour,
 }) {
+  const { updateVendourTransaction, isLoading } = useVendourTransaction();
+
   const goBackToTransaction = () => {
     setCurrentStep("transaction");
   };
 
+  const goToNextSite = () => {
+    const nextSiteIndex = transactionData.currentSiteIndex + 1;
+    setTransactionData({
+      ...transactionData,
+      currentSiteIndex: nextSiteIndex,
+    });
+    setCurrentSiteItemsAdded(0); // Reset items count for next site
+  };
+
+  const isLastSite =
+    transactionData.currentSiteIndex >= transactionData.sites.length - 1;
+
   // final submit button
   const handleCompleteTransaction = () => {
-    console.log("Complete transaction data:", transactionData);
+    // Calculate total amount from all sites and their items
+    let totalAmount = 0;
+    const allItems = [];
 
-    // Calculate total amount from all items
-    const totalAmount = transactionData.items
-      .filter(
-        (item) =>
-          item &&
-          typeof item.price === "number" &&
-          typeof item.quantity === "number"
-      )
-      .reduce((sum, item) => sum + item.price * item.quantity, 0);
+    transactionData.sites.forEach((site) => {
+      if (site.items && Array.isArray(site.items)) {
+        site.items.forEach((item) => {
+          if (
+            item &&
+            typeof item.price === "number" &&
+            typeof item.quantity === "number"
+          ) {
+            totalAmount += item.price * item.quantity;
+            allItems.push({
+              ...item,
+              site: site.siteName,
+            });
+          }
+        });
+      }
+    });
 
-    // API call would go here
+    // API call payload
     const payload = {
       date: transactionData.date,
-      site: transactionData.site,
-      status: transactionData.status,
-      items: transactionData.items,
       amount: totalAmount,
+      status: transactionData.status,
+      items: transactionData.sites.map((site) => ({
+        site: site.siteName,
+        itemList: site.items || [],
+      })),
     };
 
-    console.log("Payload with total amount:", payload);
+    updateVendourTransaction({ data: payload, vendourId: vendour._id });
 
+    // Reset to initial state
     setTransactionData({
       date: "",
-      site: "",
-      noOfItem: 0,
       status: "paid",
-      items: [],
+      noOfSites: 0,
+      sites: [],
+      currentSiteIndex: 0,
     });
     setCurrentStep("transaction");
-    setItemsAdded(0);
+    setCurrentSiteItemsAdded(0);
   };
   return (
     <div
@@ -68,22 +99,44 @@ function NavigationButtonVendour({
         Back to Transaction
       </button>
       {isAllItemsAdded && (
-        <button
-          type="button"
-          onClick={handleCompleteTransaction}
-          style={{
-            padding: "0.5rem 1.5rem",
-            backgroundColor: "#28a745",
-            color: "white",
-            border: "none",
-            borderRadius: "4px",
-            cursor: "pointer",
-            fontWeight: "bold",
-            fontSize: "1rem",
-          }}
-        >
-          🎉 Complete Transaction
-        </button>
+        <>
+          {!isLastSite ? (
+            <button
+              type="button"
+              onClick={goToNextSite}
+              style={{
+                padding: "0.5rem 1.5rem",
+                backgroundColor: "#007bff",
+                color: "white",
+                border: "none",
+                borderRadius: "4px",
+                cursor: "pointer",
+                fontWeight: "bold",
+                fontSize: "1rem",
+              }}
+            >
+              Next Site →
+            </button>
+          ) : (
+            <button
+              type="button"
+              onClick={handleCompleteTransaction}
+              style={{
+                padding: "0.5rem 1.5rem",
+                backgroundColor: "#28a745",
+                color: "white",
+                border: "none",
+                borderRadius: "4px",
+                cursor: "pointer",
+                fontWeight: "bold",
+                fontSize: "1rem",
+              }}
+              disabled={isLoading}
+            >
+              🎉 Complete Transaction
+            </button>
+          )}
+        </>
       )}
     </div>
   );

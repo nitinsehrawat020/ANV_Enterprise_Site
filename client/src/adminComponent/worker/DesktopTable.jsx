@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { useState, useEffect } from "react";
 
 export const StyledTable = styled.table`
   width: 100%;
@@ -74,106 +75,176 @@ export const StyledTable = styled.table`
   }
 `;
 
-function DesktopTable({ register, workerData, today }) {
+function DesktopTable({ register, workerData, today, resetTrigger }) {
+  const [numberOfWorkers, setNumberOfWorkers] = useState(0);
+  const [showWorkerForms, setShowWorkerForms] = useState(false);
+
+  const handleNumberSubmit = () => {
+    if (numberOfWorkers > 0) {
+      setShowWorkerForms(true);
+    }
+  };
+
+  const resetForm = () => {
+    setNumberOfWorkers(0);
+    setShowWorkerForms(false);
+  };
+
+  // Reset form when resetTrigger changes (after successful submission)
+  useEffect(() => {
+    if (resetTrigger > 0) {
+      resetForm();
+    }
+  }, [resetTrigger]);
+
+  // Generate array of worker indices for dynamic form generation
+  const workerIndices = Array.from(
+    { length: numberOfWorkers },
+    (_, i) => i + 1
+  );
+
   return (
-    <StyledTable>
-      <thead>
-        <tr>
-          <th>Worker Name</th>
-          <th>Payment Date</th>
-          <th>Amount</th>
-          <th>Payment For</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>
-            <select {...register("workerId_4")}>
-              <option value="">Select Worker</option>
-              {workerData.map((worker, index) => (
-                <option value={worker.id} key={index}>
-                  {worker.name}
-                </option>
-              ))}
-            </select>
-          </td>
-          <td>
-            <input {...register("date_4")} type="date" defaultValue={today} />
-          </td>
-          <td>
-            <input {...register("amount_4")} type="number" />
-          </td>
-          <td>
-            <select {...register("paymentFor_4")}>
-              <option value="">Select </option>
-              <option value="weekly">Weekly</option>
-              <option value="salary">Salary</option>
-              <option value="advance">Advance</option>
-            </select>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <select {...register("workerId_5")}>
-              <option value="">Select Worker</option>
-              {workerData.map((worker, index) => (
-                <option value={worker.id} key={index}>
-                  {worker.name}
-                </option>
-              ))}
-            </select>
-          </td>
-          <td>
-            <input {...register("date_5")} type="date" defaultValue={today} />
-          </td>
-          <td>
-            <input type="number" {...register("amount_5")} />
-          </td>
-          <td>
-            <select {...register("paymentFor_5")}>
-              <option value="">Select </option>
-              <option value="weekly">Weekly</option>
-              <option value="salary">Salary</option>
-              <option value="advance">Advance</option>
-            </select>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <select {...register("workerId_6")}>
-              <option value="">Select Worker</option>
-              {workerData.map((worker, index) => (
-                <option value={worker.id} key={index}>
-                  {worker.name}
-                </option>
-              ))}
-            </select>
-          </td>
-          <td>
-            <input {...register("date_6")} type="date" defaultValue={today} />
-          </td>
-          <td>
-            <input type="number" {...register("amount_6")} />
-          </td>
-          <td>
-            <select {...register("paymentFor_6")}>
-              <option value="">Select </option>
-              <option value="weekly">Weekly</option>
-              <option value="salary">Salary</option>
-              <option value="advance">Advance</option>
-            </select>
-          </td>
-        </tr>
-        <tr>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td>
-            <input type="submit" value="Submit" />
-          </td>
-        </tr>
-      </tbody>
-    </StyledTable>
+    <div>
+      {!showWorkerForms ? (
+        // Step 1: Ask for number of workers
+        <div style={{ padding: "2rem", textAlign: "center" }}>
+          <h3 style={{ marginBottom: "1rem" }}>
+            How many worker payments do you want to update?
+          </h3>
+          <div style={{ marginBottom: "1rem" }}>
+            <input
+              type="number"
+              min="1"
+              max="10"
+              value={numberOfWorkers === 0 ? "" : numberOfWorkers}
+              onChange={(e) => {
+                const value = e.target.value;
+                console.log("Input value:", value); // Debug log
+
+                if (value === "" || value === "0") {
+                  setNumberOfWorkers(0);
+                } else {
+                  const numValue = parseInt(value, 10);
+                  console.log("Parsed value:", numValue); // Debug log
+
+                  if (!isNaN(numValue) && numValue > 0 && numValue <= 10) {
+                    setNumberOfWorkers(numValue);
+                  }
+                }
+              }}
+              placeholder="Enter number of workers"
+              style={{
+                padding: "0.5rem",
+                fontSize: "1rem",
+                width: "200px",
+                textAlign: "center",
+                border: "1px solid var(--color-background-500)",
+                borderRadius: "5px",
+                backgroundColor: "var(--color-background-800)",
+                color: "white",
+              }}
+            />
+          </div>
+          <p
+            style={{ marginBottom: "1rem", fontSize: "0.9rem", color: "#666" }}
+          >
+            Selected: {numberOfWorkers} workers
+          </p>
+          <button
+            type="button"
+            onClick={handleNumberSubmit}
+            disabled={numberOfWorkers <= 0}
+            style={{
+              padding: "0.5rem 1rem",
+              fontSize: "1rem",
+              backgroundColor:
+                numberOfWorkers > 0
+                  ? "var(--color-primary-700)"
+                  : "var(--color-background-500)",
+              color: "white",
+              border: "none",
+              borderRadius: "5px",
+              cursor: numberOfWorkers > 0 ? "pointer" : "not-allowed",
+            }}
+          >
+            Next
+          </button>
+        </div>
+      ) : (
+        // Step 2: Show dynamic worker payment forms
+        <StyledTable>
+          <thead>
+            <tr>
+              <th>Worker Name</th>
+              <th>Payment Date</th>
+              <th>Amount</th>
+              <th>Payment For</th>
+            </tr>
+          </thead>
+          <tbody>
+            {workerIndices.map((index) => (
+              <tr key={index}>
+                <td>
+                  <select {...register(`workerId_${index}`)}>
+                    <option value="">Select Worker</option>
+                    {workerData.map((worker, workerIndex) => (
+                      <option value={worker._id} key={workerIndex}>
+                        {worker.name}
+                      </option>
+                    ))}
+                  </select>
+                </td>
+                <td>
+                  <input
+                    {...register(`date_${index}`)}
+                    type="date"
+                    defaultValue={today}
+                  />
+                </td>
+                <td>
+                  <input
+                    {...register(`amount_${index}`)}
+                    type="number"
+                    placeholder="Amount"
+                  />
+                </td>
+                <td>
+                  <select {...register(`paymentFor_${index}`)}>
+                    <option value="">Select</option>
+                    <option value="weekly">Weekly</option>
+                    <option value="salary">Salary</option>
+                    <option value="advance">Advance</option>
+                  </select>
+                </td>
+              </tr>
+            ))}
+            <tr>
+              <td>
+                <button
+                  type="button"
+                  onClick={resetForm}
+                  style={{
+                    padding: "0.3rem 0.8rem",
+                    backgroundColor: "var(--color-background-600)",
+                    color: "white",
+                    border: "none",
+                    borderRadius: "5px",
+                    cursor: "pointer",
+                  }}
+                >
+                  Change Number
+                </button>
+              </td>
+              <td></td>
+              <td></td>
+              <td>
+                <input type="submit" value="Submit Payments" />
+              </td>
+            </tr>
+          </tbody>
+        </StyledTable>
+      )}
+    </div>
   );
 }
 

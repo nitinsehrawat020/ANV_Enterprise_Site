@@ -11,13 +11,17 @@ import SpeedDialTooltipOpen from "../../ui/SpeedDial";
 import PaymentHistoryModal from "./PaymentHistoryModal";
 import UpdatePaymentModal from "./UpdatePaymentModal";
 import AddWorkerModal from "./AddWorkerModal";
+import { useWorker } from "../../hooks/useWorker";
 
-function ActionButton({ WorkerData, sites }) {
+function ActionButton({ sites }) {
+  const { workers, isLoading } = useWorker();
+  if (isLoading) return;
+
   return (
     <>
       <Modal>
         <StyleActionButton>
-          <Attendance WorkerData={WorkerData} sites={sites} />
+          <Attendance workers={workers} sites={sites} />
 
           <Modal.Open opens="updatePayment">
             <UpdatePayment>update payment</UpdatePayment>
@@ -25,18 +29,12 @@ function ActionButton({ WorkerData, sites }) {
           <Modal.Open opens="paymentHistory">
             <PaymentHistory>Payment History</PaymentHistory>
           </Modal.Open>
-          <Modal.Open opens="addWorker">
-            <Addworker>Add worker</Addworker>
-          </Modal.Open>
 
           <Modal.Window name="updatePayment">
-            <UpdatePaymentModal workerData={WorkerData} />
+            <UpdatePaymentModal workerData={workers} />
           </Modal.Window>
           <Modal.Window name="paymentHistory">
-            <PaymentHistoryModal workerData={WorkerData} />
-          </Modal.Window>
-          <Modal.Window name="addWorker">
-            <AddWorkerModal workerData={WorkerData} />
+            <PaymentHistoryModal workerData={workers} />
           </Modal.Window>
         </StyleActionButton>
 
