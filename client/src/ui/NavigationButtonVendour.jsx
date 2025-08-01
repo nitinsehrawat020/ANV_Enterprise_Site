@@ -57,7 +57,7 @@ function NavigationButtonVendour({
       amount: totalAmount,
       status: transactionData.status,
       items: transactionData.sites.map((site) => ({
-        site: site.siteName,
+        site: site.siteId,
         itemList: site.items || [],
       })),
     };

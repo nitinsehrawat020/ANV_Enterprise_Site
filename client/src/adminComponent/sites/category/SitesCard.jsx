@@ -5,18 +5,21 @@ import { SiteCardContainer, StyledSiteCard } from "../StyleSites";
 import SiteCardDetails from "./SiteCardDetails";
 import SiteModal from "./SiteModal";
 import { capitalizeFirstLetter } from "../../../util/helper";
+import { useSearchParams } from "react-router-dom";
 
-function SitesCard({ activeCategory }) {
-  const { sites, isLoading, error } = useSite();
+function SitesCard() {
+  const { sites, isLoading } = useSite();
   const [selectedSiteId, setSelectedSiteId] = useState(null);
+  const [searchParams] = useSearchParams();
+
   if (isLoading) return <Spinner />;
 
+  const category = searchParams.get("filter");
+
   const filterSites =
-    activeCategory === "All"
+    category === "All"
       ? sites
-      : sites.filter(
-          (site) => capitalizeFirstLetter(site.status) === activeCategory
-        );
+      : sites.filter((site) => capitalizeFirstLetter(site.status) === category);
 
   const selectedSite = selectedSiteId
     ? filterSites.find((site) => site._id === selectedSiteId)

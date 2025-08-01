@@ -2,7 +2,9 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   addInventoryItem,
   addPaymentApi,
+  deleteSiteApi,
   getSiteApi,
+  registerSite,
   updateWorkProgressApi,
 } from "../services/SiteApi";
 import toast from "react-hot-toast";
@@ -63,4 +65,34 @@ export function useUpdateWorkProgress() {
     },
   });
   return { updateWorkProgress, isLoading };
+}
+
+export function useAddSite() {
+  const queryClient = useQueryClient();
+  const { mutate: addSite, isLoading: isAddingSite } = useMutation({
+    mutationFn: ({ data }) => registerSite({ data }),
+    onSuccess: (res) => {
+      queryClient.invalidateQueries(["worker"]);
+      toast.success(res.message);
+    },
+    onError: (err) => {
+      toast.error(err.message);
+    },
+  });
+  return { addSite, isAddingSite };
+}
+
+export function useDeleteSite() {
+  const queryClient = useQueryClient();
+  const { mutate: deleteSite, isLoading: isDeletingSite } = useMutation({
+    mutationFn: (siteId) => deleteSiteApi(siteId),
+    onSuccess: (res) => {
+      toast.success(res.message);
+      queryClient.invalidateQueries(["site"]);
+    },
+    onError: (err) => {
+      toast.error(err.message);
+    },
+  });
+  return { deleteSite, isDeletingSite };
 }

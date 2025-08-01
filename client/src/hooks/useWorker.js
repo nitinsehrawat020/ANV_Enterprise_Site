@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
+  addWorkerApi,
   getWorkerApi,
   updateWedesdayPaymentApi,
   updateWorkerAttendance,
@@ -25,17 +26,18 @@ export function useWorkerAttendance() {
       queryClient.invalidateQueries(["worker", "site"]);
     },
     onError: (err) => {
-      toast.error("issue in updating the attendance ");
+      toast.error(err.message);
     },
   });
   return { updateAttendance, isLoading };
 }
 
 export function useUpdateWedesdayPayment() {
+  const queryClient = useQueryClient();
   const { mutate: updateWednesdayPayment, isLoading } = useMutation({
     mutationFn: ({ data }) => updateWedesdayPaymentApi({ data }),
     onSuccess: (res) => {
-      console.log(res);
+      queryClient.invalidateQueries(["worker"]);
 
       toast.success(res.message);
     },
@@ -48,9 +50,11 @@ export function useUpdateWedesdayPayment() {
   return { updateWednesdayPayment, isLoading };
 }
 export function useUpdateworkerPayment() {
+  const queryClient = useQueryClient();
   const { mutate: updateWorkerPayment, isLoading } = useMutation({
     mutationFn: ({ data }) => updateWorkerPaymentApi({ data }),
     onSuccess: (res) => {
+      queryClient.invalidateQueries(["worker"]);
       toast.success(res.message);
     },
     onError: (err) => {
@@ -58,4 +62,22 @@ export function useUpdateworkerPayment() {
     },
   });
   return { updateWorkerPayment, isLoading };
+}
+
+export function useAddWorker() {
+  const queryClient = useQueryClient();
+  const { mutate: addWorker, isLoading: isAddingWorker } = useMutation({
+    mutationFn: ({ data }) => addWorkerApi({ data }),
+    onSuccess: () => {
+      queryClient.invalidateQueries(["worker"]);
+      toast.success("Worker added successfully!");
+    },
+    onError: (err) => {
+      console.error("useAddWorker error:", err);
+      const errorMessage =
+        err.response?.data?.message || err.message || "Error adding worker";
+      toast.error(errorMessage);
+    },
+  });
+  return { addWorker, isAddingWorker };
 }

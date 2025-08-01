@@ -5,9 +5,10 @@ import AttendanceModel from "../models/attendance.module.js";
 
 export async function addWorker(req, res) {
   try {
-    const { name, phoneNumber, join, memberType, addharCard } = req.body;
+    const { name, phoneNumber, join, memberType } = req.body; // Added memberType
     const addharFile = req.file;
-    if (!name || !phoneNumber || !memberType) {
+
+    if (!name || !phoneNumber) {
       return res.status(400).json({
         message: "kindly provide all the required field",
         success: false,
@@ -15,14 +16,19 @@ export async function addWorker(req, res) {
       });
     }
 
-    const upload = await uploadImageClodinary(addharFile, "addhar");
+    // Only upload to Cloudinary if file exists
+    let addharCardUrl = null;
+    if (addharFile) {
+      const upload = await uploadImageClodinary(addharFile, "addhar");
+      addharCardUrl = upload?.secure_url;
+    }
 
     const payload = {
       name,
       phoneNumber,
       join: join || new Date().toDateString(),
-      memberType,
-      addharCard: upload?.secure_url,
+      memberType, // This was missing in your original code
+      addharCard: addharCardUrl,
       activeStatus: true,
     };
 
@@ -180,12 +186,12 @@ export async function removeInventoryItem(req, res) {
 export async function updatePayment(req, res) {
   try {
     const { workers } = req.body; // workers is the array of all the worker which salary need to be updated
-    console.log(workers);
 
     for (const worker of workers) {
       const { workerId, date, amount, paymentFor } = worker;
 
       const workerDb = await WorkerModel.findById(workerId);
+
       let payload;
       if (!workerDb) {
         return res.status(400).json({
@@ -229,11 +235,7 @@ export async function updatePayment(req, res) {
 
       workerDb.paymentLog.push(payload);
       workerDb.save();
-      return res.status(200).json({
-        message: "hello",
-        success: true,
-        error: false,
-      });
+
       // await workerDb.save();
     }
 

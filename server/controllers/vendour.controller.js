@@ -55,48 +55,11 @@ export async function getVendours(req, res) {
   }
 }
 
-export async function updatePayment(req, res) {
-  try {
-    const vendourId = req.params.vendourId;
-    const { amount } = req.body;
-
-    if (!amount) {
-      return res.status(400).json({
-        message: "kindly provide the amount",
-        success: false,
-        error: true,
-      });
-    }
-
-    const vendour = await VendoursModel.findById(vendourId);
-    if (!vendour) {
-      return res.status(400).json({
-        message: "no vendour found with this id",
-        success: false,
-        error: true,
-      });
-    }
-    vendour.payment.totalBalance -= amount;
-    await vendour.save();
-    return res.status(200).json({
-      message: "payment updated succesfully",
-      success: true,
-      error: false,
-    });
-  } catch (error) {
-    return res.status(500).json({
-      message: error.message || error,
-      success: false,
-      error: true,
-    });
-  }
-}
-
 export async function updateTransaction(req, res) {
   try {
     const vendourId = req.params.vendourId;
     const { date, amount, status, items } = req.body;
-    console.log(items[0].itemList);
+    console.log(items);
 
     if (!amount || !status) {
       return res.status(400).json({
@@ -124,24 +87,31 @@ export async function updateTransaction(req, res) {
     };
 
     vendour.transaction.push(payload);
+    console.log(vendour.itemCosting);
 
     if (vendour.itemCosting.length === 0) {
-      items.foreach((item) => {
-        item.itemList.foreach((item) => {
+      items.forEach((item) => {
+        item.itemList.forEach((item) => {
           const payload = { name: item.name, price: item.price };
           vendour.itemCosting.push(payload);
         });
       });
     } else {
       items.map((item) => {
-        item.itemList.map(async (cItem) => {
+        item.itemList.map((cItem) => {
           vendour.itemCosting.map((vItem) => {
             if (cItem.name === vItem.name) {
+              console.log(cItem, vItem);
+
               if (cItem.price !== vItem.price) vItem.price = cItem.price;
             }
           });
         });
       });
+    }
+
+    if (status === "not paid") {
+      vendour.payment.totalBalance += amount;
     }
 
     await vendour.save();
@@ -198,6 +168,8 @@ export async function updatePaymentHistory(req, res) {
       });
     }
 
+    vendour.payment.totalBalance -= amount;
+
     const payload = { date, amount, mode };
 
     vendour.paymentHistory.push(payload);
@@ -211,6 +183,36 @@ export async function updatePaymentHistory(req, res) {
   } catch (error) {
     console.log(error);
 
+    res.status(500).json({
+      message: error.message || error,
+      success: false,
+      error: true,
+    });
+  }
+}
+
+export async function deleteVendour(req, res) {
+  try {
+    const vendourId = req.params.vendourId;
+
+    const vendour = await VendoursModel.findById(vendourId);
+
+    if (!vendour) {
+      return res.status(400).json({
+        message: "vendour Doesn't exit",
+        success: false,
+        error: true,
+      });
+    }
+
+    const deleteVendour = await VendoursModel.deleteOne({ _id: vendourId });
+
+    return res.status(200).json({
+      message: "vendour deleted successfully",
+      success: true,
+      error: false,
+    });
+  } catch (error) {
     res.status(500).json({
       message: error.message || error,
       success: false,

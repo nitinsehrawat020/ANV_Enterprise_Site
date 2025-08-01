@@ -58,6 +58,7 @@ export const FormContainer = styled.div`
   }
 
   input {
+    width: 120px;
     padding: 0.5rem;
     border-radius: var(--br-l);
     border: none;

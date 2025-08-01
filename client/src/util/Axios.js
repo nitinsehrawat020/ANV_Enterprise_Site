@@ -57,7 +57,7 @@ Axios.interceptors.response.use(
         // Refresh failed, clear auth and reject original error
         localStorage.removeItem("accessToken");
         localStorage.removeItem("refreshToken");
-        return Promise.reject(error);
+        return Promise.reject(refreshError);
       }
     }
 

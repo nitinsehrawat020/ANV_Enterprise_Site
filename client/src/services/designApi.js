@@ -58,10 +58,37 @@ export async function removeFavDesignApi(designId) {
     ...SummaryApi.design.removeFavDesign(designId),
   })
     .then((res) => {
-      return res;
+      return res.data;
     })
     .catch((err) => {
       throw err;
+    });
+  return res;
+}
+
+export async function addDesignApi({ data }) {
+  const res = await Axios({
+    ...SummaryApi.design.addDesign,
+    data: data,
+  })
+    .then((res) => {
+      return res.data;
+    })
+    .catch((err) => {
+      return err;
+    });
+  return res;
+}
+
+export async function deleteDesignApi(designId) {
+  const res = await Axios({
+    ...SummaryApi.design.deleteDesign(designId),
+  })
+    .then((res) => {
+      return res.data;
+    })
+    .catch((err) => {
+      return err;
     });
   return res;
 }

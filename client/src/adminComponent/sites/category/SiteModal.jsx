@@ -5,12 +5,14 @@ import CostMakingDetails from "./CostMakingDetails";
 import UpdateDetails from "./UpdateDetails";
 import { useState } from "react";
 import SeeDetails from "./SeeDetails";
+import { device } from "../../../Styles/Theme";
 
 import { IoArrowBack } from "react-icons/io5";
+import { IoIosInformationCircle } from "react-icons/io";
 
 const ModalContainer = styled.div`
-  width: 1200px;
-  height: 800px;
+  width: 100%;
+  height: auto;
   display: grid;
   grid-template-columns: ${(props) => (props.seeDetails ? "1fr" : "1fr 1fr")};
   grid-template-rows: ${(props) =>
@@ -29,7 +31,7 @@ const ModalContainer = styled.div`
   box-shadow: var(--shadow-md);
 
   @media (max-width: 768px) {
-    width: 330px;
+    width: 100%;
     overflow: auto;
     grid-template-columns: 1fr;
     grid-template-rows: 50px auto auto auto auto;
@@ -44,6 +46,7 @@ const ModalContainer = styled.div`
 
 const SiteName = styled.div`
   grid-area: siteName;
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -55,6 +58,7 @@ const SiteName = styled.div`
 
 const Inventory = styled.div`
   grid-area: inventory;
+  width: 100%;
 
   display: flex;
   align-items: center;
@@ -66,8 +70,9 @@ const Inventory = styled.div`
   background-color: var(--color-background-500);
   border-radius: var(--br-l);
 
-  @media (max-width: 768px) {
+  @media ${device.tablet} {
     height: 300px;
+    padding: 0.5rem;
   }
 `;
 export const TableContainer = styled.div`
@@ -78,6 +83,10 @@ export const TableContainer = styled.div`
   &::-webkit-scrollbar {
     width: 0;
     background: transparent;
+  }
+  @media ${device.tablet} {
+    height: 300px;
+    padding: 0.5rem;
   }
 `;
 
@@ -100,12 +109,18 @@ const SeeDetailsButton = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 1rem;
+  gap: 4px;
   padding: 0.5rem;
   background-color: var(--color-background-500);
   border: 2px solid var(--color-background-200);
   border-radius: var(--br-l);
   cursor: pointer;
+  .mobileIcon {
+    display: none;
+    @media ${device.mobile} {
+      display: flex;
+    }
+  }
   &:hover {
     background-color: var(--color-background-800);
     border: 2px solid var(--color-background-500);
@@ -143,6 +158,10 @@ function SiteModal({ site, onClose }) {
         <div style={{ display: "flex", gap: "0.5rem" }}>
           <SeeDetailsButton onClick={() => setSeeDetails((value) => !value)}>
             {seeDetails ? "Hide Details" : "See Details"}
+            <div className="mobileIcon">
+              {" "}
+              <IoIosInformationCircle />
+            </div>
           </SeeDetailsButton>
         </div>
       </SiteName>

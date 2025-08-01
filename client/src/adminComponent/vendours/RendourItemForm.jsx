@@ -1,5 +1,6 @@
 import NavigationButtonVendour from "../../ui/NavigationButtonVendour";
 import RenderItemList from "./RenderItemList";
+import { StyleRenderItemForm } from "./StyleVendours";
 
 function RendourItemForm({
   handleSubmit,
@@ -17,13 +18,6 @@ function RendourItemForm({
   const isAllItemsAdded = currentSiteItemsAdded >= totalItemsForCurrentSite;
 
   // Debug logging
-  console.log("RendourItemForm Debug:", {
-    currentSiteIndex: transactionData.currentSiteIndex,
-    sitesLength: transactionData.sites?.length,
-    currentSite,
-    currentSiteItemsAdded,
-    totalItemsForCurrentSite,
-  });
 
   // Safety check - if no current site, return error message
   if (!currentSite) {
@@ -70,7 +64,7 @@ function RendourItemForm({
   };
 
   return (
-    <div style={{ display: "flex", gap: "2rem", alignItems: "flex-start" }}>
+    <StyleRenderItemForm>
       {/* Left side - Form or completion message */}
       <div style={{ flex: "1", minWidth: "300px" }}>
         {!isAllItemsAdded ? (
@@ -142,7 +136,7 @@ function RendourItemForm({
       <div style={{ flex: "1", minWidth: "300px" }}>
         {RenderItemList({ transactionData })}
       </div>
-    </div>
+    </StyleRenderItemForm>
   );
 }
 

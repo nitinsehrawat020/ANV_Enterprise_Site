@@ -4,11 +4,12 @@ import { useUpdateVendourHistoryPayment } from "../../hooks/useVendour";
 import Heading from "../../ui/Heading";
 
 function PayPayment({ vendour }) {
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit, reset } = useForm();
   const { updateVendourHistoryPayment, isLoading } =
     useUpdateVendourHistoryPayment();
   const onSubmit = (data) => {
     updateVendourHistoryPayment({ data, vendourId: vendour._id });
+    reset();
   };
   return (
     <PayPaymentContainer>

@@ -7,8 +7,10 @@ import {
   InnerBorder,
   LastPayment,
   Name_Profile,
-  Number,
+  PaymentGrid,
+  PaymentRow,
   Span,
+  StatusBadge,
   StyledWorkerCard,
   Switch,
 } from "./StyleWorker";
@@ -22,15 +24,26 @@ function WorkerCard({ worker, onClick }) {
   const ref = useOutsideClick(() => setOverlay(false));
 
   const handleDropdownToggle = (e) => {
-    e.stopPropagation(); // This is the key line - stops the click from bubbling up
+    e.stopPropagation();
     setOverlay((prev) => !prev);
+  };
+
+  const formatCurrency = (amount) => {
+    return new Intl.NumberFormat("en-IN", {
+      style: "currency",
+      currency: "INR",
+      maximumFractionDigits: 0,
+    }).format(amount || 0);
   };
 
   return (
     <Modal>
       <StyledWorkerCard onClick={onClick}>
         <InnerBorder>
-          {/* Use the new handler that stops propagation */}
+          <StatusBadge active={worker?.activeStatus}>
+            {worker?.activeStatus ? "Active" : "Inactive"}
+          </StatusBadge>
+
           <Switch onClick={handleDropdownToggle}>
             <CgMoreVertical />
           </Switch>
@@ -43,35 +56,50 @@ function WorkerCard({ worker, onClick }) {
                 handleDropdownToggle();
               }}
             >
-              change to {getWorkerStatusText(worker)}
+              Change to {getWorkerStatusText(worker)}
             </DropdownButton>
           </Dropdown>
 
           <Name_Profile>
-            <Heading as="h3">{worker?.name}</Heading>
-            {worker?.member_type}
+            <Heading as="h3">{worker?.name || "Unknown Worker"}</Heading>
+            <span>{worker?.memberType || "No Role Assigned"}</span>
           </Name_Profile>
+
           <LastPayment>
-            Last Paid{" "}
+            <span>Last Paid: </span>
             <Span>{getLastPaymentDate(worker) || "Not paid yet"}</Span>
           </LastPayment>
-          <Number>
-            <Information color="yellow">
-              Total Salary:- <Span>{worker?.payment?.totalSalary}</Span>
-            </Information>
-          </Number>
 
-          <Number>
-            <Information color="red">
-              Wednesday <Span>{worker?.payment?.weeklyGiven}</Span>
+          <PaymentGrid>
+            <Information color="yellow">
+              <div className="label">Total Salary</div>
+              <div className="value">
+                {formatCurrency(worker?.payment?.totalSalary)}
+              </div>
             </Information>
-            <Information color="red">
-              Advance<Span>{worker?.payment?.advance}</Span>
+
+            <PaymentRow>
+              <Information color="red">
+                <div className="label">Weekly</div>
+                <div className="value">
+                  {formatCurrency(worker?.payment?.weeklyGiven)}
+                </div>
+              </Information>
+              <Information color="red">
+                <div className="label">Advance</div>
+                <div className="value">
+                  {formatCurrency(worker?.payment?.advance)}
+                </div>
+              </Information>
+            </PaymentRow>
+
+            <Information color="green">
+              <div className="label">Remaining Balance</div>
+              <div className="value">
+                {formatCurrency(worker?.payment?.remainingBal)}
+              </div>
             </Information>
-          </Number>
-          <Information color="green">
-            Remaining Balance:- <Span>{worker?.payment?.remainingBal}</Span>
-          </Information>
+          </PaymentGrid>
         </InnerBorder>
       </StyledWorkerCard>
     </Modal>
@@ -79,17 +107,31 @@ function WorkerCard({ worker, onClick }) {
 }
 
 function toggleWorkerStatus(worker) {
-  worker.active_status = !worker.active_status;
+  // Note: This should ideally call an API to update the worker status
+  // For now, just toggling the local state
+  worker.activeStatus = !worker.activeStatus;
 }
 
 function getWorkerStatusText(worker) {
-  return worker?.active_status ? "inactive" : "active";
+  return worker?.activeStatus ? "inactive" : "active";
 }
 
 function getLastPaymentDate(worker) {
-  return new Date(
-    worker?.paymentLog[worker?.paymentLog.length - 1]?.date
-  ).toLocaleDateString();
+  if (!worker?.paymentLog || worker.paymentLog.length === 0) {
+    return null;
+  }
+
+  try {
+    const lastPayment = worker.paymentLog[worker.paymentLog.length - 1];
+    return new Date(lastPayment?.date).toLocaleDateString("en-IN", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    });
+  } catch (error) {
+    console.error("Error formatting date:", error);
+    return "Invalid date";
+  }
 }
 
 export default WorkerCard;

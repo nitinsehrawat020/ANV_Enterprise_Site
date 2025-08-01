@@ -20,21 +20,7 @@ export async function addVendourApi({ data }) {
     .catch((err) => {
       return err;
     });
-  return res.data.data;
-}
-
-export async function updatePaymentApi({ data, vendourId }) {
-  const res = await Axios({
-    ...SummaryApi.vendour.updatePayment(vendourId),
-    data,
-  })
-    .then((res) => {
-      return res;
-    })
-    .catch((err) => {
-      return err;
-    });
-  return res.data.data;
+  return res.data;
 }
 
 export async function updateTransactionApi({ data, vendourId }) {
@@ -48,7 +34,7 @@ export async function updateTransactionApi({ data, vendourId }) {
     .catch((err) => {
       return err;
     });
-  return res.data.data;
+  return res.data;
 }
 
 export async function updatePaymentHistoryApi({ data, vendourId }) {
@@ -57,9 +43,25 @@ export async function updatePaymentHistoryApi({ data, vendourId }) {
     data: data,
   })
     .then((res) => {
-      return res.data.data;
+      return res.data;
     })
     .catch((err) => {
       return err;
     });
+  return res;
+}
+
+export async function deleteVendourApi(vendourId) {
+  console.log(vendourId);
+
+  const res = await Axios({
+    ...SummaryApi.vendour.deleteVendour(vendourId),
+  })
+    .then((res) => {
+      return res.data;
+    })
+    .catch((err) => {
+      return err;
+    });
+  return res;
 }

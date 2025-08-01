@@ -206,7 +206,7 @@ function AttendanceModal({ day, WorkerData, sites }) {
                 <td></td>
                 <td></td>
                 <td>
-                  <input type="submit" value="Submit" />
+                  <input type="submit" value="Submit" disabled={isLoading} />
                 </td>
               </tr>
             </tbody>
@@ -220,6 +220,7 @@ function AttendanceModal({ day, WorkerData, sites }) {
         handleSubmit={handleSubmit}
         onSubmit={onSubmit}
         day={day}
+        isLoading={isLoading}
       />
     </ModalContainer>
   );

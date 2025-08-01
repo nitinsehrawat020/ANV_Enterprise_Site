@@ -1,22 +1,31 @@
 import styled from "styled-components";
 import NavBar from "../component/navbar/NavBar";
-import Footer from "../component/footer/Footer";
-import Main from "../adminComponent/main/Main";
+import UserMain from "../component/userMain/UserMain";
 
 const StyledAppLayout = styled.div`
   width: 100%;
-  height: 100vh;
+  min-height: 100vh;
   display: grid;
+  gap: 1rem;
   grid-template-columns: 1fr;
   grid-template-rows: auto 1fr auto;
   //prettier-ignore
   grid-template-areas: 
-  "navbar navbar"
-  "main aside"
-  "footer footer";
-  background: var(--color-background-500);
+  "navbar "
+  "main "
+  "footer ";
+  background: var(--color-whitesmoke);
+  overflow-x: hidden;
+
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
+    grid-template-areas:
+      "navbar"
+      "main"
+      "footer";
+    gap: 0;
+    min-height: 100vh;
+    height: auto;
   }
 `;
 
@@ -25,8 +34,7 @@ function AppLayout() {
     <>
       <StyledAppLayout>
         <NavBar />
-        <Main />
-        <Footer />
+        <UserMain />
       </StyledAppLayout>
     </>
   );

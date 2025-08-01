@@ -2,8 +2,8 @@ import { cloneElement, createContext, useContext, useState } from "react";
 import { createPortal } from "react-dom";
 import { HiXMark } from "react-icons/hi2";
 import styled from "styled-components";
+import { device } from "../Styles/Theme";
 import { useOutsideClick } from "../hooks/useOutsideClick.jsx";
-// import { useOutsideClick } from "../hooks/useOutsideClick";
 
 const StyledModal = styled.div`
   position: fixed;
@@ -15,12 +15,21 @@ const StyledModal = styled.div`
   box-shadow: var(--shadow-lg);
   padding: 3.2rem 4rem;
   transition: all 0.5s;
+  max-width: 95vw;
+  max-height: 95vh;
+  overflow: auto;
 
-  @media (max-width: 768px) {
-    padding: 1.5rem;
+  @media ${device.phnAndTab} {
+    padding: 2rem;
+    max-width: 90vw;
+    max-height: 90vh;
   }
-  @media (max-width: 480px) {
-    padding: 0.5rem;
+
+  @media ${device.mobile} {
+    padding: 1rem;
+    max-width: 95vw;
+    max-height: 95vh;
+    border-radius: var(--border-radius-md);
   }
 `;
 

@@ -1,13 +1,13 @@
 import SummaryApi from "../common/SummaryApi";
 import Axios from "../util/Axios";
 
-export async function registerSite(data) {
+export async function registerSite({ data }) {
   const res = await Axios({
     ...SummaryApi.site.register,
     data: data,
   })
     .then((res) => {
-      return res.data.data;
+      return res.data;
     })
     .catch((error) => {
       return error;
@@ -34,7 +34,7 @@ export async function addInventoryItem({ data, siteId }) {
     data: data,
   })
     .then((res) => {
-      return res.data.data;
+      return res.data;
     })
     .catch((error) => {
       return error;
@@ -84,6 +84,19 @@ export async function getSiteApi() {
     })
     .catch((error) => {
       return error;
+    });
+  return res;
+}
+
+export async function deleteSiteApi(siteId) {
+  const res = await Axios({
+    ...SummaryApi.site.deleteSite(siteId),
+  })
+    .then((res) => {
+      return res.data;
+    })
+    .catch((err) => {
+      return err;
     });
   return res;
 }

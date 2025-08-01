@@ -44,20 +44,6 @@ export default function SpeedDialTooltipOpen() {
         handleClose();
       },
     },
-    {
-      icon: (
-        <Modal.Open opens="addWorker">
-          <GroupAddIcon />
-        </Modal.Open>
-      ),
-      name: "Add Worker",
-      operation: () => {
-        <Modal.Window name="addWorker">
-          <AddWorkerModal />
-        </Modal.Window>;
-        handleClose();
-      },
-    },
   ];
 
   const [open, setOpen] = React.useState(false);

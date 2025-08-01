@@ -3,6 +3,7 @@ import adminAuth from "../middleware/admin-auth.js";
 import {
   addItemToInventory,
   addPaymentLog,
+  deleteSite,
   getAllSites,
   registerNewSite,
   removeItemFromInventory,
@@ -27,5 +28,6 @@ siteRoute.post(
 );
 siteRoute.get("/get-sites", adminAuth, getAllSites);
 siteRoute.post("/add-payment-log/:siteId", adminAuth, addPaymentLog);
+siteRoute.delete("/delete-site/:siteId", adminAuth, deleteSite);
 
 export default siteRoute;

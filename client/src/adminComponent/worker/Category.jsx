@@ -1,30 +1,34 @@
-import { useState } from "react";
-import {
-  CategoryContainer,
-  CategoryItem,
-  CategoryList,
-  StyleCategory,
-} from "./StyleWorker";
+import { useEffect } from "react";
+import { CategoryContainer, StyleCategory } from "./StyleWorker";
+import { useSearchParams } from "react-router-dom";
 
-function Category({ active, setActive }) {
+function Category() {
+  const [searchParms, setSearchParams] = useSearchParams();
+  useEffect(() => {
+    searchParms.set("filter", "all");
+    setSearchParams(searchParms);
+  }, []);
+  const active = searchParms.get("filter");
+
+  function handleClick(value) {
+    searchParms.set("filter", value);
+    setSearchParams(searchParms);
+  }
+
   return (
     <StyleCategory>
       <CategoryContainer>
-        Category:-{" "}
-        <CategoryList>
-          <CategoryItem
-            onClick={() => setActive("active")}
-            className={active === "active" && "active"}
-          >
-            Active
-          </CategoryItem>
-          <CategoryItem
-            onClick={() => setActive("non-active")}
-            className={active === "non-active" && "active"}
-          >
-            Non-active
-          </CategoryItem>
-        </CategoryList>
+        Category
+        <select
+          value={active || "all"}
+          onChange={(e) => {
+            handleClick(e.target.value);
+          }}
+        >
+          <option value="all">all</option>
+          <option value="active">active</option>
+          <option value="non-active">Non Active </option>
+        </select>
       </CategoryContainer>
     </StyleCategory>
   );

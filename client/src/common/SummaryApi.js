@@ -1,4 +1,4 @@
-export const BASE_URL = "http://localhost:5000";
+export const BASE_URL = "http://192.168.1.6:5000";
 
 const SummaryApi = {
   user: {
@@ -33,10 +33,6 @@ const SummaryApi = {
     getUser: {
       url: "/api/user/userInfo",
       method: "get",
-    },
-    getWorker: {
-      url: "api/worker/getWorker/681909a9e429bc250e2c4fa5",
-      method: "post",
     },
     changeAvatar: {
       url: "/api/user/upload-avatar",
@@ -80,6 +76,14 @@ const SummaryApi = {
       url: `/api/user/remove-from-fav/${designId}`,
       method: "post",
     }),
+    addDesign: {
+      url: "/api/design/add-design",
+      method: "post",
+    },
+    deleteDesign: (designId) => ({
+      url: `/api/design/delete-design/${designId}`,
+      method: "delete",
+    }),
   },
   site: {
     register: {
@@ -110,6 +114,14 @@ const SummaryApi = {
       url: "/api/site/get-sites",
       method: "get",
     },
+    addSite: {
+      url: "/api/site/register-site",
+      method: "post",
+    },
+    deleteSite: (siteId) => ({
+      url: `/api/site/delete-site/${siteId}`,
+      method: "delete",
+    }),
   },
   worker: {
     getWorker: {
@@ -128,6 +140,10 @@ const SummaryApi = {
       url: "/api/worker/update-payment",
       method: "put",
     },
+    addWorker: {
+      url: "/api/worker/add-worker",
+      method: "post",
+    },
   },
   vendour: {
     getVendours: {
@@ -138,10 +154,7 @@ const SummaryApi = {
       url: "api/vendour/add-vendour",
       method: "post",
     },
-    updatePayment: (vendourId) => ({
-      url: `api/vendour/update-payment/${vendourId}`,
-      method: "put",
-    }),
+
     updateTransaction: (vendourId) => ({
       url: `api/vendour/update-transaction/${vendourId}`,
       method: "put",
@@ -149,6 +162,10 @@ const SummaryApi = {
     updateHistoryPayment: (vendourId) => ({
       url: `api/vendour/update-paymentHistory/${vendourId}`,
       method: "put",
+    }),
+    deleteVendour: (vendourId) => ({
+      url: `api/vendour/delete-vendour/${vendourId}`,
+      method: "delete",
     }),
   },
 };

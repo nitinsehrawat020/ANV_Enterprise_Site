@@ -8,12 +8,15 @@ function RenderSiteForm({
   transactionData,
 }) {
   const handleSiteSubmit = (data) => {
-    const siteName = data.siteName;
+    const siteId = data.siteId;
     const noOfItems = parseInt(data.noOfItems) || 0;
+
+    const selectedSite = sites?.find((site) => site._id === siteId);
 
     // Add this site to the sites array
     const newSite = {
-      siteName,
+      siteId: selectedSite._id,
+      siteName: selectedSite?.name,
       noOfItems,
       items: [],
     };
@@ -43,7 +46,7 @@ function RenderSiteForm({
         <label htmlFor="siteName">
           Site Name (Site {currentSiteNumber} of {transactionData.noOfSites}){" "}
         </label>
-        <select id="siteName" {...register("siteName")} required>
+        <select id="siteName" {...register("siteId")} required>
           <option value="">Select a site</option>
           {sites?.map((site) => (
             <option key={site._id} value={site._id}>

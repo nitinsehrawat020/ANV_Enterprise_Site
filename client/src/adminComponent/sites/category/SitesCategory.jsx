@@ -1,35 +1,40 @@
-import { CategoryContainer, CategoryItem, StyleCategory } from "../StyleSites";
-import styled from "styled-components";
+import { useSearchParams } from "react-router-dom";
+import { CategoryContainer, StyleCategory } from "../StyleSites";
+import { useEffect } from "react";
 
-const ActiveCategoryItem = styled(CategoryItem)`
-  background-color: var(--color-primary-500);
-  color: var(--color-white-500);
-`;
-
-function SitesCategory({ setActiveCategory, activeCategory }) {
+function SitesCategory() {
   const categories = ["All", "Active", "Complete", "Upcoming"];
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  useEffect(() => {
+    searchParams.set("filter", "All");
+    setSearchParams(searchParams);
+  }, []);
+  const active = searchParams.get("filter");
+
+  function handleClick(value) {
+    console.log(value);
+
+    searchParams.set("filter", value);
+    setSearchParams(searchParams);
+  }
 
   return (
     <StyleCategory>
       <CategoryContainer>
         Category:-
-        {categories.map((category) =>
-          category === activeCategory ? (
-            <ActiveCategoryItem
-              key={category}
-              onClick={() => setActiveCategory(category)}
-            >
-              {category}
-            </ActiveCategoryItem>
-          ) : (
-            <CategoryItem
-              key={category}
-              onClick={() => setActiveCategory(category)}
-            >
-              {category}
-            </CategoryItem>
-          )
-        )}
+        <select
+          value={active || "All"}
+          onChange={(e) => {
+            handleClick(e.target.value);
+          }}
+        >
+          {categories.map((categorie) => (
+            <option key={categorie} value={categorie}>
+              {categorie}
+            </option>
+          ))}
+        </select>
       </CategoryContainer>
     </StyleCategory>
   );

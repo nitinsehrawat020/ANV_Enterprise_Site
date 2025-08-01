@@ -15,6 +15,19 @@ export async function registerNewSite(req, res) {
       bathroom,
       hall,
     } = req.body;
+    console.log(
+      name,
+      address,
+      totalPayment,
+      userEmail,
+      workType,
+      area,
+      floor,
+      rooms,
+      kitchen,
+      bathroom,
+      hall
+    );
 
     const payload = {
       name,
@@ -272,6 +285,36 @@ export async function addPaymentLog(req, res) {
   } catch (error) {
     console.log(error);
 
+    res.status(500).json({
+      message: error.message || error,
+      success: false,
+      error: true,
+    });
+  }
+}
+
+export async function deleteSite(req, res) {
+  try {
+    const siteId = req.params.siteId;
+
+    const sites = await SiteModel.findById(siteId);
+
+    if (!sites) {
+      return res.status(400).json({
+        message: "site Cannot be found",
+        success: false,
+        error: true,
+      });
+    }
+
+    const deletedsite = await SiteModel.deleteOne({ _id: siteId });
+
+    return res.status(200).json({
+      message: `${deleteSite.name} Site Delete Successfully`,
+      success: true,
+      error: false,
+    });
+  } catch (error) {
     res.status(500).json({
       message: error.message || error,
       success: false,

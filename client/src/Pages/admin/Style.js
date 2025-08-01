@@ -9,6 +9,9 @@ export const Content = styled.main`
   justify-content: center;
 
   padding: 0rem 1rem;
+  &::-webkit-scrollbar {
+    width: 0px;
+  }
 
   @media ${device.phnAndTab} {
     /* gap: 1rem; */

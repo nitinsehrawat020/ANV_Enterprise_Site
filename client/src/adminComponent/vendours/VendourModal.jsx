@@ -33,6 +33,7 @@ function VendourModal({ vendour, onClose }) {
     sites: [], // Array of sites with their items
     currentSiteIndex: 0,
   });
+  console.log(transactionData);
 
   // UI state
   const [currentStep, setCurrentStep] = useState("transaction"); // "transaction", "sites", "items"
@@ -50,7 +51,9 @@ function VendourModal({ vendour, onClose }) {
           <CloseButton onClick={onClose}>
             <IoArrowBack />
           </CloseButton>{" "}
-          <Heading as="h3">Material Details </Heading>
+          <div className="heading">
+            <Heading as="h3">Material Details </Heading>
+          </div>
         </span>
         {vendour.transaction
           .sort((a, b) => new Date(b.date) - new Date(a.date)) // Sort by date, newest first
@@ -87,9 +90,9 @@ function VendourModal({ vendour, onClose }) {
                       {item.itemList.map((listItem) => (
                         <tr key={listItem._id}>
                           <td>{listItem.name}</td>
-                          <td>${listItem.price}</td>
+                          <td>{listItem.price}</td>
                           <td>{listItem.quantity}</td>
-                          <td>${listItem.price * listItem.quantity}</td>
+                          <td>{listItem.price * listItem.quantity}</td>
                         </tr>
                       ))}
                       <tr>

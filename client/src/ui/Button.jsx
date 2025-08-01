@@ -1,77 +1,82 @@
 import styled, { css } from "styled-components";
 import { device } from "../Styles/Theme";
-
-export const Button = styled.button`
+const StyleButton = styled.button`
   ${(props) =>
-    props.variant === "filled" &&
+    props.variation === "filled" &&
     css`
-      & {
-        border-radius: var(--br-m);
-        background-color: ${props.color ? props.color : "var(--color-primary)"};
-        overflow: hidden;
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: center;
-        padding: var(--padding-xs-1) var(--padding-xs-1);
-        cursor: pointer;
-        font-size: ${props.size ? `${props.size}rem` : "1rem"};
-        border: none;
-        transition: all 0.3s ease;
-
-        @media ${device.laptop} {
-          font-size: ${props.size ? `${props.size / 1.5}rem` : "0.75rem"};
-        }
-        @media ${device.tablet} {
-          font-size: ${props.size ? `${props.size / 1.5}rem` : "0.75rem"};
-        }
-        @media ${device.mobile} {
-          font-size: ${props.size ? `${props.size / 2}rem` : "0.75rem"};
-        }
-      }
-      &:hover {
-        background-color: ${props.hoverColor
-          ? props.hoverColor
-          : "var(--color-primary)"};
-        border: 2px solid var(--color-primary);
-        background-color: transparent;
-        color: var(--color-primary);
-      }
-    `}
-  ${(props) =>
-    props.variant === "outlined" &&
-    css`
-      background-color: transparent;
-      border-radius: var(--br-m);
-      border: 2px solid var(--color-primary);
-      overflow: hidden;
+      position: relative;
+      border-radius: 16px;
+      background-color: var(--color-orange);
+      border: 3px solid var(--color-orange);
+      box-sizing: border-box;
       display: flex;
       flex-direction: row;
       align-items: center;
       justify-content: center;
-      padding: var(--padding-xs-1) var(--padding-xs-1);
-      color: var(--color-primary);
-      cursor: pointer;
-
-      font-size: ${props.size ? `${props.size}rem` : "1rem"};
-
-      @media ${device.laptop} {
-        font-size: ${props.size ? `${props.size / 2}rem` : "0.75rem"};
-      }
+      padding: 0.25rem 1.5rem;
+      text-align: left;
+      font-size: 1.5rem;
+      color: var(--color-gray-100);
+      font-family: var(--font-poppins);
+      font-weight: 500;
+      transition: all 0.2s ease;
+      gap: 1rem;
 
       @media ${device.tablet} {
-        font-size: ${props.size ? `${props.size / 2}rem` : "0.75rem"};
+        font-size: 1rem;
+        padding: 0.25rem 1rem;
       }
-      @media ${device.mobile} {
-        font-size: ${props.size ? `${props.size / 2}rem` : "0.75rem"};
+
+      @media ${device.laptop} {
+        font-size: 1.1rem;
+        padding: 0.25rem 1.1rem;
       }
 
       &:hover {
-        background-color: ${props.hoverColor
-          ? props.hoverColor
-          : "var(--color-primary)"};
-        color: var(--color-white-500);
-        background-color: ${props.color ? props.color : "var(--color-primary)"};
+        border: 3px solid var(--color-gray-100);
+      }
+    `}
+
+  ${(props) =>
+    props.variation === "unfilled" &&
+    css`
+      width: fit-content
+      position: relative;
+      border-radius: 16px;
+      background-color: var(--color-white);
+      border: 3px solid var(--color-gray-100);
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      padding: 0.25rem 1.5rem;
+      text-align: left;
+      font-size: 1.5rem;
+      color: var(--color-gray-100);
+      font-family: var(--font-poppins);
+      font-weight: 500;
+      transition: all 0.2s ease;
+      gap: 1rem;
+
+      @media ${device.tablet} {
+        font-size: 1rem;
+        padding: 0.25rem 1rem;
+      }
+       @media ${device.laptop} {
+            font-size: 1.1rem;
+            padding: 0.25rem 1.1rem;
+        }
+
+      &:hover {
+        border: 3px solid var(--color-gray-100);
+        background-color: var(--color-orange);
       }
     `}
 `;
+
+function Button({ children, variation }) {
+  return <StyleButton variation={variation}>{children}</StyleButton>;
+}
+
+export default Button;

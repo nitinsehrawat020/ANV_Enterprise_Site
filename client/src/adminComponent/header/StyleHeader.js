@@ -1,4 +1,6 @@
 import styled from "styled-components";
+import { device } from "../../Styles/Theme";
+
 export const StyleHeader = styled.div`
   grid-area: header;
   display: flex;
@@ -8,9 +10,15 @@ export const StyleHeader = styled.div`
   background-color: var(--color-background-200);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 
-  @media (max-width: 768px) {
+  @media ${device.phnAndTab} {
+    padding: 0 15px;
+  }
+
+  @media ${device.mobile} {
+    padding: 0 10px;
   }
 `;
+
 export const Title = styled.div`
   width: 100%;
   font-size: 1.5rem;
@@ -20,7 +28,13 @@ export const Title = styled.div`
   align-items: center;
   justify-content: center;
 
-  @media (max-width: 768px) {
+  @media ${device.phnAndTab} {
     width: 80%;
+    font-size: 1.3rem;
+  }
+
+  @media ${device.mobile} {
+    width: 70%;
+    font-size: 1.1rem;
   }
 `;

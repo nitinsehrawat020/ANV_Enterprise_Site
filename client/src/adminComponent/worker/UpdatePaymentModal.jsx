@@ -149,6 +149,7 @@ function UpdatePaymentModal({ workerData }) {
             workerData={workerData}
             today={formatDate(new Date())}
             updateWednesdayPayment={WednesdayPayment}
+            resetTrigger={resetTrigger}
           />
         </form>
       </TableContainer>

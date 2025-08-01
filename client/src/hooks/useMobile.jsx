@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-const useMobile = (breakpoint = 1024) => {
+const useMobile = (breakpoint = 480) => {
   const [isMobile, setIsMobile] = useState(window.innerWidth < breakpoint);
 
   const handleResize = () => {
@@ -19,7 +19,7 @@ const useMobile = (breakpoint = 1024) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  return [isMobile];
+  return { isMobile };
 };
 
 export default useMobile;

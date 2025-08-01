@@ -1,37 +1,34 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import UserAppLayout from "./ui/AppLayout";
-import Home from "./Pages/Home";
+
 import GlobalStyle from "./Styles/GlobalStyle";
+import UserStyle from "./Styles/UserStyle";
+import isPropValid from "@emotion/is-prop-valid";
+import { StyleSheetManager } from "styled-components";
+
 import { Toaster } from "react-hot-toast";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 import { PrimeReactProvider } from "primereact/api";
 
-import isPropValid from "@emotion/is-prop-valid";
-import { StyleSheetManager } from "styled-components";
-import DesignForeCeil from "./Pages/DesignForeCeil";
-import DesignMolding from "./Pages/DesignMolding";
-import AboutUs from "./Pages/AboutUs";
-import Dashboard from "./Pages/admin/Dashboard";
+import UserAppLayout from "./ui/AppLayout";
 import AdminAppLayout from "./ui/AdminAppLayout";
+
+import Dashboard from "./Pages/admin/Dashboard";
 import Workers from "./Pages/admin/Workers";
 import Sites from "./Pages/admin/Sites";
 import Vendours from "./Pages/admin/Vendours";
 import Setting from "./Pages/admin/Setting";
-import ForgotPassword from "./Pages/ForgotPassword";
-import Login from "./Pages/Login";
-import Signup from "./Pages/Signup";
-import VerifyOtp from "./Pages/VerifyOtp";
-import ChangePassword from "./Pages/ChangePassword";
+
+import Login from "./Pages/User/Login";
+import Signup from "./Pages/User/Signup";
+
 import ProtectedRoute from "./ui/ProtectedRoute";
 import AdminProtectedRoute from "./ui/AdminProtectedRoute";
-import Favorite from "./Pages/Favorite";
+import Home from "./Pages/User/Home";
+import FalseCeilDesign from "./Pages/User/FalseCeilDesign";
+import MoldingDesign from "./Pages/User/MoldingDesign";
 // import MyAccount from "./Pages/MyAccount";
-import MyAccountLayout from "./ui/MyAccountLayout";
-import AccountInfo from "./component/myAccount/AccountInfo";
-import LoginChangePassword from "./component/myAccount/LoginChangePassword";
-import UserProtectedRoute from "./ui/UserProtectedRoute";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -46,6 +43,7 @@ function App() {
     <>
       <StyleSheetManager shouldForwardProp={shouldForwardProp}>
         <GlobalStyle />
+        <UserStyle />
         <QueryClientProvider client={queryClient}>
           <ReactQueryDevtools initialIsOpen={false} />
           <PrimeReactProvider>
@@ -58,32 +56,12 @@ function App() {
                     </ProtectedRoute>
                   }
                 >
-                  <Route path="/" element={<Home />} />
-                  <Route path="/designFalseCeil" element={<DesignForeCeil />} />
-                  <Route path="/designMolding" element={<DesignMolding />} />
-                  <Route path="/aboutUs" element={<AboutUs />} />
-                  <Route path="/forgotPassword" element={<ForgotPassword />} />
-                  <Route path="/verifyOtp" element={<VerifyOtp />} />
-                  <Route path="/changePassword" element={<ChangePassword />} />
-                  <Route path="/favorite" element={<Favorite />} />
-
-                  <Route
-                    path="/myAccount"
-                    element={
-                      <UserProtectedRoute>
-                        <MyAccountLayout />{" "}
-                      </UserProtectedRoute>
-                    }
-                  >
-                    <Route index element={<AccountInfo />} />
-
-                    <Route path="info" element={<AccountInfo />} />
-                    <Route
-                      path="changePassword"
-                      element={<LoginChangePassword />}
-                    />
-                  </Route>
                   <Route path="*" element={<Home />} />
+                  <Route
+                    path="/design/false-ceil"
+                    element={<FalseCeilDesign />}
+                  />
+                  <Route path="/design/molding" element={<MoldingDesign />} />
                 </Route>
                 <Route element={<UserAppLayout />}>
                   <Route path="/login" element={<Login />} />

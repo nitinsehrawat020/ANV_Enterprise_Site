@@ -6,7 +6,7 @@ import uploadImageClodinary from "../utils/uploadImageClodinary.js";
 
 export async function postAddDesignController(req, res) {
   try {
-    const { title, designType, designArea, description, ETA, rating, image } =
+    const { title, designType, designArea, description, ETA, rating } =
       req.body;
 
     const designImage = req.file;

@@ -1,8 +1,8 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   addVendourApi,
+  deleteVendourApi,
   getVendoursApi,
-  updatePaymentApi,
   updatePaymentHistoryApi,
   updateTransactionApi,
 } from "../services/vendourApi";
@@ -18,54 +18,64 @@ export function useGetVendour() {
 }
 
 export function useAddVendour() {
+  const queryClient = useQueryClient();
   const { mutate: addVendour, isLoading } = useMutation({
     mutationFn: ({ data }) => addVendourApi({ data }),
     onSuccess: (res) => {
-      toast.success("vensour added successfully");
+      queryClient.invalidateQueries(["vendour"]);
+      toast.success(res.message);
     },
     onError: (err) => {
-      toast.error("issue in adding vendour");
+      toast.error(err.message);
     },
   });
   return { addVendour, isLoading };
 }
 
-export function useUpdatePayment() {
-  const { mutate: updateVendourPayment, isLoading } = useMutation({
-    mutationFn: ({ data, vendourId }) => updatePaymentApi({ data, vendourId }),
-    onSuccess: (res) => {
-      toast.success("payment added successfully");
-    },
-    onError: (err) => {
-      toast.error("issue on added payment");
-    },
-  });
-  return { updateVendourPayment, isLoading };
-}
 export function useVendourTransaction() {
+  const queryClient = useQueryClient();
   const { mutate: updateVendourTransaction, isLoading } = useMutation({
     mutationFn: ({ data, vendourId }) =>
       updateTransactionApi({ data, vendourId }),
     onSuccess: (res) => {
-      toast.success("transaction added successfully");
+      queryClient.invalidateQueries(["vendour"]);
+      toast.success(res.message);
     },
     onError: (err) => {
-      toast.error("issue on added transaction");
+      toast.error(err.message);
     },
   });
   return { updateVendourTransaction, isLoading };
 }
 
 export function useUpdateVendourHistoryPayment() {
+  const queryClient = useQueryClient();
+
   const { mutate: updateVendourHistoryPayment, isLoading } = useMutation({
     mutationFn: ({ data, vendourId }) =>
       updatePaymentHistoryApi({ data, vendourId }),
     onSuccess: (res) => {
-      toast.success("vendour payment updated succesfully");
+      queryClient.invalidateQueries(["vendour"]);
+      toast.success(res.message);
     },
     onError: (err) => {
-      toast.error("issue in vendour payment history ");
+      toast.error(err.message);
     },
   });
   return { updateVendourHistoryPayment, isLoading };
+}
+
+export function useDeleteVendour() {
+  const queryClient = useQueryClient();
+  const { mutate: deleteVendour, isLoading: isDeletingVendour } = useMutation({
+    mutationFn: (vendourId) => deleteVendourApi(vendourId),
+    onSuccess: (res) => {
+      queryClient.invalidateQueries(["vendour"]);
+      toast.success(res.message);
+    },
+    onError: (err) => {
+      toast.error(err.message);
+    },
+  });
+  return { deleteVendour, isDeletingVendour };
 }

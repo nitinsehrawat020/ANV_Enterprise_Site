@@ -17,7 +17,6 @@ const designRouter = new Router();
 designRouter.post(
   "/add-design",
   adminAuth,
-  // validateAddDesign,
   upload.single("image"),
   postAddDesignController
 );

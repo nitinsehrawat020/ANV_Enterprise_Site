@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { useState, useEffect } from "react";
+import { device } from "../../Styles/Theme";
 
 export const StyledTable = styled.table`
   width: 100%;
@@ -74,6 +75,13 @@ export const StyledTable = styled.table`
     display: none;
   }
 `;
+export const WorkerForm = styled.div`
+  display: flex;
+
+  @media ${device.tablet} {
+    display: none;
+  }
+`;
 
 function DesktopTable({ register, workerData, today, resetTrigger }) {
   const [numberOfWorkers, setNumberOfWorkers] = useState(0);
@@ -104,7 +112,7 @@ function DesktopTable({ register, workerData, today, resetTrigger }) {
   );
 
   return (
-    <div>
+    <WorkerForm>
       {!showWorkerForms ? (
         // Step 1: Ask for number of workers
         <div style={{ padding: "2rem", textAlign: "center" }}>
@@ -244,7 +252,7 @@ function DesktopTable({ register, workerData, today, resetTrigger }) {
           </tbody>
         </StyledTable>
       )}
-    </div>
+    </WorkerForm>
   );
 }
 

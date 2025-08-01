@@ -18,6 +18,12 @@ export const CategoryContainer = styled.div`
   color: var(--color-white-500);
   gap: 0.5rem;
   border-radius: var(--br-l);
+
+  select {
+    background-color: var(--color-background-400);
+    border-radius: 8px;
+    padding: 4px;
+  }
 `;
 export const CategoryItem = styled.div`
   display: flex;
@@ -54,8 +60,29 @@ export const StyleSiteCard = styled.div`
   height: 400px;
   padding: 1rem;
   background-color: var(--color-background-800);
-  border-radius: var(--br-l);
-  box-shadow: var(--shadow-md);
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--color-background-500);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+
+  &:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--color-primary-500);
+  }
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    border-color: var(--color-primary-600);
+  }
 `;
 
 export const InnerBorder = styled.div`
@@ -67,8 +94,9 @@ export const InnerBorder = styled.div`
   justify-content: start;
   padding: 1rem;
   gap: 1rem;
-  border-radius: var(--br-m);
+  border-radius: 8px;
   border: 1px solid var(--color-background-500);
+  background: var(--color-background-300);
 `;
 
 export const Graphs = styled.div`

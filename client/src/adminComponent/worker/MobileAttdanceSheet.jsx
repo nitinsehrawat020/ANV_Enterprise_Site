@@ -1,5 +1,7 @@
 import { useMemo } from "react";
 import styled from "styled-components";
+import { isWorkerNotAvailableOnDay } from "./utils/attendanceUtils";
+import { useSite } from "../../hooks/useSite";
 
 const StyleMobileAttdanceSheet = styled.div`
   display: none;
@@ -63,19 +65,19 @@ const StyleMobileAttdanceSheet = styled.div`
   }
 `;
 
-function RenderRow({ worker, index, register }) {
+function RenderRow({ worker, register, sites }) {
   return (
-    <tr key={index}>
+    <tr key={worker._id}>
       <td>
         {worker.name}
         <input
           type="hidden"
-          {...register(`workerId_${worker.id}`)}
+          {...register(`workerId_${worker._id}`)}
           value={worker.id}
         />
       </td>
       <td>
-        <select {...register(`attendance${worker.id}`)}>
+        <select {...register(`attendance_${worker._id}`)}>
           <option value="">select</option>
           <option value="present">Present</option>
           <option value="absent">Absent</option>
@@ -85,11 +87,13 @@ function RenderRow({ worker, index, register }) {
         </select>
       </td>
       <td>
-        <select {...register(`site${worker.id}`)}>
+        <select {...register(`site_${worker._id}`)}>
           <option value="">Select Site</option>
-          <option value="site1">Site 1</option>
-          <option value="site2">Site 2</option>
-          <option value="site3">Site 3</option>
+          {sites.map((site) => (
+            <option key={site._id} value={site._id}>
+              {site.name}
+            </option>
+          ))}
         </select>
       </td>
     </tr>
@@ -106,16 +110,20 @@ function MobileAttdanceSheet({
   handleSubmit,
   day,
 }) {
+  const { sites, isLoading } = useSite();
+  console.log(sites);
+
   const filteredWorkers = useMemo(() => {
     if (shouldShowAllWorkers(day)) {
       return WorkerData;
     } else {
-      return WorkerData.filter(
-        (worker) =>
-          worker.attendance && worker.attendance[day] === "not_available"
-      );
+      return WorkerData.filter((worker) => {
+        return isWorkerNotAvailableOnDay(worker, day);
+      });
     }
   }, [WorkerData, day]);
+  if (isLoading) return;
+
   return (
     <StyleMobileAttdanceSheet>
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -129,7 +137,7 @@ function MobileAttdanceSheet({
           </thead>
           <tbody>
             {filteredWorkers.map((worker, index) =>
-              RenderRow({ worker, register, index })
+              RenderRow({ worker, register, index, sites })
             )}
             <tr>
               <td></td>

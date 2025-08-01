@@ -1,99 +1,31 @@
-import styled from "styled-components";
-import Heading from "../../ui/Heading";
 import { useForm } from "react-hook-form";
-import { formatDate, getTodayFormattedDate } from "../../util/helper";
-
-import { format } from "date-fns";
-
-const ModelContainer = styled.div`
-  /* height: 400px; */
-  /* width: 200px; */
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  flex-direction: column;
-  background-color: var(--color-background-500);
-  border-radius: var(--br-l);
-  box-shadow: var(--shadow-lg);
-  padding: 2rem;
-  text-align: center;
-
-  form {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-  }
-
-  input {
-    padding: 0.5rem;
-    border-radius: var(--br-l);
-    border: none;
-    background-color: var(--color-background-200);
-  }
-
-  input[type="submit"] {
-    background-color: var(--color-primary-500);
-    color: var(--color-white-500);
-    cursor: pointer;
-    transition: all 0.3s;
-  }
-
-  input[type="submit"]:hover {
-    background-color: var(--color-primary-600);
-  }
-
-  input[type="submit"]:active {
-    background-color: var(--color-primary-700);
-  }
-
-  input[type="submit"]:disabled {
-    background-color: var(--color-background-200);
-    color: var(--color-background-500);
-    cursor: not-allowed;
-  }
-
-  input[type="submit"]:disabled:hover {
-    background-color: var(--color-background-200);
-  }
-
-  input[type="text"] {
-    width: 100%;
-  }
-
-  select {
-    padding: 0.5rem;
-    border-radius: var(--br-l);
-    border: none;
-    background-color: var(--color-background-200);
-  }
-
-  select:focus {
-    outline: none;
-  }
-
-  input[type="file"] {
-    padding: 0.5rem;
-    border-radius: var(--br-l);
-    border: none;
-    background-color: var(--color-background-200);
-  }
-
-  input[type="date"] {
-    padding: 0.5rem;
-    border-radius: var(--br-l);
-    border: none;
-    background-color: var(--color-background-200);
-  }
-
-  input[type="date"]::-webkit-calendar-picker-indicator {
-    color: var(--color-white-500);
-  }
-`;
+import { formatDate } from "../../util/helper";
+import {
+  StyleModal,
+  Title,
+  FormContainer,
+  WorkerForm,
+  FormGroup,
+  FormLabel,
+  FormInput,
+  FormSelect,
+  FormFileInput,
+  ErrorMessage,
+  FileHint,
+  SubmitButton,
+} from "../setting/add/styleAddModal";
 
 function AddWorkerModal({ workerData = [] }) {
   const todayDates = formatDate(new Date());
-  const { register, handleSubmit, reset, setValue, watch } = useForm({
-    join: todayDates,
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+      join: todayDates,
+    },
   });
 
   const onSubmit = (data) => {
@@ -118,26 +50,98 @@ function AddWorkerModal({ workerData = [] }) {
 
     reset();
   };
-  return (
-    <ModelContainer>
-      <Heading as="h3">Add Worker</Heading>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <input type="text" placeholder="Name" {...register("name")} />
-        <input type="text" placeholder="Phone" {...register("phone_number ")} />
-        <input type="date" placeholder="join" {...register("join")} />
-        <select {...register("member_type")}>
-          <option value="worker">Worker</option>
-          <option value="helper">Helper</option>
-        </select>
-        <select {...register("active_status")}>
-          <option value="true">Active</option>
-          <option value="false">Not Active</option>
-        </select>
-        <input type="file" {...register("image")} />
 
-        <input type="submit" value="Add Worker" />
-      </form>
-    </ModelContainer>
+  return (
+    <StyleModal>
+      <Title>
+        <h2>Add Worker</h2>
+      </Title>
+      <FormContainer>
+        <WorkerForm onSubmit={handleSubmit(onSubmit)}>
+          <FormGroup>
+            <FormLabel>Worker Name</FormLabel>
+            <FormInput
+              type="text"
+              placeholder="Enter worker name"
+              hasError={errors.name}
+              {...register("name", { required: "Name is required" })}
+            />
+            {errors.name && <ErrorMessage>{errors.name.message}</ErrorMessage>}
+          </FormGroup>
+
+          <FormGroup>
+            <FormLabel>Phone Number</FormLabel>
+            <FormInput
+              type="text"
+              placeholder="Enter phone number"
+              hasError={errors.phone_number}
+              {...register("phone_number", {
+                required: "Phone number is required",
+              })}
+            />
+            {errors.phone_number && (
+              <ErrorMessage>{errors.phone_number.message}</ErrorMessage>
+            )}
+          </FormGroup>
+
+          <FormGroup>
+            <FormLabel>Join Date</FormLabel>
+            <FormInput
+              type="date"
+              hasError={errors.join}
+              {...register("join", { required: "Join date is required" })}
+            />
+            {errors.join && <ErrorMessage>{errors.join.message}</ErrorMessage>}
+          </FormGroup>
+
+          <FormGroup>
+            <FormLabel>Member Type</FormLabel>
+            <FormSelect
+              hasError={errors.member_type}
+              {...register("member_type", {
+                required: "Member type is required",
+              })}
+            >
+              <option value="">Select member type</option>
+              <option value="worker">Worker</option>
+              <option value="helper">Helper</option>
+            </FormSelect>
+            {errors.member_type && (
+              <ErrorMessage>{errors.member_type.message}</ErrorMessage>
+            )}
+          </FormGroup>
+
+          <FormGroup>
+            <FormLabel>Active Status</FormLabel>
+            <FormSelect
+              hasError={errors.active_status}
+              {...register("active_status", {
+                required: "Active status is required",
+              })}
+            >
+              <option value="">Select status</option>
+              <option value="true">Active</option>
+              <option value="false">Not Active</option>
+            </FormSelect>
+            {errors.active_status && (
+              <ErrorMessage>{errors.active_status.message}</ErrorMessage>
+            )}
+          </FormGroup>
+
+          <FormGroup>
+            <FormLabel>Profile Image</FormLabel>
+            <FormFileInput
+              type="file"
+              accept="image/*"
+              {...register("image")}
+            />
+            <FileHint>Upload a profile image (optional)</FileHint>
+          </FormGroup>
+
+          <SubmitButton type="submit">Add Worker</SubmitButton>
+        </WorkerForm>
+      </FormContainer>
+    </StyleModal>
   );
 }
 

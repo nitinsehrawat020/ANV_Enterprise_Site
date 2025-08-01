@@ -9,6 +9,7 @@ import {
 import Modal from "../../ui/Modal";
 import AttendanceModal from "./AttendanceModal";
 import { useOutsideClick } from "../../hooks/useOutsideClick.jsx";
+import { BsChevronBarDown, BsChevronBarUp } from "react-icons/bs";
 
 function Attendance({ workers, sites }) {
   const [attendanceDropdown, setAttendanceDropdown] = useState(false);
@@ -56,12 +57,12 @@ function Attendance({ workers, sites }) {
 
   return (
     <AttendanceContainer>
-      Attendance:-
       <AttendanceBox attendanceDropdown={attendanceDropdown}>
         <PendingListButton
           onClick={() => setAttendanceDropdown((prev) => !prev)}
         >
-          View Pending List ({uniqueNotAvailableDays.length} pending)
+          Attendance ({uniqueNotAvailableDays.length})
+          {!attendanceDropdown ? <BsChevronBarDown /> : <BsChevronBarUp />}
         </PendingListButton>
 
         {attendanceDropdown && (

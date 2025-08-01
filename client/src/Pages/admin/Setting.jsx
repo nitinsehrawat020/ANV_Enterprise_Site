@@ -1,8 +1,12 @@
-import Heading from "../../ui/Heading";
+import SettingMain from "../../adminComponent/setting/SettingMain";
 import { Content } from "./Style";
 
 function Setting() {
-  return <Content></Content>;
+  return (
+    <Content>
+      <SettingMain />
+    </Content>
+  );
 }
 
 export default Setting;

@@ -52,3 +52,28 @@ export async function updateWorkerPaymentApi({ data }) {
     });
   return res;
 }
+
+export async function addWorkerApi({ data }) {
+  try {
+    const config = {
+      ...SummaryApi.worker.addWorker,
+      data: data,
+    };
+
+    // When sending FormData, don't set Content-Type header
+    // Let the browser set it automatically with the boundary
+    if (data instanceof FormData) {
+      // Remove any existing Content-Type header to let browser handle it
+      if (config.headers) {
+        delete config.headers["Content-Type"];
+      }
+    }
+
+    console.log("Sending request with config:", config);
+    const res = await Axios(config);
+    return res.data;
+  } catch (err) {
+    console.error("API Error:", err.response?.data || err.message);
+    throw err;
+  }
+}

@@ -24,14 +24,6 @@ function RenderItemList({ transactionData }) {
   const currentSite = transactionData.sites[transactionData.currentSiteIndex];
   const currentSiteItems = currentSite?.items || [];
 
-  // Debug logging
-  console.log("RenderItemList Debug:", {
-    currentSiteIndex: transactionData.currentSiteIndex,
-    currentSite,
-    currentSiteItems,
-    sitesLength: transactionData.sites.length,
-  });
-
   if (currentSiteItems.length === 0) {
     return (
       <div

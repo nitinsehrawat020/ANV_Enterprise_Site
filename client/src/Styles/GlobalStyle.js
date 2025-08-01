@@ -4,7 +4,7 @@ const GlobalStyle = createGlobalStyle`
 
 :root {
 /* fonts */
---font-roboto: Roboto;
+--font-roboto: Poppins;
 --text-lg-medium: Poppins;
 /* font sizes */
 --fontsize-xs: 1rem;
@@ -52,33 +52,6 @@ const GlobalStyle = createGlobalStyle`
 --color-black: #000;
 --color-darkslategray: #454545;
 
-
-
-
-/* 
---color-secondary:#464646 ;
---color-secondary:#969696 ;
---color-secondary:#FF9900 ;
---color-secondary:#FFD700 ;
---color-secondary:#2E2E2E ;
---color-secondary:#5E5E5E ;
---color-secondary:#464646  ;
---color-secondary:#4682B4  ;
---color-secondary:#B44682  ;
---color-secondary:#363636  ;
---color-secondary:#666666  ;
---color-secondary:#A64646  ;
---color-secondary:#468C96 ;
---color-secondary:#5AB4BF ;
---color-secondary:#A4E4E0 ;
---color-secondary:#E6A4C4 ;
---color-secondary:#A4D8E6 ;
---color-secondary:#E6BCA4 ;
---color-secondary:#A4E6C0 ;
---color-secondary:#C1A267 ; */
-
-/* Gaps */
-
 /* Paddings */
 --padding-xs-1: 0.5rem;
 --padding-xs-0: 1rem;
@@ -108,7 +81,13 @@ body{
     background-color: #464646;
     font-family: var(--font-roboto);
     color: var(--color-white-500);
-    margin: 0; line-height: normal;
+    margin: 0; 
+    line-height: normal;
+    overflow-x: hidden;
+}
+
+html {
+    overflow-x: hidden;
 }
 
 a {
