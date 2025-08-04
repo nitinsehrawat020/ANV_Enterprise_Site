@@ -12,7 +12,7 @@ const designSchema = new mongoose.Schema(
     description: { type: String, default: "" },
     ETA: { type: Date, default: null },
     rating: { type: Number, default: null },
-    image: { type: String, default: null },
+    images: { type: Array, default: null },
   },
   { timestamps: true }
 );

@@ -40,7 +40,7 @@ const StyleButton = styled.button`
   ${(props) =>
     props.variation === "unfilled" &&
     css`
-      width: fit-content
+      width: fit-content;
       position: relative;
       border-radius: 16px;
       background-color: var(--color-white);
@@ -63,10 +63,10 @@ const StyleButton = styled.button`
         font-size: 1rem;
         padding: 0.25rem 1rem;
       }
-       @media ${device.laptop} {
-            font-size: 1.1rem;
-            padding: 0.25rem 1.1rem;
-        }
+      @media ${device.laptop} {
+        font-size: 1.1rem;
+        padding: 0.25rem 1.1rem;
+      }
 
       &:hover {
         border: 3px solid var(--color-gray-100);

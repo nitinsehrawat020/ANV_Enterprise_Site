@@ -240,6 +240,7 @@ export async function updateUserDetialsController(req, res) {
     const userId = req.userId;
 
     const { firstName, lastName, phoneNumber, address } = req.body;
+    console.log(firstName, lastName, phoneNumber, address);
 
     const updateUser = await UserModel.updateOne(
       { _id: userId },

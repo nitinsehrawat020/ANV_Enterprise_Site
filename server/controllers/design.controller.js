@@ -52,6 +52,7 @@ export async function postAddDesignController(req, res) {
 export async function getDesignController(req, res) {
   try {
     const data = await DesignModel.find();
+
     res.status(200).json({
       message: "All the design has been fetch",
       data: data,
@@ -89,6 +90,7 @@ export async function getMoldingDesignController(req, res) {
 export async function getFlaseCeilDesignController(req, res) {
   try {
     const data = await DesignModel.find({ designType: "false-ceil" });
+
     res.status(200).json({
       message: "all the designs fetched",
       success: true,

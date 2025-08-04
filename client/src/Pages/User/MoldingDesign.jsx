@@ -4,8 +4,6 @@ import { useMolding } from "../../hooks/useDesign";
 function MoldingDesign() {
   const { moldingDesigns, isMoldingLoading } = useMolding();
 
-  console.log(moldingDesigns);
-
   return (
     <DesignTemplete
       type={"Molding Design"}

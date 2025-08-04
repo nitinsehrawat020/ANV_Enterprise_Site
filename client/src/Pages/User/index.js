@@ -8,7 +8,7 @@ export const Main = styled.main`
   align-items: flex-start;
   justify-content: flex-start;
   gap: 2rem;
-  /* padding: 0rem 1rem; */
+  padding: 0rem 1rem;
 
   @media ${device.phnAndTab} {
     gap: 1rem;

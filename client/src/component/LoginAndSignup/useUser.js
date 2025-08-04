@@ -24,7 +24,9 @@ export function useUser() {
   return {
     user,
     isLoading,
-    isAuthenticated: user?.status === "active" && user?.role === "admin",
+    isAuthenticated:
+      user?.status === "active" &&
+      (user?.role === "user" || user?.role === "admin"),
     isAdminAuthenticated: user?.role === "admin" && user?.status === "active",
   };
 }
@@ -56,7 +58,7 @@ export function useUpdateUser() {
     isPending: isLoading,
     error,
   } = useMutation({
-    mutationFn: (data) => updateUserApi(data),
+    mutationFn: ({ data }) => updateUserApi({ data }),
     onSuccess: (res) => {
       toast.success(" user updated succesfully");
       queryClient.invalidateQueries("user");

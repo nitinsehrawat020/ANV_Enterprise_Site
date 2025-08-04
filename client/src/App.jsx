@@ -28,6 +28,9 @@ import AdminProtectedRoute from "./ui/AdminProtectedRoute";
 import Home from "./Pages/User/Home";
 import FalseCeilDesign from "./Pages/User/FalseCeilDesign";
 import MoldingDesign from "./Pages/User/MoldingDesign";
+import MyAccount from "./Pages/User/MyAccount";
+import AboutUs from "./Pages/User/AboutUs";
+import Favorite from "./Pages/User/Favorite";
 // import MyAccount from "./Pages/MyAccount";
 
 const queryClient = new QueryClient({
@@ -61,7 +64,13 @@ function App() {
                     path="/design/false-ceil"
                     element={<FalseCeilDesign />}
                   />
+                  <Route
+                    path="/my-account/:ActiveButton"
+                    element={<MyAccount />}
+                  />
                   <Route path="/design/molding" element={<MoldingDesign />} />
+                  <Route path="/aboutUs" element={<AboutUs />} />
+                  <Route path="/favortie" element={<Favorite />} />
                 </Route>
                 <Route element={<UserAppLayout />}>
                   <Route path="/login" element={<Login />} />

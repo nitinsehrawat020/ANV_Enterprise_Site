@@ -36,3 +36,19 @@ export function formatCurrencty(amount) {
     maximumFractionDigits: 0,
   }).format(amount);
 }
+
+// {isLoading && (
+//   <ConstructionLoader
+//     message="Loading projects..."
+//     progress={loadingProgress}
+//     showProgress={true}
+//   />
+// )}
+
+// // For buttons
+// <ButtonLoader isLoading={isSubmitting}>
+//   Submit Application
+// </ButtonLoader>
+
+// // For content placeholders
+// <SkeletonLoader lines={3} showCard={true} />

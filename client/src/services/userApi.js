@@ -132,7 +132,7 @@ export async function changeAvatarApi(data) {
   return res.data.data;
 }
 
-export async function updateUserApi(data) {
+export async function updateUserApi({ data }) {
   const res = await Axios({
     ...SummaryApi.user.updateUser,
     data: data,

@@ -1,365 +1,769 @@
 import { NavLink } from "react-router-dom";
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 import { device } from "../../Styles/Theme";
-export const AccountContainer = styled.div`
+export const StyleMyAccount = styled.div`
   width: 100%;
-  height: 100%;
-  display: grid;
-  grid-template-columns: 300px 1fr;
-  grid-template-rows: 1fr;
-  grid-template-areas: "navigate content";
+  height: 600px;
+  display: flex;
+  align-items: flex-start;
   justify-content: center;
-  align-items: start;
+  gap: 24px;
+  max-width: 1200px;
+
+  @media ${device.laptop} {
+    height: 550px;
+    gap: 16px;
+  }
+
+  @media ${device.tablet} {
+    height: auto;
+    min-height: 400px;
+    flex-direction: column;
+    gap: 12px;
+    padding: 1rem;
+  }
+
+  @media ${device.mobile} {
+    height: auto;
+    min-height: 350px;
+    flex-direction: column;
+    gap: 8px;
+    padding: 0.5rem;
+  }
 `;
 
-export const StyleAccountNavigation = styled.div`
-  grid-area: "navigate";
-  width: 100%;
+export const SelectContentContainer = styled.div`
+  width: fit-content;
   height: 100%;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 12px;
-  background-color: var(--color-background-200);
-`;
-
-export const StyleAccountContent = styled.div`
-  grid-area: "content";
-  display: flex;
-  justify-content: center;
-  align-items: start;
-  width: 100%;
-  height: 100%;
-`;
-
-export const AccountNavContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 200px;
-  height: 100%;
-  /* background-color: var(--color-background-800); */
-`;
-export const LinkContainer = styled.div`
-  display: flex;
-  justify-content: start;
-  align-items: start;
-  padding: 4rem 1.5rem;
-  text-align: left;
-  background-color: var(--color-background-800);
   flex-direction: column;
-  list-style: none;
-  gap: 1rem;
-  border-radius: 0.8rem;
-`;
-export const StyleAccountLink = styled(NavLink)`
-  width: 180px;
-  display: flex;
-
+  justify-content: flex-start;
   align-items: center;
-  justify-content: start;
-  flex-direction: row;
-  gap: 0.5rem;
-  color: var(--color-white-500);
+  padding: 24px;
+  gap: 12px;
+  background-color: var(--color-floralwhite);
+  border-radius: 24px;
+`;
+
+export const SelectButton = styled(NavLink)`
+  width: 288px;
+  height: fit-content;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 0.25rem 1.5rem;
+  gap: 8px;
+  font-size: 24px;
+  font-weight: 400;
+  border: 3px solid var(--color-black);
+  border-radius: 8px;
+  background-color: transparent;
   text-decoration: none;
-  font-size: 1rem;
-  font-weight: 500;
-  cursor: pointer;
-  padding: 0.5rem;
-  border-radius: 0.5rem;
-  background-color: var(--color-background-200);
-  cursor: pointer;
-
-  svg {
-    font-size: 1.5rem;
-  }
-
-  &:hover {
-    background-color: var(--color-primary-200);
-  }
+  color: inherit;
+  transition: background-color 0.2s ease;
 
   &.active {
-    background-color: var(--color-background-800);
-    border: 2px solid var(--color-primary-700);
-  }
-  @media (max-width: 768px) {
-    width: auto;
-    gap: 0.2rem;
+    background-color: var(--color-orange);
   }
 
-  @media (max-width: 480px) {
-    flex-direction: column;
-    font-size: 0.7rem;
-    gap: 0.2rem;
+  &:not(.active) {
+    background-color: transparent;
+  }
+
+  &:hover:not(.active) {
+    background-color: rgba(0, 0, 0, 0.05);
+  }
+
+  @media ${device.laptop} {
+    font-size: 16px;
+    width: 210px;
   }
 `;
 
-export const StyleAccountInfo = styled.div`
+export const SelectedContent = styled.div`
   width: 100%;
   height: 100%;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 100px 1fr;
-  //prettier-ignore
-  grid-template-areas: 
-  "title title"
-  "avatar changeInfo"
-  ;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  flex-direction: column;
+  background-color: var(--color-floralwhite);
+  border-radius: 24px;
+  padding: 24px;
+  overflow-y: auto;
+
+  @media ${device.laptop} {
+    padding: 18px;
+    border-radius: 20px;
+  }
+
+  @media ${device.tablet} {
+    padding: 16px;
+    border-radius: 16px;
+  }
+
+  @media ${device.mobile} {
+    padding: 12px;
+    border-radius: 12px;
+  }
 `;
 
-export const Header = styled.div`
-  grid-area: title;
-  display: flex;
+export const AccountHeading = styled.div`
   width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  font-weight: 600;
+
+  @media ${device.laptop} {
+    font-size: 28px;
+  }
+
+  @media ${device.tablet} {
+    font-size: 24px;
+  }
+
+  @media ${device.mobile} {
+    font-size: 20px;
+  }
+`;
+
+export const ProfileGroup = styled.div`
+  width: 100%;
+  height: fit-content;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 24px;
+  padding: 24px;
+  @media ${device.laptop} {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  @media ${device.tablet} {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+`;
+
+export const ProfileContainer = styled.div`
+  width: 240px;
+  height: 240px;
+  display: flex;
   justify-content: center;
   align-items: center;
+  padding: 40px;
+  background-color: var(--color-whitesmoke);
+  border-radius: 8px;
+`;
 
+export const ProfileImage = styled.div`
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  background-image: url(${(props) => props.url});
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-color: var(--color-floralwhite);
+`;
+export const IconBackground = styled.div`
+  width: fit-content;
+  height: fit-content;
+  padding: 8px;
+  background-color: var(--color-white);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: scale(1.1);
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.7);
+  }
+`;
+
+// Image Upload Modal Styles
+export const ImageUploadContainer = styled.div`
+  display: flex;
   flex-direction: column;
-  gap: 12px;
-  border-bottom: 2px solid var(--color-white-100);
+  gap: 24px;
+  padding: 20px;
+  min-width: 400px;
+  background-color: var(--color-floralwhite);
+  border-radius: 16px;
 
-  h2 {
-    background-color: var(--color-background-800);
-    padding: 8px;
+  @media ${device.tablet} {
+    min-width: 350px;
+    gap: 20px;
+    border-radius: 12px;
+  }
+
+  @media ${device.mobile} {
+    min-width: 300px;
+    gap: 16px;
     border-radius: 8px;
   }
 `;
 
-export const ChangeAvatarConatiner = styled.div`
-  grid-area: avatar;
-  width: 100%;
+export const UploadTitle = styled.h2`
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--color-gray-100);
+  margin: 0;
+  text-align: center;
+
+  @media ${device.mobile} {
+    font-size: 20px;
+  }
+`;
+
+export const ImagePreviewContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  margin: 20px 0;
+`;
+
+export const ImagePreview = styled.div`
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background-image: url(${(props) => props.src});
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-color: var(--color-whitesmoke);
+  border: 3px solid var(--color-gray-100);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  color: var(--color-gray-100);
+  text-align: center;
+
+  @media ${device.mobile} {
+    width: 150px;
+    height: 150px;
+    font-size: 12px;
+  }
+`;
+
+export const FileInputContainer = styled.div`
+  display: flex;
   flex-direction: column;
   gap: 12px;
 `;
-export const StyleAvatar = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  padding: 5rem;
-  width: 500px;
-  height: 300px;
-  border-radius: 8px;
-  background-color: var(--color-background-200);
-  box-shadow: var(--shadow-md);
+
+export const FileInputWrapper = styled.div`
+  position: relative;
+  overflow: hidden;
+  display: inline-block;
+  width: 100%;
 `;
 
-export const AvatarDiv = styled.div`
-  width: 100px;
-  height: 100px;
-  border-radius: 8px;
-  img {
-    width: 100%;
-    height: 100%;
-  }
-  form {
-    display: flex;
-    gap: 10px;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-  }
+export const FileInput = styled.input`
+  position: absolute;
+  left: -9999px;
+  opacity: 0;
 `;
-export const ChangeAvatarContainer = styled.div`
+
+export const FileInputButton = styled.label`
   display: flex;
-  justify-content: center;
   align-items: center;
-  padding: 8px;
-  width: 400px;
-  height: 300px;
-`;
-export const AvatarButton = styled.div`
-  width: 140px;
-  background-color: var(--color-primary);
-  padding: 8px;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 24px;
+  background-color: var(--color-orange);
+  color: var(--color-white);
   border-radius: 8px;
-  text-align: center;
   cursor: pointer;
+  font-size: 16px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  width: 100%;
+  box-sizing: border-box;
+  border: 2px solid var(--color-orange);
 
   &:hover {
-    background-color: var(--color-primary);
-    border: 2px solid var(--color-primary);
-    background-color: transparent;
-    color: var(--color-primary);
+    background-color: #ff8c42;
+    border-color: #ff8c42;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 140, 66, 0.3);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+
+  @media ${device.mobile} {
+    padding: 10px 20px;
+    font-size: 14px;
   }
 `;
 
-export const ChnageInfoDiv = styled.div`
-  grid-area: changeInfo;
+export const UploadButtonGroup = styled.div`
   display: flex;
+  gap: 12px;
   justify-content: center;
-  align-items: center;
-  flex-direction: column;
-`;
-export const EditFormContainer = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  padding: 1.5rem;
-  background-color: var(--color-background-200);
-  border-radius: 8px;
-  gap: 8px;
-`;
-export const EditButton = styled.button`
-  ${(props) =>
-    props.variant === "filled" &&
-    css`
-      & {
-        align-self: flex-end;
-        border-radius: var(--br-m);
-        background-color: ${props.color ? props.color : "var(--color-primary)"};
-        overflow: hidden;
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: center;
-        padding: var(--padding-xs-1) var(--padding-xs-1);
-        cursor: pointer;
-        font-size: ${props.size ? `${props.size}rem` : "1rem"};
-        border: none;
-        transition: all 0.3s ease;
-        margin-right: 0px;
+  margin-top: 20px;
 
-        @media ${device.laptop} {
-          font-size: ${props.size ? `${props.size / 1.5}rem` : "0.75rem"};
-        }
-        @media ${device.tablet} {
-          font-size: ${props.size ? `${props.size / 1.5}rem` : "0.75rem"};
-        }
-        @media ${device.mobile} {
-          font-size: ${props.size ? `${props.size / 2}rem` : "0.75rem"};
-        }
-      }
-      &:hover {
-        background-color: ${props.hoverColor
-          ? props.hoverColor
-          : "var(--color-primary)"};
-        border: 2px solid var(--color-primary);
-        background-color: transparent;
-        color: var(--color-primary);
-      }
-    `}
-`;
-export const InfoForm = styled.form`
-  width: min-content;
-  height: min-content;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 500px;
-  padding: 0.4rem;
-  gap: 1rem;
-  border: 2px solid var(--color-background-800);
-  border-radius: 8px;
-  p {
-    display: flex;
+  @media ${device.mobile} {
     flex-direction: column;
-    align-items: start;
-    justify-content: center;
-    width: 40%;
+    gap: 8px;
+  }
+`;
 
-    ${(props) => {
-      props.type === "address" &&
-        `
-        width: 80%;
-      `;
-    }}
+export const UploadButton = styled.button`
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  flex: 1;
+
+  @media ${device.mobile} {
+    padding: 10px 20px;
+    font-size: 14px;
+  }
+`;
+
+export const ConfirmButton = styled(UploadButton)`
+  background-color: var(--color-orange);
+  color: var(--color-white);
+  border: 2px solid var(--color-orange);
+
+  &:hover:not(:disabled) {
+    background-color: #ff8c42;
+    border-color: #ff8c42;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 140, 66, 0.3);
+  }
+
+  &:disabled {
+    background-color: #cccccc;
+    border-color: #cccccc;
+    color: #888888;
+    cursor: not-allowed;
+    transform: none;
+    opacity: 0.6;
+    box-shadow: none;
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0);
+  }
+`;
+
+export const CancelButton = styled(UploadButton)`
+  background-color: var(--color-whitesmoke);
+  color: var(--color-gray-100);
+  border: 2px solid var(--color-gray-100);
+
+  &:hover {
+    background-color: #e8e8e8;
+    border-color: #1a1a1a;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+`;
+
+export const StyledButtonLoader = styled.div`
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: ${(props) =>
+    !props.$hasFile || props.$isLoading ? "not-allowed" : "pointer"};
+  transition: all 0.3s ease;
+  flex: 1;
+  background-color: var(--color-orange);
+  color: var(--color-white);
+  opacity: ${(props) => (!props.$hasFile || props.$isLoading ? "0.6" : "1")};
+  border: 2px solid var(--color-orange);
+
+  &:hover:not(:disabled) {
+    background-color: #ff8c42;
+    border-color: #ff8c42;
+    transform: ${(props) =>
+      !props.$hasFile || props.$isLoading ? "none" : "translateY(-2px)"};
+    box-shadow: ${(props) =>
+      !props.$hasFile || props.$isLoading
+        ? "none"
+        : "0 4px 12px rgba(255, 140, 66, 0.3)"};
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0);
+  }
+
+  @media ${device.mobile} {
+    padding: 10px 20px;
+    font-size: 14px;
+  }
+`;
+
+export const ProfileForm = styled.form`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+  flex-direction: column;
+  gap: 16px;
+  p {
+    width: 80%;
   }
   span {
-    display: flex;
-    flex-direction: column;
-    align-items: start;
-    justify-content: center;
+    font-size: 20px;
+    color: var(--color-orange);
+  }
+`;
+export const StyleLabel = styled.label`
+  width: auto;
+  height: fit-content;
+  font-size: 24px;
+  font-weight: 500;
+`;
+
+export const StyleInput = styled.input`
+  width: 100%;
+  height: 48px;
+  font-size: 24px;
+  font-weight: 500;
+  padding: 0rem 1rem;
+  background-color: var(--color-whitesmoke);
+  border-radius: 8px;
+  &:disabled {
+    cursor: not-allowed;
+    background-color: transparent;
+  }
+`;
+
+export const StyleSubmitFormButton = styled.input.attrs({ type: "submit" })`
+  width: fit-content;
+  position: relative;
+  border-radius: 16px;
+  background-color: var(--color-white);
+  border: 3px solid var(--color-gray-100);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  padding: 0.25rem 1.5rem;
+  text-align: left;
+  font-size: 1.5rem;
+  color: var(--color-gray-100);
+  font-family: var(--font-poppins);
+  font-weight: 500;
+  transition: all 0.2s ease;
+  gap: 1rem;
+
+  @media ${device.tablet} {
+    font-size: 1rem;
+    padding: 0.25rem 1rem;
+  }
+  @media ${device.laptop} {
+    font-size: 1.1rem;
+    padding: 0.25rem 1.1rem;
+  }
+
+  &:hover {
+    border: 3px solid var(--color-gray-100);
+    background-color: var(--color-orange);
+  }
+`;
+
+export const StyleSubmitFilledButton = styled.input.attrs({ type: "submit" })`
+  position: relative;
+  border-radius: 16px;
+  background-color: var(--color-orange);
+  border: 3px solid var(--color-orange);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  padding: 0.25rem 1.5rem;
+  text-align: left;
+  font-size: 1.5rem;
+  color: var(--color-gray-100);
+  font-family: var(--font-poppins);
+  font-weight: 500;
+  transition: all 0.2s ease;
+  gap: 1rem;
+
+  @media ${device.tablet} {
+    font-size: 1rem;
+    padding: 0.25rem 1rem;
   }
 
   @media ${device.laptop} {
-    /* width: 90%; */
+    font-size: 1.1rem;
+    padding: 0.25rem 1.1rem;
+  }
+
+  &:hover {
+    border: 3px solid var(--color-gray-100);
+  }
+`;
+export const ButtonGroup = styled.div`
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  flex-direction: row;
+  gap: 1rem;
+  @media ${device.laptop} {
+    flex-direction: column;
+  }
+  @media ${device.tablet} {
+    flex-direction: column;
+  }
+`;
+export const EditProfileButton = styled.div`
+  width: fit-content;
+  height: fit-content;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 16px;
+  gap: 8px;
+  border: 2px solid var(--color-black);
+  border-radius: 8px;
+  font-size: 24px;
+  cursor: pointer;
+`;
+
+// order History
+export const TWrapper = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding: 1rem;
+  border-radius: 24px;
+  background-color: var(--color-whitesmoke);
+  overflow-x: auto;
+
+  @media ${device.laptop} {
+    padding: 0.75rem;
   }
 
   @media ${device.tablet} {
-    width: 100%;
-    height: 100%;
-    flex-direction: column;
+    padding: 0.5rem;
+    border-radius: 16px;
+  }
 
-    p {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
+  @media ${device.mobile} {
+    padding: 0.25rem;
+    border-radius: 12px;
+  }
+`;
 
-      text-align: start;
+export const TConatiner = styled.table`
+  width: 100%;
+  border-collapse: collapse;
+  background-color: var(--color-whitesmoke);
+  min-width: 600px; /* Minimum width to prevent cramping */
+
+  @media ${device.laptop} {
+    min-width: 500px;
+  }
+
+  @media ${device.tablet} {
+    min-width: 450px;
+  }
+
+  @media ${device.mobile} {
+    min-width: 400px;
+  }
+`;
+
+export const THeader = styled.thead``;
+
+export const TBody = styled.tbody``;
+
+export const TR = styled.tr`
+  border-bottom: 1px solid var(--color-whitesmoke);
+  border-bottom: 1px solid var(--color-black);
+
+  &:last-child {
+    border-bottom: 1px solid var(--color-black);
+  }
+
+  &:hover {
+    background-color: var(--color-gray-200);
+  }
+`;
+
+export const TH = styled.th`
+  padding: var(--padding-16) var(--gap-8);
+  text-align: left;
+  font-weight: 600;
+  font-size: var(--font-size-20);
+  color: var(--color-gray-100);
+  background-color: transparent;
+  font-family: var(--font-poppins);
+
+  &:first-child {
+    width: auto; /* Takes available space */
+  }
+
+  &:nth-child(2),
+  &:nth-child(3) {
+    width: 120px; /* Status and Amount */
+  }
+
+  &:nth-child(4) {
+    width: 60px; /* Details column - smaller for icon */
+    text-align: center;
+  }
+
+  @media ${device.laptop} {
+    padding: 12px 6px;
+    font-size: 18px;
+
+    &:nth-child(2),
+    &:nth-child(3) {
+      width: 100px;
     }
 
-    span {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      width: 90%;
+    &:nth-child(4) {
+      width: 50px;
+    }
+  }
+
+  @media ${device.tablet} {
+    padding: 10px 4px;
+    font-size: 16px;
+
+    &:nth-child(2),
+    &:nth-child(3) {
+      width: 80px;
+    }
+
+    &:nth-child(4) {
+      width: 40px;
     }
   }
 
   @media ${device.mobile} {
-    width: 90%;
+    padding: 8px 4px;
+    font-size: 14px;
 
-    p {
-      display: flex;
-      flex-direction: column;
-      align-items: start;
-      justify-content: center;
-      width: 90%;
-      text-align: center;
+    &:nth-child(2),
+    &:nth-child(3) {
+      width: 70px;
     }
-    span {
-      display: flex;
-      flex-direction: column;
-      align-items: start;
-      justify-content: center;
-      width: 90%;
+
+    &:nth-child(4) {
+      width: 35px;
     }
   }
 `;
+export const TD = styled.td`
+  padding: var(--padding-16) var(--gap-8);
+  text-align: left;
+  font-size: var(--font-size-16);
+  color: var(--color-dimgray);
+  background-color: transparent;
+  vertical-align: middle;
+  font-family: var(--font-poppins);
 
-export const StyleChangePassword = styled.div`
-  display: flex;
-  justify-content: start;
-  align-items: center;
-  width: 100%;
-  height: 100%;
-  flex-direction: column;
-`;
-
-export const StylePasswordHeader = styled.div`
-  display: flex;
-  width: 100%;
-  justify-content: center;
-  align-items: center;
-  padding: 20px;
-  flex-direction: column;
-  gap: 12px;
-  border-bottom: 2px solid var(--color-white-100);
-
-  h2 {
-    background-color: var(--color-background-800);
-    padding: 8px;
-    border-radius: 8px;
+  &:first-child {
+    width: auto; /* Takes available space */
+    font-weight: 500;
+    color: var(--color-black);
   }
-`;
-export const ChangePasswordFormContainer = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 100%;
-`;
 
-export const ChangePasswordForm = styled.form`
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  &:nth-child(2),
+  &:nth-child(3) {
+    width: 120px; /* Status and Amount */
+  }
+
+  &:nth-child(4) {
+    width: 60px; /* Details column - smaller for icon */
+    text-align: center;
+  }
+
+  &:last-child {
+    color: ${(props) => (props.color ? "var(--color-orange)" : "")};
+    cursor: pointer;
+    font-weight: 500;
+
+    &:hover {
+      opacity: 0.7;
+      transform: scale(1.1);
+    }
+  }
+
+  @media ${device.laptop} {
+    padding: 12px 6px;
+    font-size: 14px;
+
+    &:nth-child(2),
+    &:nth-child(3) {
+      width: 100px;
+    }
+
+    &:nth-child(4) {
+      width: 50px;
+    }
+  }
+
+  @media ${device.tablet} {
+    padding: 10px 4px;
+    font-size: 12px;
+
+    &:nth-child(2),
+    &:nth-child(3) {
+      width: 80px;
+    }
+
+    &:nth-child(4) {
+      width: 40px;
+    }
+
+    &:first-child {
+      font-size: 13px;
+    }
+  }
+
+  @media ${device.mobile} {
+    padding: 8px 4px;
+    font-size: 11px;
+    line-height: 1.3;
+
+    &:nth-child(2),
+    &:nth-child(3) {
+      width: 70px;
+    }
+
+    &:nth-child(4) {
+      width: 35px;
+    }
+
+    &:first-child {
+      font-size: 12px;
+    }
+  }
 `;

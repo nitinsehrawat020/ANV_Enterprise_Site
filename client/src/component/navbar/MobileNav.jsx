@@ -2,7 +2,6 @@ import { useState } from "react";
 import Logo from "./Logo";
 import {
   MobileNavContainer,
-  SignupButton,
   MenuAndLogoGroup,
   HamburgerIcon,
   MobileMenuOverlay,
@@ -12,29 +11,52 @@ import {
   MobileMenuList,
   MobileMenuItem,
   MobileMenuLink,
+  MobileLoginLink,
   MobileMenuButton,
   MobileSubMenu,
   MobileSubMenuItem,
   MobileChevronIcon,
+  FavAndSignUpGroup,
+  MenuButton,
+  Favbutton,
+  MobileAdminContainer,
+  MobileAdminLink,
+  MobileLogoutContainer,
+  MobileLogoutLink,
 } from "./StyleNavBar";
-import { FaUserLarge, FaArrowRightLong } from "react-icons/fa6";
+import {
+  FaIndianRupeeSign,
+  FaLock,
+  FaUser,
+  FaUserLarge,
+} from "react-icons/fa6";
 import useMobile from "../../hooks/useMobile";
 import useTablet from "../../hooks/useTablet";
-import Button from "../../ui/Button";
+
+import { GrFavorite } from "react-icons/gr";
+import { useUser } from "../LoginAndSignup/useUser";
+import { useLogout } from "../LoginAndSignup/useLogin";
+import { FaShoppingBag } from "react-icons/fa";
 
 function MobileNav() {
   const { isMobile } = useMobile(480);
   const { isTablet } = useTablet();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isExploreOpen, setIsExploreOpen] = useState(false);
+  const [isMyAccount, setIsMyAccount] = useState(false);
+  const { user, isAdminAuthenticated, isAuthenticated } = useUser();
+  const { logout, isLoading } = useLogout();
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
-    setIsExploreOpen(false); // Close submenu when main menu closes
+    setIsExploreOpen(false);
   };
 
   const toggleExplore = () => {
     setIsExploreOpen(!isExploreOpen);
+  };
+  const toggleAccount = () => {
+    setIsMyAccount(!isMyAccount);
   };
 
   const closeMenu = () => {
@@ -43,6 +65,10 @@ function MobileNav() {
   };
 
   const handleOverlayClick = () => {
+    closeMenu();
+  };
+  const handleLogout = () => {
+    logout();
     closeMenu();
   };
 
@@ -55,13 +81,19 @@ function MobileNav() {
         </MenuAndLogoGroup>
 
         {!isTablet ? (
-          <SignupButton isMobile={isMobile}>
-            <FaUserLarge size={16} />
-          </SignupButton>
+          <MenuButton to={"/favortie"}>
+            <Favbutton>
+              Fav <GrFavorite />
+            </Favbutton>
+          </MenuButton>
         ) : (
-          <Button variation="filled">
-            Sign Up <FaArrowRightLong />
-          </Button>
+          <FavAndSignUpGroup>
+            <MenuButton to={"/favortie"}>
+              <Favbutton>
+                Fav <GrFavorite />
+              </Favbutton>
+            </MenuButton>
+          </FavAndSignUpGroup>
         )}
       </MobileNavContainer>
 
@@ -72,6 +104,40 @@ function MobileNav() {
           <Logo />
           <CloseButton onClick={closeMenu} />
         </MobileMenuHeader>
+
+        <MobileMenuItem>
+          <MobileLoginLink
+            to={user ? "/my-account/profile" : "/login"}
+            onClick={closeMenu}
+          >
+            {isAuthenticated ? (
+              user.avatar ? (
+                <img
+                  src={user.avatar}
+                  alt="User Avatar"
+                  className="user-avatar"
+                />
+              ) : (
+                <div className="login-icon">
+                  <FaUserLarge />
+                </div>
+              )
+            ) : (
+              <div className="login-icon">
+                <FaUserLarge />
+              </div>
+            )}
+            {user ? user.firstName + " " + user.lastName : "Login"}
+          </MobileLoginLink>
+
+          {isAuthenticated && isAdminAuthenticated && (
+            <MobileAdminContainer>
+              <MobileAdminLink to="/admin" onClick={closeMenu}>
+                🔧 Admin Panel
+              </MobileAdminLink>
+            </MobileAdminContainer>
+          )}
+        </MobileMenuItem>
 
         <MobileMenuList>
           <MobileMenuItem>
@@ -100,7 +166,48 @@ function MobileNav() {
               </MobileSubMenuItem>
             </MobileSubMenu>
           </MobileMenuItem>
+          <MobileMenuItem>
+            <MobileMenuButton onClick={toggleAccount}>
+              My Account
+              <MobileChevronIcon $isOpen={isMyAccount} />
+            </MobileMenuButton>
+            <MobileSubMenu $isOpen={isMyAccount}>
+              <MobileSubMenuItem to="/my-account/profile" onClick={closeMenu}>
+                <FaUser />
+                Profile
+              </MobileSubMenuItem>
+              <MobileSubMenuItem
+                to="/my-account/order-history"
+                onClick={closeMenu}
+              >
+                <FaShoppingBag />
+                Orders
+              </MobileSubMenuItem>
+              <MobileSubMenuItem
+                to="/my-account/payment-history"
+                onClick={closeMenu}
+              >
+                <FaIndianRupeeSign />
+                Payment History
+              </MobileSubMenuItem>
+              <MobileSubMenuItem to="/my-account/password" onClick={closeMenu}>
+                <FaLock />
+                Password
+              </MobileSubMenuItem>
+            </MobileSubMenu>
+          </MobileMenuItem>
         </MobileMenuList>
+
+        {/* Logout at bottom with padding */}
+        {isAuthenticated && (
+          <MobileLogoutContainer>
+            <MobileMenuItem>
+              <MobileLogoutLink to="/logout" onClick={handleLogout}>
+                🚪 Logout
+              </MobileLogoutLink>
+            </MobileMenuItem>
+          </MobileLogoutContainer>
+        )}
       </MobileMenuContainer>
     </>
   );
