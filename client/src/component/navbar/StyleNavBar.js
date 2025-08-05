@@ -10,6 +10,12 @@ export const StyledLogo = styled.div`
   display: flex;
   align-items: center;
   left: 20px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+
+  &:hover {
+    transform: scale(1.05);
+  }
 `;
 export const Img = styled.img`
   height: 4rem;
@@ -32,17 +38,43 @@ export const Nav = styled.nav`
   align-items: center;
   font-size: var(--font-size-xs);
   z-index: 999;
-  position: sticky;
-
-  background: var(--color-whitesmoke);
+  position: ${(props) => (props.isSticky ? "fixed" : "relative")};
+  top: ${(props) => (props.isSticky ? "0" : "auto")};
+  left: ${(props) => (props.isSticky ? "0" : "auto")};
+  right: ${(props) => (props.isSticky ? "0" : "auto")};
+  background: ${(props) =>
+    props.isSticky ? "rgba(245, 245, 245, 0.98)" : "var(--color-whitesmoke)"};
+  transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  box-shadow: ${(props) =>
+    props.isSticky
+      ? "0 8px 32px rgba(0, 0, 0, 0.06), 0 4px 16px rgba(0, 0, 0, 0.04), 0 2px 8px rgba(0, 0, 0, 0.02)"
+      : "0 1px 3px rgba(0, 0, 0, 0.02)"};
+  backdrop-filter: ${(props) =>
+    props.isSticky ? "blur(12px) saturate(120%)" : "none"};
+  border-bottom: ${(props) =>
+    props.isSticky ? "1px solid rgba(255, 255, 255, 0.2)" : "none"};
 
   @media ${device.tablet} {
     height: 48px;
-    /* padding: var(--padding-4) var(--padding-24); */
-    margin-top: 1rem;
+    margin-top: ${(props) => (props.isSticky ? "0" : "1rem")};
   }
   @media ${device.mobile} {
     height: 48px;
+  }
+`;
+
+// Placeholder to prevent layout shift when navbar becomes fixed
+export const NavPlaceholder = styled.div`
+  height: ${(props) => (props.isSticky ? "80px" : "0")};
+  width: 100%;
+  transition: height 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  opacity: 0; /* Invisible placeholder */
+
+  @media ${device.tablet} {
+    height: ${(props) => (props.isSticky ? "48px" : "0")};
+  }
+  @media ${device.mobile} {
+    height: ${(props) => (props.isSticky ? "48px" : "0")};
   }
 `;
 

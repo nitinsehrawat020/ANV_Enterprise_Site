@@ -1,7 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-import GlobalStyle from "./Styles/GlobalStyle";
-import UserStyle from "./Styles/UserStyle";
 import isPropValid from "@emotion/is-prop-valid";
 import { StyleSheetManager } from "styled-components";
 
@@ -51,8 +49,6 @@ function App() {
   return (
     <>
       <StyleSheetManager shouldForwardProp={shouldForwardProp}>
-        <GlobalStyle />
-        <UserStyle />
         <QueryClientProvider client={queryClient}>
           <ReactQueryDevtools initialIsOpen={false} />
           <PrimeReactProvider>

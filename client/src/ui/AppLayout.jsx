@@ -2,6 +2,7 @@ import styled from "styled-components";
 import NavBar from "../component/navbar/NavBar";
 import UserMain from "../component/userMain/UserMain";
 import Footer from "../component/footer/Footer";
+import UserStyle from "../Styles/UserStyle";
 
 const StyledAppLayout = styled.div`
   width: 100%;
@@ -24,7 +25,7 @@ const StyledAppLayout = styled.div`
       "navbar"
       "main"
       "footer";
-    gap: 0;
+    gap: 1rem;
     min-height: 100vh;
     height: auto;
   }
@@ -33,6 +34,7 @@ const StyledAppLayout = styled.div`
 function AppLayout() {
   return (
     <>
+      <UserStyle />
       <StyledAppLayout>
         <NavBar />
         <UserMain />

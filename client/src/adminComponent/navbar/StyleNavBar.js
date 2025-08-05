@@ -40,8 +40,13 @@ export const StyleNavBarLogo = styled(NavLink)`
   display: ${(props) => (props.parent === "navbar" ? "flex" : "none")};
   align-items: center;
   justify-content: center;
-
   cursor: pointer;
+  transition: transform 0.2s ease;
+  text-decoration: none;
+
+  &:hover {
+    transform: scale(1.05);
+  }
 
   @media (max-width: 768px) {
     display: ${(props) => (props.parent === "header" ? "flex" : "none")};

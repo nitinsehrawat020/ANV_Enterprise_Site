@@ -5,7 +5,65 @@ body {
 margin: 0; line-height: normal;
 color: #000;
 font-family: var(--font-poppins);
+padding: 0;
+    margin:0%;
+    
+    margin: 0; 
+    line-height: normal;
+    overflow-x: hidden;
 
+
+}
+
+html {
+    overflow-x: hidden;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+ul {
+    list-style: none;
+}
+
+*,
+*::before,
+*::after {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+button {
+    cursor: pointer;
+}
+
+*:disabled {
+  cursor: not-allowed;
+}
+
+    input,
+button,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+input:focus,
+button:focus,
+textarea:focus,
+select:focus {
+  outline: 2px solid var(--color-background-800);
+  outline-offset: -1px;
+}
+
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
 }
 :root {
 /* Color */
@@ -40,6 +98,27 @@ font-family: var(--font-poppins);
 --font-size-24: 1.5rem;
 --font-size-48: 3rem;
 --font-size-64: 4rem;
+
+--padding-xs-1: 0.5rem;
+--padding-xs-0: 1rem;
+--padding-s: 2rem;
+--padding-ls: 3rem;
+--padding-m: 4rem;
+--padding-l: 8rem;
+--padding-xl: 10rem;
+
+/* Border radiuses */
+--br-s: 2.5px;
+--br-m: 5px;
+--br-l: 10px;
+--br-xl: 15px;
+
+
+--shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
+--shadow-md: 0px 0.6rem 2.4rem rgba(0, 0, 0, 0.06);
+--shadow-lg: 0 2.4rem 3.2rem rgba(0, 0, 0, 0.12);
+
+
 }
 `;
 

@@ -2,6 +2,7 @@ import styled from "styled-components";
 import NavBar from "../adminComponent/navbar/NavBar";
 import Header from "../adminComponent/header/Header";
 import Main from "../adminComponent/main/Main";
+import GlobalStyle from "../Styles/GlobalStyle";
 
 export const StyledAdminAppLayout = styled.div`
   width: 100vw;
@@ -28,11 +29,14 @@ export const StyledAdminAppLayout = styled.div`
 
 function AdminAppLayout() {
   return (
-    <StyledAdminAppLayout>
-      <NavBar />
-      <Header />
-      <Main />
-    </StyledAdminAppLayout>
+    <>
+      <GlobalStyle />
+      <StyledAdminAppLayout>
+        <NavBar />
+        <Header />
+        <Main />
+      </StyledAdminAppLayout>
+    </>
   );
 }
 

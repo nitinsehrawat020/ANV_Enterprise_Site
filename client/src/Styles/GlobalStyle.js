@@ -143,7 +143,7 @@ input[type=number]::-webkit-outer-spin-button {
   margin: 0; 
 }
 
-/* table {
+table {
     width: 100%;
     border-collapse: collapse;
     border-spacing: 1;
@@ -173,7 +173,7 @@ input[type=number]::-webkit-outer-spin-button {
     padding: 0.3rem;
     border: 1px solid var(--color-background-500);
     font-size: 0.8rem;
-  } */
+  } 
 
 
 `;
