@@ -3,16 +3,16 @@ import mongoose from "mongoose";
 const designSchema = new mongoose.Schema(
   {
     title: { type: String, required: true },
-    designType: { type: String, enum: ["molding", "false-ceil"], default: "" },
-    designArea: {
+    designType: {
       type: String,
-      enum: ["living room", "hall", "kickhen", "bathroom", "wall"],
-      default: "",
+      enum: ["molding", "false-ceil"],
+      required: true,
     },
-    description: { type: String, default: "" },
-    ETA: { type: Date, default: null },
-    rating: { type: Number, default: null },
-    images: { type: Array, default: null },
+    designArea: { type: String, required: true },
+    description: { type: String },
+    ETA: { type: String },
+    rating: { type: Number },
+    images: [{ type: String }], // Changed from single String to Array of Strings
   },
   { timestamps: true }
 );

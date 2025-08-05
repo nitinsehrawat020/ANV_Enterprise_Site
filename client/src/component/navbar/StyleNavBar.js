@@ -367,21 +367,21 @@ export const MobileMenuList = styled.div`
   flex-direction: column;
   overflow-y: auto; /* Enable scrolling */
   scrollbar-width: thin; /* For Firefox */
-  
+
   /* Custom scrollbar styling */
   &::-webkit-scrollbar {
     width: 5px;
   }
-  
+
   &::-webkit-scrollbar-track {
     background: transparent;
   }
-  
+
   &::-webkit-scrollbar-thumb {
     background: var(--color-gray-200);
     border-radius: 10px;
   }
-  
+
   &::-webkit-scrollbar-thumb:hover {
     background: var(--color-orange);
   }

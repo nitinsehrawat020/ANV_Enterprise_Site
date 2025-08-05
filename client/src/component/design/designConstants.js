@@ -5,18 +5,18 @@
 // Design categories
 export const DESIGN_CATEGORIES = [
   "All Category",
-  "Hall",
-  "Bedrooms",
-  "Kitchen",
-  "Bathroom",
-  "Walls",
+  "living room",
+  "hall",
+  "kitchen",
+  "bathroom",
+  "wall",
 ];
 
 // Default design rating
 export const DEFAULT_RATING = 4.5;
 
 // Carousel auto-advance time (ms)
-export const CAROUSEL_ADVANCE_TIME = 5000;
+export const CAROUSEL_ADVANCE_TIME = 20000;
 
 // Default design description
 export const DEFAULT_DESCRIPTION =

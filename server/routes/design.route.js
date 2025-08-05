@@ -17,7 +17,7 @@ const designRouter = new Router();
 designRouter.post(
   "/add-design",
   adminAuth,
-  upload.single("image"),
+  upload.array("images", 10), // Changed from upload.single("image") to upload.array("images", 10)
   postAddDesignController
 );
 designRouter.get("/get-all-designs", getDesignController);

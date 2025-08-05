@@ -240,7 +240,6 @@ export async function updateUserDetialsController(req, res) {
     const userId = req.userId;
 
     const { firstName, lastName, phoneNumber, address } = req.body;
-    console.log(firstName, lastName, phoneNumber, address);
 
     const updateUser = await UserModel.updateOne(
       { _id: userId },
@@ -580,10 +579,9 @@ export async function removeFromFav(req, res) {
 export async function userInfo(req, res) {
   try {
     const userId = req.userId;
-    const user = await UserModel.findById(userId).populate(
-      "favDesign",
-      "designId"
-    );
+    const user = await UserModel.findById(userId)
+      .populate("favDesign", "designId")
+      .populate("userSites");
     if (!user) {
       return res.status(400).json({
         message: "User not Found",
@@ -605,6 +603,7 @@ export async function userInfo(req, res) {
       addressDetails,
       userSite,
       role,
+      userSites,
     } = user;
     return res.status(200).json({
       message: "user fetch successfully",
@@ -622,6 +621,7 @@ export async function userInfo(req, res) {
         userSite,
         role,
         favDesign,
+        userSites,
       },
     });
   } catch (error) {

@@ -12,7 +12,7 @@ import { useLogin } from "../../component/LoginAndSignup/useLogin";
 import { NavLink } from "react-router-dom";
 
 function Login() {
-  const { register, handleSubmit, reset, error } = useForm();
+  const { register, handleSubmit, reset } = useForm();
 
   const { login, isLoading } = useLogin();
 
@@ -31,30 +31,47 @@ function Login() {
     <LoginSignupContainer>
       <LoginContainer>
         <Logo />
-        <Heading as="h3">Welcome Back!</Heading>
-        <Heading as="h4">Login to your account</Heading>
+        <Heading
+          as="h3"
+          style={{
+            color: "var(--color-orange)",
+            marginBottom: "0.5rem",
+            textAlign: "center",
+          }}
+        >
+          Welcome Back!
+        </Heading>
+        <Heading
+          as="h4"
+          style={{
+            color: "var(--color-dimgray)",
+            marginBottom: "1rem",
+            textAlign: "center",
+            fontWeight: "400",
+          }}
+        >
+          Login to your account
+        </Heading>
 
         <StyledLoginForm onSubmit={handleSubmit(onSubmit)} type="fp">
           <StyledInput
             type="email"
-            placeholder="Email"
+            placeholder="Enter your email"
             hi="login"
             {...register("email", { required: "Email is required" })}
           />
 
           <StyledInput
             type="password"
-            placeholder="Password"
+            placeholder="Enter your password"
             hi="login"
             {...register("password", { required: "Password is required" })}
           />
 
           <p>
-            <ForgotNavLink to="/forgotPassword">
-              {" "}
-              Forgot Password?
-            </ForgotNavLink>{" "}
+            <ForgotNavLink to="/forgotPassword">Forgot Password?</ForgotNavLink>
           </p>
+
           <StyledInput
             type="submit"
             value={isLoading ? "Logging in..." : "Login"}
@@ -62,8 +79,26 @@ function Login() {
           />
         </StyledLoginForm>
 
-        <p>
-          Don&apos;t have an account? <NavLink to="/signup"> Sign up</NavLink>
+        <p
+          style={{
+            color: "var(--color-dimgray)",
+            textAlign: "center",
+            marginTop: "1rem",
+          }}
+        >
+          Don&apos;t have an account?{" "}
+          <NavLink
+            to="/signup"
+            style={{
+              color: "var(--color-orange)",
+              textDecoration: "none",
+              fontWeight: "600",
+            }}
+            onMouseEnter={(e) => (e.target.style.textDecoration = "underline")}
+            onMouseLeave={(e) => (e.target.style.textDecoration = "none")}
+          >
+            Sign up
+          </NavLink>
         </p>
       </LoginContainer>
     </LoginSignupContainer>

@@ -138,7 +138,7 @@ function Signup() {
             <Label htmlFor="firstName">First Name</Label>
             <StyledInput
               type="text"
-              placeholder="e.g., Aman"
+              placeholder="e.g., John"
               id="firstName"
               hasError={errors.firstName}
               {...register("firstName", { required: true, minLength: 2 })}
@@ -152,7 +152,7 @@ function Signup() {
             <Label htmlFor="lastName">Last Name</Label>
             <StyledInput
               type="text"
-              placeholder="e.g., Kumar"
+              placeholder="e.g., Smith"
               id="lastName"
               hasError={errors.lastName}
               {...register("lastName", { required: true, minLength: 2 })}
@@ -166,7 +166,7 @@ function Signup() {
             <Label htmlFor="phoneNumber">Phone Number</Label>
             <StyledInput
               type="tel"
-              placeholder="e.g., +91 123456789"
+              placeholder="e.g., +1 (555) 123-4567"
               id="phoneNumber"
               hasError={errors.mobileNumber}
               {...register("mobileNumber", { required: true })}
@@ -180,7 +180,7 @@ function Signup() {
             <Label htmlFor="email">Email Address</Label>
             <StyledInput
               type="email"
-              placeholder="e.g., aman.kumar@email.com"
+              placeholder="e.g., john.smith@email.com"
               id="email"
               hasError={errors.email}
               {...register("email", {

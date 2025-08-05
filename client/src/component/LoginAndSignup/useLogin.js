@@ -82,6 +82,7 @@ export function useLogout() {
   const { mutate: logout, isPending: isLoading } = useMutation({
     mutationFn: logoutUser,
     onSuccess: () => {
+      queryClient.invalidateQueries(["user"]);
       queryClient.setQueryData(["user"], null);
       queryClient.removeQueries({ queryKey: ["user"] });
 

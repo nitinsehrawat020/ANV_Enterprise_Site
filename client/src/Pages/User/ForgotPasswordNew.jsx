@@ -41,11 +41,12 @@ function ForgotPassword() {
         <LogoContainer>
           <Logo />
         </LogoContainer>
-        
+
         <FormHeader>
           <FormTitle>Reset Your Password</FormTitle>
           <FormSubtitle>
-            Enter your email address and we&apos;ll send you a verification code to reset your password.
+            Enter your email address and we&apos;ll send you a verification code
+            to reset your password.
           </FormSubtitle>
         </FormHeader>
 
@@ -75,7 +76,8 @@ function ForgotPassword() {
             Remember your password? <FooterLink to="/login">Login</FooterLink>
           </FooterText>
           <SecondaryFooterText>
-            Don&apos;t have an account? <FooterLink to="/signup">Sign Up</FooterLink>
+            Don&apos;t have an account?{" "}
+            <FooterLink to="/signup">Sign Up</FooterLink>
           </SecondaryFooterText>
         </FormFooter>
       </ModernFormContainer>

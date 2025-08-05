@@ -1,4 +1,5 @@
 import SiteModel from "../models/site.module.js";
+import UserModel from "../models/user.module.js";
 
 export async function registerNewSite(req, res) {
   try {
@@ -29,6 +30,15 @@ export async function registerNewSite(req, res) {
       hall
     );
 
+    const user = await UserModel.findOne({ email: userEmail });
+    if (!user) {
+      return res.status(400).json({
+        message: "No user Found with this email",
+        success: false,
+        error: true,
+      });
+    }
+
     const payload = {
       name,
       address,
@@ -48,7 +58,7 @@ export async function registerNewSite(req, res) {
           },
         ],
       },
-      userEmail,
+      userId: user._id,
     };
 
     const site = new SiteModel(payload);

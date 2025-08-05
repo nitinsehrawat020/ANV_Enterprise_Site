@@ -31,6 +31,12 @@ import MoldingDesign from "./Pages/User/MoldingDesign";
 import MyAccount from "./Pages/User/MyAccount";
 import AboutUs from "./Pages/User/AboutUs";
 import Favorite from "./Pages/User/Favorite";
+import PrivacyPolicy from "./Pages/User/PrivacyPolicy";
+import TermsOfService from "./Pages/User/TermsOfService";
+import Sitemap from "./Pages/User/Sitemap";
+import ForgotPassword from "./Pages/User/ForgotPassword";
+import VerifyOtp from "./Pages/User/VerifyOtp";
+import ChangePassword from "./Pages/User/ChangePassword";
 // import MyAccount from "./Pages/MyAccount";
 
 const queryClient = new QueryClient({
@@ -71,10 +77,19 @@ function App() {
                   <Route path="/design/molding" element={<MoldingDesign />} />
                   <Route path="/aboutUs" element={<AboutUs />} />
                   <Route path="/favortie" element={<Favorite />} />
+                  <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+                  <Route
+                    path="/terms-of-service"
+                    element={<TermsOfService />}
+                  />
+                  <Route path="/sitemap" element={<Sitemap />} />
                 </Route>
                 <Route element={<UserAppLayout />}>
                   <Route path="/login" element={<Login />} />
                   <Route path="/signup" element={<Signup />} />
+                  <Route path="/forgotPassword" element={<ForgotPassword />} />
+                  <Route path="/verifyOtp" element={<VerifyOtp />} />
+                  <Route path="/changePassword" element={<ChangePassword />} />
                 </Route>
                 <Route
                   element={

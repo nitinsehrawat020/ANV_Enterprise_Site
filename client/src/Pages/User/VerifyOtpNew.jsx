@@ -54,7 +54,7 @@ function VerifyOtp() {
         <LogoContainer>
           <Logo />
         </LogoContainer>
-        
+
         <FormHeader>
           <FormTitle>Verify Your Email</FormTitle>
         </FormHeader>
@@ -84,7 +84,8 @@ function VerifyOtp() {
               {...register("otp", { required: "OTP is required" })}
             />
             <HelpText>
-              Please check your email inbox and enter the 6-digit verification code.
+              Please check your email inbox and enter the 6-digit verification
+              code.
             </HelpText>
           </InputGroup>
 
@@ -100,7 +101,8 @@ function VerifyOtp() {
             Already have an account? <FooterLink to="/login">Login</FooterLink>
           </FooterText>
           <SecondaryFooterText>
-            Didn&apos;t receive the code? <FooterLink to="/forgotPassword">Resend Code</FooterLink>
+            Didn&apos;t receive the code?{" "}
+            <FooterLink to="/forgotPassword">Resend Code</FooterLink>
           </SecondaryFooterText>
         </FormFooter>
       </ModernFormContainer>

@@ -108,13 +108,25 @@ export const DesignOption = styled.option`
 
 export const CardDesignContainer = styled.div`
   width: 100%;
-  height: fit-content;
+  height: 950px; /* Fixed height to contain 6 designs (2 rows × 420px + gaps) */
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-evenly;
   flex-wrap: wrap;
-  gap: 1rem;
-  padding: 1rem;
+  gap: 2rem;
+  padding: 2rem;
+  border-radius: 24px;
+  overflow-y: auto; /* Enable scrolling if content exceeds fixed height */
+  background-color: var(--color-floralwhite);
+
+  @media ${device.tablet} {
+    height: 1350px; /* Adjusted for tablet view (3 rows × 420px + gaps) */
+  }
+
+  @media ${device.mobile} {
+    height: 2200px; /* Adjusted for mobile view (5 rows × 420px + gaps) */
+    justify-content: center;
+  }
 `;
 
 export const DesignCard = styled.div`
@@ -602,5 +614,24 @@ export const ModalRequestButton = styled.button`
   @media ${device.mobile} {
     padding: 8px 12px;
     font-size: 13px;
+  }
+`;
+
+export const PaginationContainer = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  padding: 20px 0;
+
+  @media ${device.tablet} {
+    margin-top: 30px;
+    padding: 15px 0;
+  }
+
+  @media ${device.mobile} {
+    margin-top: 20px;
+    padding: 10px 0;
   }
 `;

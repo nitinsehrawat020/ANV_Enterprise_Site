@@ -6,20 +6,40 @@ import uploadImageClodinary from "../utils/uploadImageClodinary.js";
 
 export async function postAddDesignController(req, res) {
   try {
+    console.log("📝 Request body:", req.body);
+    console.log("📁 Files received:", req.files);
+
     const { title, designType, designArea, description, ETA, rating } =
       req.body;
+    const designImages = req.files; // Changed from req.file to req.files
 
-    const designImage = req.file;
-
-    if (!designImage) {
-      return res.status(500).json({
-        message: " there is a issue uploading the photo at the server",
+    if (!designImages || designImages.length === 0) {
+      return res.status(400).json({
+        message: "At least one image is required",
         success: false,
         error: true,
       });
     }
 
-    const upload = await uploadImageClodinary(designImage, "design");
+    // Upload all images to Cloudinary
+    const uploadPromises = designImages.map(async (image) => {
+      return await uploadImageClodinary(image, "design");
+    });
+
+    const uploadResults = await Promise.all(uploadPromises);
+
+    // Extract secure URLs
+    const imageUrls = uploadResults
+      .map((result) => result?.secure_url)
+      .filter(Boolean);
+
+    if (imageUrls.length === 0) {
+      return res.status(500).json({
+        message: "Failed to upload images to Cloudinary",
+        success: false,
+        error: true,
+      });
+    }
 
     const payload = {
       title,
@@ -28,19 +48,23 @@ export async function postAddDesignController(req, res) {
       description,
       ETA,
       rating,
-      image: upload?.secure_url,
+      images: imageUrls, // Array of image URLs
     };
 
     const newDesign = new DesignModel(payload);
     const save = await newDesign.save();
 
     return res.status(200).json({
-      message: "design has been  succesfully added ",
+      message: "Design has been successfully added with multiple images",
       success: true,
       error: false,
+      data: {
+        designId: save._id,
+        imagesUploaded: imageUrls.length,
+      },
     });
   } catch (error) {
-    console.log(error);
+    console.error("❌ Error in postAddDesignController:", error);
     return res.status(500).json({
       message: error.message || error,
       error: true,
@@ -164,7 +188,6 @@ export async function putEditDesignController(req, res) {
 export async function deleteDesignController(req, res) {
   try {
     const designId = req.params.designId;
-    // First get the design to access the image URL
     const design = await DesignModel.findById(designId);
 
     if (!design) {
@@ -175,23 +198,26 @@ export async function deleteDesignController(req, res) {
       });
     }
 
-    // Extract public_id from Cloudinary URL
-    if (design.image) {
-      const urlParts = design.image.split("/");
-      const publicIdWithExtension = urlParts[urlParts.length - 1];
-      const publicId = publicIdWithExtension.split(".")[0]; // Remove file extension
+    // Delete all images from Cloudinary
+    if (design.images && design.images.length > 0) {
+      const deletePromises = design.images.map(async (imageUrl) => {
+        try {
+          const urlParts = imageUrl.split("/");
+          const publicIdWithExtension = urlParts[urlParts.length - 1];
+          const publicId = publicIdWithExtension.split(".")[0];
+          const fullPublicId = `ANV Enterprise/design/${publicId}`;
 
-      // Path will be something like "ANV Enterprise/design/publicId"
-      const fullPublicId = `ANV Enterprise/design/${publicId}`;
+          await cloudinary.uploader.destroy(fullPublicId);
+          console.log(`Deleted image ${fullPublicId} from Cloudinary`);
+        } catch (cloudinaryError) {
+          console.error(
+            "Error deleting image from Cloudinary:",
+            cloudinaryError
+          );
+        }
+      });
 
-      try {
-        // Delete image from Cloudinary
-        await cloudinary.uploader.destroy(fullPublicId);
-        console.log(`Deleted image ${fullPublicId} from Cloudinary`);
-      } catch (cloudinaryError) {
-        console.error("Error deleting image from Cloudinary:", cloudinaryError);
-        // Continue with deletion even if Cloudinary fails
-      }
+      await Promise.all(deletePromises);
     }
 
     const deleteDesign = await DesignModel.deleteOne({ _id: designId });
@@ -199,14 +225,14 @@ export async function deleteDesignController(req, res) {
       { designId: designId },
       { $pull: { designId: designId } }
     );
+
     res.status(200).json({
-      message: "design deleted successfully",
+      message: "Design and all images deleted successfully",
       success: true,
       error: false,
     });
   } catch (error) {
     console.log(error);
-
     res.status(500).json({
       message: error.message || error,
       success: false,

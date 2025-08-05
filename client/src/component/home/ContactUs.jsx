@@ -23,7 +23,7 @@ import { LuSend } from "react-icons/lu";
 
 function ContactUs() {
   return (
-    <StyleContactUs>
+    <StyleContactUs id="contact-us">
       <ContactHeadingContainer>
         <ContactHeading>
           Let&#39;s Bring Your <span>Vision To Vision</span>

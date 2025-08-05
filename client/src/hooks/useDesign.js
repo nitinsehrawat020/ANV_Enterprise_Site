@@ -84,12 +84,13 @@ export function useAddFavDesign() {
       toast.success("Added to favorites!");
     },
     onError: (err) => {
-      console.error("useAddFavDesign error:", err);
+      err.status === 401 &&
+        toast.error("kindly  login to add design To favorite");
       const errorMessage =
         err.response?.data?.message ||
         err.message ||
         "Error adding to favorites";
-      toast.error(errorMessage);
+      err.status === 401 || toast.error(errorMessage);
     },
   });
   return { addFavDesign, isAddingFav };

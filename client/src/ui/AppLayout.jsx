@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import NavBar from "../component/navbar/NavBar";
 import UserMain from "../component/userMain/UserMain";
+import Footer from "../component/footer/Footer";
 
 const StyledAppLayout = styled.div`
   width: 100%;
@@ -35,6 +36,7 @@ function AppLayout() {
       <StyledAppLayout>
         <NavBar />
         <UserMain />
+        <Footer />
       </StyledAppLayout>
     </>
   );

@@ -5,6 +5,7 @@ const siteSchema = new mongoose.Schema(
     address: { type: String, ref: "address" },
     phoneNumber: { type: Number, default: "" },
     workProgress: { type: Number, default: 0 },
+    userId: { type: mongoose.Schema.ObjectId, default: null },
     inventory: [
       {
         name: { type: String, default: "" },
