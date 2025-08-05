@@ -12,6 +12,7 @@ import {
   FaHeart,
   FaInfoCircle,
 } from "react-icons/fa";
+import { LogoImage } from "../../ui/OptimizedImage";
 import {
   FooterContainer,
   FooterContent,
@@ -55,7 +56,12 @@ function Footer() {
         {/* Company Information */}
         <CompanySection>
           <FooterLogo>
-            <img src="/pictures/logo/Logo.png" alt="ANV Enterprise" />
+            <LogoImage
+              src="/pictures/logo/Logo.png"
+              alt="ANV Enterprise"
+              width="40px"
+              height="40px"
+            />
             <CompanyName>ANV Enterprise</CompanyName>
           </FooterLogo>
           <FooterDescription>

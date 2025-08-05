@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { Suspense, lazy } from "react";
+import { Suspense, lazy, useEffect } from "react";
 
 import isPropValid from "@emotion/is-prop-valid";
 import { StyleSheetManager } from "styled-components";
@@ -9,6 +9,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 import { PrimeReactProvider } from "primereact/api";
+import { initializeImagePreloading } from "./util/imagePreloader";
+import { initializePerformanceOptimizations } from "./util/performanceOptimization";
 
 // Layouts - Keep these as regular imports since they're critical
 import UserAppLayout from "./ui/AppLayout";
@@ -58,6 +60,15 @@ const queryClient = new QueryClient({
 });
 
 function App() {
+  // Initialize critical image preloading on app mount
+  useEffect(() => {
+    // Initialize performance optimizations
+    initializePerformanceOptimizations();
+
+    // Initialize image preloading
+    initializeImagePreloading();
+  }, []);
+
   return (
     <>
       <StyleSheetManager shouldForwardProp={shouldForwardProp}>

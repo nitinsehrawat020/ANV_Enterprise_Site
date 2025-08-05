@@ -6,8 +6,13 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "build:analyze": "vite build --mode analyze",
+    "build:production": "vite build --mode production && npm run build:report",
+    "build:report": "echo '📊 Build completed! Check dist/ folder for optimized assets'",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "preview:production": "vite preview --mode production",
+    "analyze": "npm run build && npx vite-bundle-analyzer dist"
   },
   "dependencies": {
     "@emotion/is-prop-valid": "^1.3.1",
@@ -21,6 +26,7 @@
     "@tanstack/react-query": "^5.75.5",
     "@tanstack/react-query-devtools": "^5.75.5",
     "axios": "^1.9.0",
+    "chart.js": "^4.5.0",
     "date-fns": "^4.1.0",
     "dayjs": "^1.11.13",
     "embla-carousel-autoplay": "^8.5.2",
@@ -36,7 +42,8 @@
     "react-native-svg": "^15.11.2",
     "react-router-dom": "^7.1.5",
     "recharts": "^3.1.0",
-    "styled-components": "^6.1.15"
+    "styled-components": "^6.1.15",
+    "web-vitals": "^5.1.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.19.0",
@@ -49,6 +56,10 @@
     "eslint-plugin-react-hooks": "^5.0.0",
     "eslint-plugin-react-refresh": "^0.4.18",
     "globals": "^15.14.0",
-    "vite": "^6.1.0"
+    "imagemin-mozjpeg": "^10.0.0",
+    "imagemin-pngquant": "^10.0.0",
+    "imagemin-webp": "^8.0.0",
+    "vite": "^6.1.0",
+    "vite-plugin-imagemin": "^0.6.1"
   }
 }

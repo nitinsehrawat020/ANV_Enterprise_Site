@@ -1,6 +1,6 @@
 import Button from "../../ui/Button";
+import OptimizedImage, { HeroImage } from "../../ui/OptimizedImage";
 import {
-  BannerImage,
   HappyUser,
   HeroBanner,
   HeroButtonGroup,
@@ -10,7 +10,6 @@ import {
   HeroText,
   HeroTextAndButton,
   StyleHeroSection,
-  UserImg,
   UserText,
 } from "./styleHome.jsx";
 
@@ -36,17 +35,25 @@ function HeroSection() {
           </HeroButtonGroup>
         </HeroTextAndButton>
         <HappyUser>
-          <UserImg src="pictures\image\Group frame.png" />
+          <OptimizedImage
+            src="/pictures/image/Group frame.png"
+            alt="Happy clients group"
+            width="80px"
+            height="60px"
+            objectFit="contain"
+          />
           <UserText>
             100+ <span>Satisfied Clients</span>
           </UserText>
         </HappyUser>
       </HeroGroup>
       <HeroBanner>
-        <BannerImage
+        <HeroImage
           src="/pictures/banner/HeroBanner.png"
-          alt="Hero Banner Image "
-        ></BannerImage>
+          alt="Hero Banner Image - ANV Enterprise Interior Design"
+          width="100%"
+          height="400px"
+        />
       </HeroBanner>
     </StyleHeroSection>
   );
