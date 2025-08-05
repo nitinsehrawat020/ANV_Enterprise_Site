@@ -164,7 +164,6 @@ export async function loginUserController(req, res) {
       message: "User login successfully",
       error: false,
       success: true,
-      data: { accessToken, refreshToken },
     });
   } catch (error) {
     return res

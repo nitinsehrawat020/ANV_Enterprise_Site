@@ -24,21 +24,24 @@ import {
 } from "./styleDeleteModal";
 
 function DeleteDesignModal({ onClick }) {
-  const { moldingDesign, isLoading: isMoldingLoading } = useMolding();
-  const { falseCeilDesign, isLoading: isFalseceilLoading } = useFalseCeil();
+  const { moldingDesigns, isMoldingLoading } = useMolding();
+  const { falseCeilDesigns, isFalseceilLoading } = useFalseCeil();
   const [confirmDelete, setConfirmDelete] = useState(null);
   const [isDeleting, setIsDeleting] = useState(false);
   const { deleteDesign } = useDeleteDesign();
 
   // Combine all designs into one array
   const allDesigns = [
-    ...(moldingDesign?.map((design) => ({ ...design, category: "Molding" })) ||
-      []),
-    ...(falseCeilDesign?.map((design) => ({
+    ...(moldingDesigns?.map((design) => ({
       ...design,
-      category: "False Ceiling",
+      designType: "Molding",
+    })) || []),
+    ...(falseCeilDesigns?.map((design) => ({
+      ...design,
+      designType: "False Ceiling",
     })) || []),
   ];
+  console.log(moldingDesigns, falseCeilDesigns);
 
   const handleDeleteClick = (design) => {
     setConfirmDelete(design);
@@ -83,6 +86,7 @@ function DeleteDesignModal({ onClick }) {
       </StyleModal>
     );
   }
+  console.log(allDesigns);
 
   return (
     <>
@@ -115,7 +119,9 @@ function DeleteDesignModal({ onClick }) {
                       <TableCell>
                         <DesignImage
                           src={
-                            design.image ||
+                            (design.images && design.images.length > 0
+                              ? design.images[0]
+                              : null) ||
                             design.imageUrl ||
                             "/placeholder-image.jpg"
                           }
@@ -131,7 +137,7 @@ function DeleteDesignModal({ onClick }) {
                         </strong>
                       </TableCell>
                       <TableCell>
-                        <CategoryBadge>{design.category}</CategoryBadge>
+                        <CategoryBadge>{design.designArea}</CategoryBadge>
                       </TableCell>
                       <TableCell>
                         {design.designArea || design.area || "N/A"}

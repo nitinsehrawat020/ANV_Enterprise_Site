@@ -75,8 +75,12 @@ const StyleButton = styled.button`
     `}
 `;
 
-function Button({ children, variation }) {
-  return <StyleButton variation={variation}>{children}</StyleButton>;
+function Button({ children, variation, onClick, ...props }) {
+  return (
+    <StyleButton variation={variation} onClick={onClick} {...props}>
+      {children}
+    </StyleButton>
+  );
 }
 
 export default Button;

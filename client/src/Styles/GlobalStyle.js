@@ -52,6 +52,17 @@ const GlobalStyle = createGlobalStyle`
 --color-black: #000;
 --color-darkslategray: #454545;
 
+// Additional colors for error pages
+--color-text-900: #000;
+--color-text-800: #333;
+--color-text-700: #555;
+--color-text-600: #666;
+--color-border-100: #ddd;
+--color-border-200: #ccc;
+--color-white-100: #fff;
+--color-primary-50: #e3f2fd;
+--color-whitesmoke: #f5f5f5;
+
 /* Paddings */
 --padding-xs-1: 0.5rem;
 --padding-xs-0: 1rem;
