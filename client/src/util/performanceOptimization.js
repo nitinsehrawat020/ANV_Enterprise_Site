@@ -1,15 +1,52 @@
 // Performance monitoring and optimization utilities
 
-// Web Vitals monitoring
+// Simple performance observer fallback
+const simplePerformanceMonitor = (onPerfEntry) => {
+  if (typeof PerformanceObserver !== "undefined") {
+    try {
+      // Monitor paint metrics
+      const paintObserver = new PerformanceObserver((list) => {
+        for (const entry of list.getEntries()) {
+          onPerfEntry({
+            name: entry.name.includes("first-contentful-paint") ? "FCP" : "FP",
+            value: entry.startTime,
+          });
+        }
+      });
+      paintObserver.observe({ entryTypes: ["paint"] });
+    } catch (error) {
+      console.warn("Performance observer not available:", error);
+    }
+  }
+};
+
+// Web Vitals monitoring (compatible with web-vitals v5.x)
 export const reportWebVitals = (onPerfEntry) => {
   if (onPerfEntry && onPerfEntry instanceof Function) {
-    import("web-vitals").then(({ getCLS, getFID, getFCP, getLCP, getTTFB }) => {
-      getCLS(onPerfEntry);
-      getFID(onPerfEntry);
-      getFCP(onPerfEntry);
-      getLCP(onPerfEntry);
-      getTTFB(onPerfEntry);
-    });
+    import("web-vitals")
+      .then((webVitals) => {
+        // Try new API first (v5.x)
+        if (webVitals.onCLS) {
+          webVitals.onCLS(onPerfEntry);
+          webVitals.onFID && webVitals.onFID(onPerfEntry);
+          webVitals.onFCP(onPerfEntry);
+          webVitals.onLCP(onPerfEntry);
+          webVitals.onTTFB(onPerfEntry);
+        }
+        // Fallback to old API (v4.x)
+        else if (webVitals.getCLS) {
+          webVitals.getCLS(onPerfEntry);
+          webVitals.getFID && webVitals.getFID(onPerfEntry);
+          webVitals.getFCP(onPerfEntry);
+          webVitals.getLCP(onPerfEntry);
+          webVitals.getTTFB(onPerfEntry);
+        }
+      })
+      .catch((error) => {
+        console.warn("Web Vitals not available, using fallback:", error);
+        // Use simple fallback
+        simplePerformanceMonitor(onPerfEntry);
+      });
   }
 };
 
@@ -106,13 +143,17 @@ export const initializePerformanceOptimizations = () => {
   // Track lazy loading performance
   trackLazyLoadPerformance();
 
-  // Report web vitals
-  reportWebVitals((metric) => {
-    if (import.meta.env.DEV) {
-      console.log(`📊 ${metric.name}: ${metric.value}`);
-    }
-    // In production, send to analytics
-  });
+  // Report web vitals (with error handling)
+  try {
+    reportWebVitals((metric) => {
+      if (import.meta.env.DEV) {
+        console.log(`📊 ${metric.name}: ${metric.value}`);
+      }
+      // In production, send to analytics
+    });
+  } catch (error) {
+    console.warn("Performance monitoring not available:", error);
+  }
 };
 
 export default initializePerformanceOptimizations;

@@ -67,9 +67,11 @@ export function useDeleteDesign() {
 }
 
 export function useFavDesign() {
+  const token = localStorage.getItem("accessToken");
   const { data: favDesigns, isLoading: isFavLoading } = useQuery({
     queryKey: ["favDesigns"],
     queryFn: getFavDesign,
+    enabled: !!token,
   });
 
   return { favDesigns, isFavLoading };
