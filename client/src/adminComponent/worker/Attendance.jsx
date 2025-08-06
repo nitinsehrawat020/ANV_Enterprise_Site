@@ -8,7 +8,7 @@ import {
 } from "./StyleWorker";
 import Modal from "../../ui/Modal";
 import AttendanceModal from "./AttendanceModal";
-import { useOutsideClick } from "../../hooks/useOutsideClick.jsx";
+import { useOutsideClick } from "../../../../useOutsideClick.jsx";
 import { BsChevronBarDown, BsChevronBarUp } from "react-icons/bs";
 
 function Attendance({ workers, sites }) {

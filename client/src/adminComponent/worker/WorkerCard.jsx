@@ -16,7 +16,7 @@ import {
 } from "./StyleWorker";
 
 import { CgMoreVertical } from "react-icons/cg";
-import { useOutsideClick } from "../../hooks/useOutsideClick.jsx";
+import { useOutsideClick } from "../../../../useOutsideClick.jsx";
 import Modal from "../../ui/Modal";
 
 function WorkerCard({ worker, onClick }) {
