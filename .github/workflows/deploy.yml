@@ -1,0 +1,81 @@
+name: 🚀 Deploy ANV Enterprise Site
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📦 Checkout Code
+        uses: actions/checkout@v4
+
+      - name: 🟢 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+          cache: "npm"
+          cache-dependency-path: |
+            client/package-lock.json
+            server/package-lock.json
+
+      - name: 🏗️ Build Client
+        working-directory: ./client
+        env:
+          VITE_SERVER_URL: http://${{ secrets.DROPLET_IP }}
+        run: |
+          npm ci
+          npm run build
+
+      - name: 🚀 Deploy to Server
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.DROPLET_IP }}
+          username: ${{ secrets.DROPLET_USER }}
+          password: ${{ secrets.DROPLET_PASSWORD }}
+          script: |
+            # Stop current application
+            pm2 stop anv-enterprise || echo "App not running"
+
+            # Clear old files
+            rm -rf /home/anv/website/*
+
+            # Clone latest code
+            cd /home/anv/website
+            git clone https://github.com/${{ github.repository }} .
+
+            # Install server dependencies
+            cd server
+            npm ci --production
+
+            # Create environment file for server
+            cat > .env << EOF
+            MONGODB_URI=${{ secrets.MONGODB_URI }}
+            FRONDEND_URL=http://${{ secrets.DROPLET_IP }}
+            RESEND_API=${{ secrets.RESEND_API }}
+            JWT_ACCESS_TOKEN_SECRET=${{ secrets.JWT_ACCESS_TOKEN_SECRET }}
+            JWT_REFRESH_TOKEN_SECRET=${{ secrets.JWT_REFRESH_TOKEN_SECRET }}
+            CLOUDINARY_CLOUD_NAME=${{ secrets.CLOUDINARY_CLOUD_NAME }}
+            CLOUDINARY_API_KEY=${{ secrets.CLOUDINARY_API_KEY }}
+            CLOUDINARY_API_SECRET=${{ secrets.CLOUDINARY_API_SECRET }}
+            WORKER_SALERY=${{ secrets.WORKER_SALERY }}
+            HELPER_SALERY=${{ secrets.HELPER_SALERY }}
+            WEEKLY_GIVEN_AMOUNT=${{ secrets.WEEKLY_GIVEN_AMOUNT }}
+            PORT=3000
+            NODE_ENV=production
+            EOF
+
+            # Build client on server
+            cd ../client
+            npm ci
+            VITE_SERVER_URL=http://${{ secrets.DROPLET_IP }} npm run build
+
+            # Start server with PM2
+            cd ../server
+            pm2 start index.js --name anv-enterprise
+            pm2 save
+
+            echo "✅ Deployment Complete!"
+            echo "🔗 Website URL: http://${{ secrets.DROPLET_IP }}"
