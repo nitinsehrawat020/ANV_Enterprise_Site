@@ -29,7 +29,7 @@ app.use(cookieParser());
 app.use(morgan("dev"));
 app.use(helmet({ contentSecurityPolicy: false }));
 
-const PORT = 5000;
+const PORT = 3000;
 
 app.use("/api/user", userRoutes);
 app.use("/api/design", designRouter);
