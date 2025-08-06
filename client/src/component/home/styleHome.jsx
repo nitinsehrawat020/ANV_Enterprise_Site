@@ -806,14 +806,19 @@ export const CardContainer = styled.div`
   width: 100%;
   height: fit-content;
   display: flex;
-
   align-items: center;
   justify-content: stretch;
   gap: 1.5rem;
   overflow-x: scroll;
-  &::scroll-behavior {
+
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  &::-webkit-scrollbar {
     display: none;
   }
+
+  /* Hide scrollbar for IE, Edge and Firefox */
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 
   @media ${device.desktop} {
     width: 100%;
@@ -837,9 +842,15 @@ export const DisplaySpace = styled.div`
   align-items: center;
   gap: 24px;
   overflow: scroll;
-  &::scroll-behavior {
+
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  &::-webkit-scrollbar {
     display: none;
   }
+
+  /* Hide scrollbar for IE, Edge and Firefox */
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 `;
 
 export const StyleHIWCard = styled.div`

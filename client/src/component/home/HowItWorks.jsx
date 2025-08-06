@@ -8,6 +8,8 @@ import {
   DisplaySpace,
 } from "./styleHome.jsx";
 
+import { Icon } from "@iconify-icon/react";
+
 import { AiTwotoneSchedule } from "react-icons/ai";
 
 function HowItWorks() {
@@ -29,19 +31,19 @@ function HowItWorks() {
             desc="Book an appointment by sharing your contact details or giving us a call."
           />
           <HIWCard
-            icon={<AiTwotoneSchedule />}
-            heading="Get In Touch"
-            desc="Book an appointment by sharing your contact details or giving us a call."
+            icon={<Icon icon="clarity:design-line" />}
+            heading="Choose a Design"
+            desc="Choose the design that fits your style, and our team of professionals will make it happen!"
           />
           <HIWCard
-            icon={<AiTwotoneSchedule />}
-            heading="Get In Touch"
-            desc="Book an appointment by sharing your contact details or giving us a call."
+            icon={<Icon icon="line-md:home" />}
+            heading="On-Site Evaluation"
+            desc="Our team visits your location to take accurate measurements and assess installation needs."
           />
           <HIWCard
-            icon={<AiTwotoneSchedule />}
-            heading="Get In Touch"
-            desc="Book an appointment by sharing your contact details or giving us a call."
+            icon={<Icon icon="eva:done-all-fill" />}
+            heading="All Set!"
+            desc="Your ceiling is now beautifully installed. We take care of the finishing touches and leave your space clean."
           />
         </DisplaySpace>
       </CardContainer>

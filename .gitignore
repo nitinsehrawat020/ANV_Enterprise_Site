@@ -24,3 +24,5 @@ dist-ssr
 *.sw?
 
 .env
+GITHUB_CICD_DEPLOYMENT_GUIDE.md
+client/src/component/home/HERO_NAVIGATION_IMPLEMENTATION.md
