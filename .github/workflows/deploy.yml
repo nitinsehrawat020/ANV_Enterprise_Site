@@ -44,7 +44,7 @@ jobs:
 
             # Clone latest code
             cd /var/www/anv-enterprise.in/
-            git clone https://github.com/${{ github.repository }} .
+            git clone https://github.com/${{ github.repository }}
 
             # Install server dependencies
             cd server
