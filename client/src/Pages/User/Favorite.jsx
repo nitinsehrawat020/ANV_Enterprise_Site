@@ -1,6 +1,7 @@
 import { MdFavorite } from "react-icons/md";
 import { GrFavorite } from "react-icons/gr";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   StyleFavorite,
   CardButton,
@@ -11,19 +12,20 @@ import {
   CardInfo,
   DesignCard,
   DesignContainer,
-  DesignFilter,
-  DesignFilterContainer,
   DesignImage,
   FavoriteButton,
   HeadingImage,
-  HeadingPara,
   HeadingTitle,
 } from "../../component/favorite/styleFavorite";
 import useFavoriteDesign from "../../hooks/useFavoriteDesign";
 import DesignDetailModal from "../../component/design/DesignDetailModal";
+import { useUser } from "../../component/LoginAndSignup/useUser";
+import Button from "../../ui/Button";
 
 function Favorite() {
   const [selectedDesign, setSelectedDesign] = useState(null);
+  const navigate = useNavigate();
+  const { isAuthenticated } = useUser();
   const {
     favDesigns: designs,
     isDesignFavorite,
@@ -39,6 +41,46 @@ function Favorite() {
   const handleCloseModal = () => {
     setSelectedDesign(null);
   };
+
+  // Handle login navigation
+  const handleLoginClick = () => {
+    navigate("/login");
+  };
+
+  // If user is not authenticated, show login prompt
+  if (!isAuthenticated) {
+    return (
+      <StyleFavorite>
+        <HeadingImage>
+          <HeadingTitle>Your Favorite Design</HeadingTitle>
+        </HeadingImage>
+        <DesignContainer>
+          <div
+            style={{
+              textAlign: "center",
+              padding: "40px 20px",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: "20px",
+            }}
+          >
+            <h3 style={{ color: "var(--color-dimgray)", marginBottom: "10px" }}>
+              Please Login to View Your Favorites
+            </h3>
+            <p style={{ color: "var(--color-gray)", marginBottom: "20px" }}>
+              Login to add and see your favorite designs. Build your collection
+              of inspiring interior designs!
+            </p>
+            <Button onClick={handleLoginClick} variation="filled">
+              Sign Up Now
+            </Button>
+          </div>
+        </DesignContainer>
+      </StyleFavorite>
+    );
+  }
+
   return (
     <StyleFavorite>
       <HeadingImage>

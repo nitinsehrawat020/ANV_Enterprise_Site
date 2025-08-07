@@ -147,7 +147,7 @@ function MobileNav() {
           </MobileMenuItem>
 
           <MobileMenuItem>
-            <MobileMenuLink to="/about-us" onClick={closeMenu}>
+            <MobileMenuLink to="/aboutUs" onClick={closeMenu}>
               About Us
             </MobileMenuLink>
           </MobileMenuItem>

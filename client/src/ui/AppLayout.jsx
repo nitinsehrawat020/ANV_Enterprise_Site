@@ -29,6 +29,23 @@ const StyledAppLayout = styled.div`
     min-height: 100vh;
     height: auto;
   }
+
+  /* iOS Safari specific fixes for iPhone 15/16 */
+  @supports (-webkit-touch-callout: none) {
+    /* iPhone 15 */
+    @media only screen and (device-width: 393px) and (device-height: 852px) and (-webkit-device-pixel-ratio: 3) {
+      gap: 0.5rem;
+      padding-top: env(safe-area-inset-top, 0);
+      padding-bottom: env(safe-area-inset-bottom, 0);
+    }
+
+    /* iPhone 16 Plus */
+    @media only screen and (device-width: 430px) and (device-height: 932px) and (-webkit-device-pixel-ratio: 3) {
+      gap: 0.5rem;
+      padding-top: env(safe-area-inset-top, 0);
+      padding-bottom: env(safe-area-inset-bottom, 0);
+    }
+  }
 `;
 
 function AppLayout() {

@@ -43,7 +43,12 @@ export const FooterContent = styled.div`
 export const FooterSection = styled.div`
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 20px;
+
+  @media ${device.mobile} {
+    align-items: center;
+  }
 `;
 
 export const CompanySection = styled(FooterSection)`
@@ -111,6 +116,10 @@ export const FooterList = styled.ul`
   display: flex;
   flex-direction: column;
   gap: 12px;
+
+  @media ${device.mobile} {
+    align-items: center;
+  }
 `;
 
 export const FooterListItem = styled.li`

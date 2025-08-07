@@ -76,6 +76,12 @@ export const NavPlaceholder = styled.div`
   @media ${device.mobile} {
     height: ${(props) => (props.isSticky ? "48px" : "0")};
   }
+
+  /* iPhone 15/16 specific fix */
+  @media only screen and (device-width: 393px) and (device-height: 852px) and (-webkit-device-pixel-ratio: 3) {
+    height: ${(props) => (props.isSticky ? "48px" : "0")};
+    margin-bottom: ${(props) => (props.isSticky ? "0" : "-8px")};
+  }
 `;
 
 export const DesktopNavContainer = styled.div`
