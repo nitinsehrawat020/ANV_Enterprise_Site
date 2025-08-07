@@ -53,6 +53,7 @@ export const Nav = styled.nav`
     props.isSticky ? "blur(12px) saturate(120%)" : "none"};
   border-bottom: ${(props) =>
     props.isSticky ? "1px solid rgba(255, 255, 255, 0.2)" : "none"};
+  padding-top: env(safe-area-inset-top);
 
   @media ${device.tablet} {
     height: 48px;
@@ -82,6 +83,7 @@ export const NavPlaceholder = styled.div`
     height: ${(props) => (props.isSticky ? "48px" : "0")};
     margin-bottom: ${(props) => (props.isSticky ? "0" : "-8px")};
   }
+  padding-top: env(safe-area-inset-top);
 `;
 
 export const DesktopNavContainer = styled.div`
