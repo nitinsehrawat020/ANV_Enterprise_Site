@@ -46,6 +46,8 @@ jobs:
             cd /var/www/anv-enterprise.in/
             git clone https://github.com/${{ github.repository }}
 
+            cd ANV_Enterprise_Site
+
             # Install server dependencies
             cd server
             npm i 
