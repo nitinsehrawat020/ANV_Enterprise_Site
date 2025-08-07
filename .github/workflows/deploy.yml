@@ -37,7 +37,7 @@ jobs:
           password: ${{ secrets.DROPLET_PASSWORD }}
           script: |
             # Stop current application
-            pm2 destory anv-enterprise || echo "App not running"
+            pm2 delete all || echo "App not running"
 
             # Clear old files
             rm -rf /var/www/anv-enterprise.in/*
