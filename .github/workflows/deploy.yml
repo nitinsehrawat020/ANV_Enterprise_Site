@@ -40,15 +40,15 @@ jobs:
             pm2 stop anv-enterprise || echo "App not running"
 
             # Clear old files
-            rm -rf /home/anv/website/*
+            rm -rf /var/www/anv-enterprise.in/*
 
             # Clone latest code
-            cd /home/anv/website
+            cd /var/www/anv-enterprise.in/
             git clone https://github.com/${{ github.repository }} .
 
             # Install server dependencies
             cd server
-            npm ci --production
+            npm i 
 
             # Create environment file for server
             cat > .env << EOF
@@ -69,7 +69,7 @@ jobs:
 
             # Build client on server
             cd ../client
-            npm ci
+            npm i
             VITE_SERVER_URL=http://${{ secrets.DROPLET_IP }} npm run build
 
             # Start server with PM2
