@@ -29,14 +29,6 @@ jobs:
           npm ci
           npm run build
 
-      - name: 📦 Create Deployment Archive
-        run: |
-          # Create deployment package with built files
-          mkdir deployment-package
-          cp -r server deployment-package/
-          cp -r client/dist deployment-package/client-dist
-          tar -czf deployment.tar.gz deployment-package/
-
       - name: 🚀 Deploy to Server
         uses: appleboy/ssh-action@v1.0.3
         with:
@@ -48,18 +40,15 @@ jobs:
             pm2 stop anv-enterprise || echo "App not running"
 
             # Clear old files
-            rm -rf /home/${{ secrets.DROPLET_USER }}/website/*
-
-            # Create website directory if it doesn't exist
-            mkdir -p /home/${{ secrets.DROPLET_USER }}/website
+            rm -rf /home/anv/website/*
 
             # Clone latest code
-            cd /home/${{ secrets.DROPLET_USER }}/website
+            cd /home/anv/website
             git clone https://github.com/${{ github.repository }} .
 
-            # Install server dependencies with memory optimization
+            # Install server dependencies
             cd server
-            npm ci --production --maxsockets=1
+            npm ci --production
 
             # Create environment file for server
             cat > .env << EOF
@@ -78,10 +67,10 @@ jobs:
             NODE_ENV=production
             EOF
 
-            # Build client on server with memory optimization  
+            # Build client on server
             cd ../client
-            mkdir -p dist
-            cp -r ../client-dist/* dist/
+            npm ci
+            VITE_SERVER_URL=http://${{ secrets.DROPLET_IP }} npm run build
 
             # Start server with PM2
             cd ../server
