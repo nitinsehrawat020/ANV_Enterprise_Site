@@ -2,8 +2,9 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
 import UserModel from "../models/user.module.js";
-import sendMail from "../config/sendMail.js";
+import { sendMail, sendWelcomeEmail } from "../config/sendMail.js";
 import verifyEmailTemplate from "../utils/verifyEmialTemplete.js";
+import welcomeEmailTemplate from "../utils/welcomeEmailTemplate.js";
 
 import generatedAccessToken from "../utils/genratedAccessToken.js";
 import genertedRefreshToken from "../utils/genratedRefernceToken.js";
@@ -49,15 +50,13 @@ export async function registerUserController(req, res) {
 
     const newUser = new UserModel(payload);
     const savedUser = await newUser.save();
-    const verifyEmaiurl = `${process.env.FRONDEND_URL}/verify-email=${savedUser.id}}`;
+    const verifyEmailUrl = `${process.env.FRONDEND_URL}/api/user/verify-email/${savedUser._id}`;
 
-    const verifyEmail = await sendMail({
+    // Send welcome email with verification
+    await sendWelcomeEmail({
       sendTo: email,
-      subject: "Welcome to our ANV Enterprise",
-      html: verifyEmailTemplate({
-        name: firstName,
-        url: `http://localhost:5000/api/user/verify-email/${savedUser._id}`,
-      }),
+      name: firstName,
+      verifyUrl: verifyEmailUrl,
     });
 
     const newFavorite = new FavoriteModel({
@@ -152,9 +151,10 @@ export async function loginUserController(req, res) {
     }
 
     const cookiesOptions = {
-      httpOnly: true,
-      secure: true,
+      httpOnly: false, // Allow JavaScript access
+      secure: process.env.NODE_ENV === "production", // Only secure in production
       sameSite: "None",
+      maxAge: 24 * 60 * 60 * 1000, // 24 hours
     };
 
     res.cookie("accessToken", accessToken, cookiesOptions);
@@ -177,9 +177,10 @@ export async function logoutController(request, response) {
     const userid = request.userId; //middleware
 
     const cookiesOption = {
-      httpOnly: true,
-      secure: true,
+      httpOnly: false, // Allow JavaScript access
+      secure: process.env.NODE_ENV === "production", // Only secure in production
       sameSite: "None",
+      maxAge: 24 * 60 * 60 * 1000, // 24 hours
     };
 
     response.clearCookie("accessToken", cookiesOption);
@@ -290,7 +291,10 @@ export async function forgetPasswordController(req, res) {
     await sendMail({
       sendTo: email,
       subject: "forget password from ANV Enterprise",
-      html: forgetPasswordTemplate({ name: user.name, otp: otp }),
+      html: forgetPasswordTemplate({
+        name: user.firstName || "User",
+        otp: otp,
+      }),
     });
 
     return res.json({

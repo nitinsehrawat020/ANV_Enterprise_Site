@@ -203,8 +203,13 @@ function OptimizedImage({
 
       {currentSrc && (
         <picture>
-          {/* Modern format with fallback */}
-          <source srcSet={optimizedSrc} type={`image/${format}`} />
+          {/* Only add source if we have a valid optimized src */}
+          {optimizedSrc &&
+            optimizedSrc !== src &&
+            optimizedSrc.includes(".") &&
+            optimizedSrc.trim() !== "" && (
+              <source srcSet={optimizedSrc} type={`image/${format}`} />
+            )}
           <StyledImage
             ref={imgRef}
             src={currentSrc}

@@ -43,10 +43,26 @@ export const getOptimizedImagePath = (originalPath, options = {}) => {
 
 // Generate srcSet for responsive images
 export const generateSrcSet = (basePath, sizes = [400, 800, 1200, 1600]) => {
+  // Validate basePath to prevent invalid srcset
+  if (!basePath || typeof basePath !== "string" || basePath.trim() === "") {
+    console.warn("Invalid basePath provided to generateSrcSet:", basePath);
+    return "";
+  }
+
+  // Ensure basePath includes file extension
+  if (!basePath.includes(".")) {
+    console.warn(
+      "basePath should include file extension for generateSrcSet:",
+      basePath
+    );
+    return basePath; // Return as single src instead of srcset
+  }
+
   return sizes
-    .map(
-      (size) => `${getOptimizedImagePath(basePath, { width: size })} ${size}w`
-    )
+    .map((size) => {
+      const optimizedPath = getOptimizedImagePath(basePath, { width: size });
+      return `${optimizedPath} ${size}w`;
+    })
     .join(", ");
 };
 
@@ -97,20 +113,45 @@ export const getBestImageFormat = () => {
   return SUPPORTED_FORMATS.JPEG;
 };
 
-// Preload critical images
+// Preload critical images with better performance
 export const preloadImage = (src, options = {}) => {
   return new Promise((resolve, reject) => {
+    // Validate src before creating preload link
+    if (!src || typeof src !== "string" || src.trim() === "") {
+      reject(new Error("Invalid image source"));
+      return;
+    }
+
     const link = document.createElement("link");
     link.rel = "preload";
     link.as = "image";
     link.href = getOptimizedImagePath(src, options);
 
+    // Add importance hint to prioritize critical images
+    if (options.critical) {
+      link.setAttribute("fetchpriority", "high");
+    }
+
     if (options.crossOrigin) {
       link.crossOrigin = options.crossOrigin;
     }
 
-    link.onload = () => resolve(link);
-    link.onerror = reject;
+    // Set a timeout to prevent hanging promises
+    const timeout = setTimeout(() => {
+      document.head.removeChild(link);
+      reject(new Error("Preload timeout"));
+    }, 10000);
+
+    link.onload = () => {
+      clearTimeout(timeout);
+      resolve(link);
+    };
+
+    link.onerror = () => {
+      clearTimeout(timeout);
+      document.head.removeChild(link);
+      reject(new Error(`Failed to preload image: ${src}`));
+    };
 
     document.head.appendChild(link);
   });

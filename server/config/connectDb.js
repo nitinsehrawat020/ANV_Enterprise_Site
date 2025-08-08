@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import { setupMonthlyAttendanceScheduler } from "../utils/updateWorkerAttdance.js";
+import { sendMail } from "./sendMail.js";
 dotenv.config();
 
 if (!process.env.MONGODB_URI) {
@@ -11,6 +12,7 @@ async function connectDb() {
   try {
     await mongoose.connect(process.env.MONGODB_URI);
     setupMonthlyAttendanceScheduler();
+
     console.log("CONNECTED");
   } catch (error) {
     console.error(error);

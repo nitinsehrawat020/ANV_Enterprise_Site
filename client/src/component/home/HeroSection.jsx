@@ -82,8 +82,8 @@ function HeroSection() {
         <HeroImage
           src="/pictures/banner/HeroBanner.png"
           alt="Hero Banner Image - ANV Enterprise Interior Design"
-          width="590PX%"
-          height="640px"
+          width="100%"
+          height="100%"
         />
       </HeroBanner>
     </StyleHeroSection>

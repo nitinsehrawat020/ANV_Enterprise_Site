@@ -38,6 +38,15 @@ export const HeroBanner = styled.div`
   max-width: 590px;
   max-height: 640px;
   overflow: hidden;
+
+  @media ${device.tablet} {
+    max-width: 100%;
+    max-height: 540px;
+  }
+  @media ${device.mobile} {
+    max-width: 100%;
+    max-height: 440px;
+  }
 `;
 
 export const HeroTextAndButton = styled.div`

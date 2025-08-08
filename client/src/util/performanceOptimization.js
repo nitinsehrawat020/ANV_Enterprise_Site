@@ -50,14 +50,6 @@ export const reportWebVitals = (onPerfEntry) => {
   }
 };
 
-// Image performance analytics
-export const trackImagePerformance = (imageSrc, loadTime) => {
-  // In production, send to analytics service
-  if (import.meta.env.DEV) {
-    console.log(`🖼️ Image loaded: ${imageSrc} in ${loadTime}ms`);
-  }
-};
-
 // Lazy loading performance tracker
 export const trackLazyLoadPerformance = () => {
   const observer = new PerformanceObserver((list) => {
@@ -76,14 +68,6 @@ export const trackLazyLoadPerformance = () => {
 };
 
 // Bundle size monitoring
-export const logBundleInfo = () => {
-  if (import.meta.env.DEV) {
-    console.log("📦 Bundle optimization enabled");
-    console.log("🏗️ Code splitting: Active");
-    console.log("🖼️ Image optimization: Active");
-    console.log("⚡ Lazy loading: Active");
-  }
-};
 
 // Critical resource hints
 export const addResourceHints = () => {
@@ -138,7 +122,6 @@ export const initializePerformanceOptimizations = () => {
   registerSW();
 
   // Log bundle info
-  logBundleInfo();
 
   // Track lazy loading performance
   trackLazyLoadPerformance();
@@ -146,9 +129,6 @@ export const initializePerformanceOptimizations = () => {
   // Report web vitals (with error handling)
   try {
     reportWebVitals((metric) => {
-      if (import.meta.env.DEV) {
-        console.log(`📊 ${metric.name}: ${metric.value}`);
-      }
       // In production, send to analytics
     });
   } catch (error) {

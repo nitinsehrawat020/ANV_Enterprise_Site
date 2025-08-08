@@ -18,23 +18,27 @@ export const BACKGROUND_IMAGES = {
   ABOUT_BANNER: "/pictures/aboutUS/AboutUsBanner2.png",
 };
 
-// Initialize critical image preloading
+// Initialize critical image preloading with better error handling
 export const initializeImagePreloading = async () => {
   try {
-    // Preload hero banner and logo immediately (above-the-fold)
-    await preloadImages([CRITICAL_IMAGES.HERO_BANNER, CRITICAL_IMAGES.LOGO], {
-      quality: 90,
-    });
+    // Only preload images that actually exist and are critical
+    const criticalImages = [CRITICAL_IMAGES.HERO_BANNER, CRITICAL_IMAGES.LOGO];
 
-    // Preload carousel images with slight delay
-    setTimeout(() => {
-      preloadImages(CRITICAL_IMAGES.HERO_CAROUSEL, { quality: 80 });
-    }, 1000);
+    // Validate images exist before preloading
+    const validImages = criticalImages.filter(
+      (src) =>
+        src && typeof src === "string" && src.includes(".") && src.trim() !== ""
+    );
 
-    // Preload background images with longer delay
-    setTimeout(() => {
-      preloadImages(Object.values(BACKGROUND_IMAGES), { quality: 70 });
-    }, 2000);
+    if (validImages.length > 0) {
+      await preloadImages(validImages, { quality: 90 });
+    }
+
+    // Remove automatic carousel preloading to reduce console warnings
+    // Only preload when actually needed by specific routes
+
+    // Reduce background image preloading
+    // Only preload when navigating to specific routes
 
     console.log("🏗️ Critical images preloaded successfully");
   } catch (error) {
