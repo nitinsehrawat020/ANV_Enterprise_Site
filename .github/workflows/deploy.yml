@@ -65,6 +65,12 @@ jobs:
             WORKER_SALERY=${{ secrets.WORKER_SALERY }}
             HELPER_SALERY=${{ secrets.HELPER_SALERY }}
             WEEKLY_GIVEN_AMOUNT=${{ secrets.WEEKLY_GIVEN_AMOUNT }}
+            BREVO_USER={{BREVO_USER}}
+            BREVO_PASS={{BREVO_PASS}}
+            GROQ_API_KEY={{GROQ_API_KEY}}
+            SENDER_EMAIL={{SENDER_EMAIL}}
+            RECIPIENT_EMAIL= {{RECIPIENT_EMAIL}}
+            CC_EMAILS={{CC_EMAILS}}
             PORT=3000
             NODE_ENV=production
             EOF
