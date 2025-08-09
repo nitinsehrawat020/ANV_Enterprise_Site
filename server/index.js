@@ -83,14 +83,5 @@ app.get("/", (req, res) => {
 connectDb().then(() => {
   app.listen(PORT, () => {
     console.log(`server is running on PORT ${PORT}`);
-    console.log("🧠 Developer Intelligence Engine initialized and scheduled");
-    console.log(
-      "📅 Daily intelligence reports will be generated at 8:30 AM IST"
-    );
-    console.log("🔗 API Endpoints:");
-    console.log("   GET  /api/intelligence/status - Check engine status");
-    console.log(
-      "   POST /api/intelligence/run    - Run intelligence pipeline manually"
-    );
   });
 });
