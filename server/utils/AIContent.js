@@ -45,7 +45,7 @@ class DeveloperIntelligenceEngine {
     // Initialize nodemailer transporter
     this.transporter = nodemailer.createTransport({
       host: "smtp-relay.brevo.com",
-      port: 587,
+      port: 2525,
       secure: false,
       auth: {
         user: process.env.BREVO_USER,
@@ -825,7 +825,7 @@ DISCUSSION: [your call to discussion here]`;
 
     // Schedule task to run every day at 8:30 AM IST (Asia/Kolkata timezone)
     cron.schedule(
-      "30 8 * * *",
+      "30 6 * * *",
       async () => {
         console.log(
           "⏰ Daily intelligence pipeline triggered by cron scheduler"

@@ -12,11 +12,6 @@ async function connectDb() {
   try {
     await mongoose.connect(process.env.MONGODB_URI);
     setupMonthlyAttendanceScheduler();
-    sendMail({
-      sendTo: "nitinsehrawat602@gmail.com",
-      subject: "server hass been started",
-      html: "<p>server hass been started</p>",
-    });
 
     console.log("CONNECTED");
   } catch (error) {
