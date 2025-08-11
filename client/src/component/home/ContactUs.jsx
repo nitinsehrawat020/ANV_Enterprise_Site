@@ -19,9 +19,16 @@ import { TbPhoneCalling } from "react-icons/tb";
 import { IoIosMail } from "react-icons/io";
 import { BsInstagram } from "react-icons/bs";
 import { FaSquareWhatsapp } from "react-icons/fa6";
-import { LuSend } from "react-icons/lu";
+import { useForm } from "react-hook-form";
+import { useSubmitContactForm } from "../../hooks/useContactus";
 
 function ContactUs() {
+  const { register, handleSubmit } = useForm();
+  const { submitContactusForm, isFormSubmittuing } = useSubmitContactForm();
+
+  const onSubmit = (data) => {
+    submitContactusForm(data);
+  };
   return (
     <StyleContactUs id="contact-us">
       <ContactHeadingContainer>
@@ -94,28 +101,47 @@ function ContactUs() {
           </span>
         </ContactImageContainer>
         <FormContainer>
-          <ContactForm>
+          <ContactForm onSubmit={handleSubmit(onSubmit)}>
             <FieldGroup>
               <FeildAndLabelGroup>
                 <StyleLabel>Full Name</StyleLabel>
-                <StyleInput type="text" />
+                <StyleInput
+                  type="text"
+                  {...register("fullName", {
+                    required: "Full name is required",
+                  })}
+                  placeholder="Enter your full name"
+                />
               </FeildAndLabelGroup>
               <FeildAndLabelGroup>
                 <StyleLabel>Phone Number</StyleLabel>
-                <StyleInput type="text" />
+                <StyleInput
+                  type="tel"
+                  {...register("phoneNumber", {
+                    required: "Phone number is required",
+                  })}
+                  placeholder="Enter your phone number"
+                />
               </FeildAndLabelGroup>
               <FeildAndLabelGroup>
                 <StyleLabel>Email</StyleLabel>
-                <StyleInput type="text" />
+                <StyleInput
+                  type="email"
+                  {...register("email", { required: "Email is required" })}
+                  placeholder="Enter your email"
+                />
               </FeildAndLabelGroup>
               <FeildAndLabelGroup>
                 <StyleLabel>Message</StyleLabel>
-                <StyleTextArea cols="6" rows="4" type="text" />
+                <StyleTextArea
+                  cols="6"
+                  rows="4"
+                  {...register("message", { required: "Message is required" })}
+                  placeholder="Enter your message"
+                />
               </FeildAndLabelGroup>
             </FieldGroup>
-            <StyleSubmit type="submit">
-              Send <LuSend />
-            </StyleSubmit>
+            <StyleSubmit type="submit" value="Send Message" />
           </ContactForm>
         </FormContainer>
       </FornAndImageConatiner>

@@ -16,48 +16,8 @@ export function useLogin() {
   const { mutate: login, isPending: isLoading } = useMutation({
     mutationFn: ({ email, password }) => loginApi({ email, password }),
     onSuccess: (res) => {
-      // Function to extract token from cookies
-      const extractTokenFromCookies = (cookieHeader, tokenName) => {
-        if (!cookieHeader) return null;
-
-        const cookies = Array.isArray(cookieHeader)
-          ? cookieHeader
-          : [cookieHeader];
-
-        for (const cookie of cookies) {
-          if (typeof cookie === "string" && cookie.includes(`${tokenName}=`)) {
-            const match = cookie.match(new RegExp(`${tokenName}=([^;]+)`));
-            if (match) {
-              return match[1];
-            }
-          }
-        }
-        return null;
-      };
-
-      // Extract tokens from cookies
-      const setCookieHeader = res.headers["set-cookie"];
-      const accessToken = extractTokenFromCookies(
-        setCookieHeader,
-        "accessToken"
-      );
-      const refreshToken = extractTokenFromCookies(
-        setCookieHeader,
-        "refreshToken"
-      );
-
-      // Store tokens in localStorage if found
-      if (accessToken && refreshToken) {
-        localStorage.setItem("accessToken", accessToken);
-        localStorage.setItem("refreshToken", refreshToken);
-      } else {
-        // Fallback: try to get from response body
-        if (res.data?.data?.accessToken && res.data?.data?.refreshToken) {
-          localStorage.setItem("accessToken", res.data.data.accessToken);
-          localStorage.setItem("refreshToken", res.data.data.refreshToken);
-        }
-      }
-
+      localStorage.setItem("accessToken", res.data.data.accessToken);
+      localStorage.setItem("refreshToken", res.data.data.refreshToken);
       toast.success(res.data.message);
       navigate("/");
     },

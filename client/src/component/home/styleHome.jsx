@@ -1134,7 +1134,7 @@ export const StyleTextArea = styled.textarea`
   }
 `;
 
-export const StyleSubmit = styled.button`
+export const StyleSubmit = styled.input`
   width: fit-content;
   height: 48px;
   border-radius: 8px;
