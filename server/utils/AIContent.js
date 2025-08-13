@@ -56,6 +56,10 @@ class DeveloperIntelligenceEngine {
     // Market intelligence data storage
     this.marketIntelligence = {};
     this.contentBriefs = [];
+    // Topic history for de-duplication across runs
+    this.topicsHistoryLoaded = false;
+    this.topicsHistory = new Map(); // normalizedTopic -> { topic, category, firstSeenAt }
+    this.historyFilePath = null; // resolved lazily
 
     // Category mapping for organized reporting
     this.categoryMapping = {
@@ -260,25 +264,37 @@ For each list, provide a simple array of strings. Do not add any text outside of
   async generateContentBriefForTopic(topic, category) {
     console.log(`📝 Generating content brief for: ${topic}`);
 
-    const briefPrompt = `For the topic '${topic}', generate a content brief for a professional LinkedIn post. The brief should include these four sections:
+    const briefPrompt = `For the topic '${topic}', generate a RICH content brief for a professional LinkedIn post. Keep the SAME section headers exactly as below, but increase depth and specificity. The TOTAL length (all sections combined) MUST be between 1000 and 1300 words.
+Sections:
 **1. Compelling Hook:** An engaging question or a bold statement to grab attention.
-**2. Context & Relevance:** A short explanation of what it is and *why* it's important for MERN/backend developers *right now*.
-**3. Key Takeaways:** 3-4 bullet points highlighting the most critical information, key features, or learning points.
-**4. Call to Discussion:** A concluding thought or a direct question for the audience to spark conversation and comments.
+**2. Context & Relevance:** 350-500 words on what it is and why it matters now for MERN/backend developers. Include practical context (performance, DX, deployment, security, costs) where relevant.
+**3. Key Takeaways:** 8-10 bullets, each 25-50 words, with actionable specifics (API/CLI names, key flags, config fields, perf numbers, version notes). Keep bullets concise but substantive.
+**4. Call to Discussion:** 25-40 words, a thoughtful closing question to spark comments.
 
-Format your response exactly like this:
+Very important formatting rules:
+- Use EXACTLY these section labels: HOOK:, CONTEXT:, TAKEAWAYS:, DISCUSSION:
+- Bullets must start with a leading bullet character like this: "• ". One bullet per line.
+- Do  include code blocks; refer to identifiers inline.
+
+Output format (copy exactly):
 
 HOOK: [your compelling hook here]
 
-CONTEXT: [your context & relevance explanation here]
+CONTEXT: [~350-450 words of deeper context & why now]
 
 TAKEAWAYS:
 • [takeaway 1]
 • [takeaway 2]
 • [takeaway 3]
 • [takeaway 4]
+• [takeaway 5]
+• [takeaway 6]
+• [takeaway 7]
+• [takeaway 8]
+• [takeaway 9]
+• [takeaway 10]
 
-DISCUSSION: [your call to discussion here]`;
+DISCUSSION: [your closing question]`;
 
     try {
       const response = await fetch(this.groqApiUrl, {
@@ -300,7 +316,7 @@ DISCUSSION: [your call to discussion here]`;
               content: briefPrompt,
             },
           ],
-          max_tokens: 600,
+          max_tokens: 1600,
           temperature: 0.8,
         }),
       });
@@ -411,6 +427,77 @@ DISCUSSION: [your call to discussion here]`;
     return sections;
   }
 
+  // Build copy-ready LinkedIn post from a brief (richer content)
+  buildLinkedInPost(brief) {
+    const esc = (s) => (s || "").replace(/\s+/g, " ").trim();
+    const hook = esc(brief.hook);
+    const context = esc(brief.context);
+    const takeaways = (brief.takeaways || []).slice(0, 5).map(esc);
+    const discussion = esc(brief.discussion);
+    const hashtags = this.buildHashtags(brief.topic, brief.category);
+
+    const lead = `Why it matters: ${context}`;
+    const bullets = takeaways.map((t) => `• ${t}`).join("\n");
+    const post = [
+      hook,
+      "",
+      lead,
+      "",
+      bullets,
+      "",
+      discussion,
+      "",
+      hashtags.join(" "),
+    ].join("\n");
+    return post.trim();
+  }
+
+  // Simple hashtag generator based on topic and category
+  buildHashtags(topic, category) {
+    const base = ["#DevCommunity", "#MERN", "#Backend", "#JavaScript"];
+    const catMap = {
+      new_libraries_and_tools: ["#NewTools", "#DX"],
+      emerging_technologies_and_concepts: ["#TechTrends", "#Architecture"],
+      critical_issues_and_vulnerabilities: ["#Security", "#BestPractices"],
+      notable_tech_talks_and_articles: ["#Learning", "#Talks"],
+    };
+    const topicTags = (topic || "")
+      .toLowerCase()
+      .split(/[^a-z0-9]+/)
+      .filter(Boolean)
+      .slice(0, 2)
+      .map((w) => `#${w.replace(/^(node|react|next|js)$/, "js")}`);
+    const extra = catMap[category] || [];
+    const all = [...new Set([...topicTags, ...extra, ...base])];
+    return all.slice(0, 8);
+  }
+
+  // Create positive/negative prompts for a relevant image
+  buildImagePrompts(brief) {
+    const top3 = (brief.takeaways || []).slice(0, 3).join("; ");
+    const positive = [
+      `Professional developer workspace about: ${brief.topic}.`,
+      `Dark theme code editor or minimal dashboard reflecting: ${top3 || brief.topic}.`,
+      `3–5 lines of real JS/TS code (import, const, async/await, return), crisp monospace, high contrast.`,
+      `Clean composition, subtle teal/cyan accents, soft lighting, minimal UI.`,
+    ].join(" ");
+    const negative = [
+      "blurry",
+      "low quality",
+      "grainy",
+      "watermark",
+      "oversaturated",
+      "illegible text",
+      "random letters",
+      "gibberish code",
+      "logo clutter",
+      "cropped code",
+      "extra fingers",
+      "mutated hands",
+    ].join(", ");
+    return { positive, negative };
+  }
+
   /**
    * Generate categorized HTML report from all content briefs
    * @param {Array} contentBriefs - Array of content brief objects
@@ -506,6 +593,32 @@ DISCUSSION: [your call to discussion here]`;
                 <p style="color: #495057; line-height: 1.6; font-size: 16px; margin: 0; font-style: italic; padding: 12px; background: rgba(111, 66, 193, 0.1); border-radius: 8px;">
                   ${brief.discussion}
                 </p>
+              </div>
+
+              <div style="margin-bottom: 15px;">
+                <h4 style="color: #0d6efd; margin: 0 0 10px 0; font-size: 15px; font-weight: 700; text-transform: uppercase;">
+                  📣 Ready-to-Post LinkedIn
+                </h4>
+                <div style="background:#f8f9fa; border:1px solid #e2e6ea; border-radius:8px; padding:14px; color:#212529; white-space:pre-wrap; font-size:15px; line-height:1.6;">
+                  ${this.buildLinkedInPost(brief).replace(/&/g, "&amp;").replace(/</g, "&lt;")}
+                </div>
+                <div style="color:#6c757d; font-size:12px; margin-top:6px;">Tip: Copy the block above directly into LinkedIn.</div>
+              </div>
+
+              <div style="margin-bottom: 15px;">
+                <h4 style="color: #198754; margin: 0 0 10px 0; font-size: 15px; font-weight: 700; text-transform: uppercase;">
+                  🎨 Image Prompt (relevant to this topic)
+                </h4>
+                ${(function (b, self) {
+                  const p = self.buildImagePrompts(b);
+                  return `
+                  <div style="background:#f6ffed; border:1px solid #d9f7be; border-radius:8px; padding:12px; color:#0f5132; font-size:14px; line-height:1.6;">
+                    <div style=\"margin-bottom:6px;\"><strong>Positive:</strong><br>${p.positive.replace(/&/g, "&amp;").replace(/</g, "&lt;")}</div>
+                    <div><strong>Negative:</strong><br>${p.negative.replace(/&/g, "&amp;").replace(/</g, "&lt;")}</div>
+                  </div>
+                `;
+                })(brief, this)}
+                <div style="color:#6c757d; font-size:12px; margin-top:6px;">Use with your generator (e.g., SDXL @ ~640×640) for email-friendly images.</div>
               </div>
 
               <div style="margin-top: 20px; padding-top: 15px; border-top: 1px solid #dee2e6; font-size: 12px; color: #6c757d; text-align: right;">
@@ -694,6 +807,9 @@ DISCUSSION: [your call to discussion here]`;
         throw new Error("No market intelligence data received in Stage 1");
       }
 
+      // Ensure topic history is loaded
+      await this.ensureHistoryLoaded();
+
       // Flatten all topics from all categories for Stage 2 processing
       const allTopics = [];
       Object.entries(intelligence).forEach(([category, topics]) => {
@@ -706,13 +822,35 @@ DISCUSSION: [your call to discussion here]`;
         throw new Error("No topics discovered for content brief generation");
       }
 
+      // De-duplicate within the run and against history
+      const seen = new Set();
+      const normalize = (s) => this.normalizeTopic(s);
+      const newTopics = [];
+      for (const item of allTopics) {
+        const key = normalize(item.topic);
+        if (!key) continue;
+        if (seen.has(key)) continue; // in-run duplicate
+        seen.add(key);
+        if (!this.topicsHistory.has(key)) {
+          newTopics.push(item);
+        } else {
+          console.log(`🔁 Skipping previously covered topic: ${item.topic}`);
+        }
+      }
+
+      if (newTopics.length === 0) {
+        console.log(
+          "ℹ️ No new topics after de-duplication. Sending minimal report."
+        );
+      }
+
       console.log(
-        `📝 STAGE 2: Generating content briefs for ${allTopics.length} topics...`
+        `📝 STAGE 2: Generating content briefs for ${newTopics.length} topics (filtered from ${allTopics.length})...`
       );
 
       // STAGE 2: Generate content briefs for all discovered topics
       // Use Promise.allSettled for resilient parallel processing
-      const briefPromises = allTopics.map(({ topic, category }) =>
+      const briefPromises = newTopics.map(({ topic, category }) =>
         this.generateContentBriefForTopic(topic, category)
       );
 
@@ -754,6 +892,13 @@ DISCUSSION: [your call to discussion here]`;
       ).length;
       const totalCategories = Object.keys(intelligence).length;
 
+      // Persist new topics to history after generating briefs
+      const topicsToRecord = newTopics.map((t) => ({
+        topic: t.topic,
+        category: t.category,
+      }));
+      await this.addTopicsToHistory(topicsToRecord);
+
       if (emailResult.success) {
         console.log(
           `🎉 Developer Intelligence Pipeline completed successfully in ${executionTime}s`
@@ -764,7 +909,7 @@ DISCUSSION: [your call to discussion here]`;
           executionTime: `${executionTime}s`,
           stage1: {
             categoriesAnalyzed: totalCategories,
-            topicsDiscovered: allTopics.length,
+            topicsDiscovered: newTopics.length,
             intelligence: intelligence,
           },
           stage2: {
@@ -786,7 +931,7 @@ DISCUSSION: [your call to discussion here]`;
           executionTime: `${executionTime}s`,
           stage1: {
             categoriesAnalyzed: totalCategories,
-            topicsDiscovered: allTopics.length,
+            topicsDiscovered: newTopics.length,
             intelligence: intelligence,
           },
           stage2: {
@@ -896,6 +1041,7 @@ DISCUSSION: [your call to discussion here]`;
         "Categorized Report Compilation",
         "Email Distribution",
       ],
+      topicsHistoryCount: this.topicsHistory.size,
     };
   }
 }
@@ -908,3 +1054,74 @@ intelligenceEngine.scheduleDaily();
 
 // Export for manual testing and integration
 export default intelligenceEngine;
+
+// ===== Helper methods: Topic History =====
+DeveloperIntelligenceEngine.prototype.normalizeTopic = function (s) {
+  return (s || "")
+    .toLowerCase()
+    .replace(/[`'"“”’]/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+};
+
+DeveloperIntelligenceEngine.prototype.ensureHistoryLoaded = async function () {
+  if (this.topicsHistoryLoaded) return;
+  const path = await import("path");
+  const fs = await import("fs/promises");
+  const dir = path.resolve(process.cwd(), "generated-content");
+  const file = path.join(dir, "topics-history.json");
+  this.historyFilePath = file;
+  try {
+    await fs.mkdir(dir, { recursive: true });
+    const raw = await fs.readFile(file, "utf8").catch(() => "[]");
+    const arr = JSON.parse(raw);
+    if (Array.isArray(arr)) {
+      for (const entry of arr) {
+        const key = this.normalizeTopic(entry.topic);
+        if (!key) continue;
+        this.topicsHistory.set(key, entry);
+      }
+    }
+    this.topicsHistoryLoaded = true;
+    console.log(
+      `🗂️ Loaded topics history (${this.topicsHistory.size} entries)`
+    );
+  } catch (e) {
+    console.warn("⚠️ Failed to load topics history:", e.message);
+    this.topicsHistoryLoaded = true; // avoid retry loop
+  }
+};
+
+DeveloperIntelligenceEngine.prototype.addTopicsToHistory = async function (
+  items
+) {
+  try {
+    await this.ensureHistoryLoaded();
+    const now = new Date().toISOString();
+    for (const it of items) {
+      const key = this.normalizeTopic(it.topic);
+      if (!key) continue;
+      if (!this.topicsHistory.has(key)) {
+        this.topicsHistory.set(key, {
+          topic: it.topic,
+          category: it.category,
+          firstSeenAt: now,
+        });
+      }
+    }
+    await this.saveTopicsHistory();
+  } catch (e) {
+    console.warn("⚠️ Failed to add topics to history:", e.message);
+  }
+};
+
+DeveloperIntelligenceEngine.prototype.saveTopicsHistory = async function () {
+  try {
+    const fs = await import("fs/promises");
+    const arr = Array.from(this.topicsHistory.values());
+    await fs.writeFile(this.historyFilePath, JSON.stringify(arr, null, 2));
+    console.log(`💾 Saved topics history (${arr.length} entries)`);
+  } catch (e) {
+    console.warn("⚠️ Failed to save topics history:", e.message);
+  }
+};
