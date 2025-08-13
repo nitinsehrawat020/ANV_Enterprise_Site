@@ -3,7 +3,8 @@ name: 🚀 Deploy ANV Enterprise Site
 on:
   push:
     branches: [main]
-    paths-ignore: -generated-content\topics-history.json
+    paths-ignore:
+      - "server/generated-content/topics-history.json"
 
 jobs:
   deploy:
