@@ -816,32 +816,40 @@ DISCUSSION: [your call to discussion here]`;
 
   /**
    * Schedule the daily intelligence pipeline using node-cron
-   * Runs every day at 8:30 AM IST
+   * Default: every day at 6:30 AM IST
    */
   scheduleDaily() {
-    console.log(
-      "🕐 Scheduling daily Developer Intelligence Pipeline for 8:30 AM IST"
-    );
+    const enabled = (process.env.INTEL_ENABLE_SCHEDULER ?? 'true').toLowerCase() !== 'false';
+    if (!enabled) {
+      console.log('⏸️  Intelligence scheduler disabled via INTEL_ENABLE_SCHEDULER=false');
+      return;
+    }
 
-    // Schedule task to run every day at 8:30 AM IST (Asia/Kolkata timezone)
-    cron.schedule(
-      "30 6 * * *",
+    // Prevent duplicate scheduling in the same process
+    if (globalThis.__INTEL_SCHED_ACTIVE) {
+      console.log('ℹ️  Intelligence scheduler already active in this process');
+      return;
+    }
+
+    const cronSpec = process.env.INTEL_CRON || "30 6 * * *"; // 06:30 daily
+    const timezone = process.env.INTEL_TZ || "Asia/Kolkata";
+
+    console.log(`🕐 Scheduling Developer Intelligence Pipeline: '${cronSpec}' (${timezone})`);
+
+    const job = cron.schedule(
+      cronSpec,
       async () => {
-        console.log(
-          "⏰ Daily intelligence pipeline triggered by cron scheduler"
-        );
+        console.log("⏰ Daily intelligence pipeline triggered by cron scheduler");
         await this.runDailyPipeline();
       },
-      {
-        scheduled: true,
-        timezone: "Asia/Kolkata", // IST timezone
-      }
+      { scheduled: true, timezone }
     );
 
-    console.log(
-      "✅ Daily scheduler activated - Developer Intelligence Engine ready"
-    );
-    console.log("📡 Next execution: Tomorrow at 8:30 AM IST");
+    globalThis.__INTEL_SCHED_ACTIVE = true;
+    globalThis.__INTEL_SCHED_JOB = job;
+
+    console.log("✅ Daily scheduler activated - Developer Intelligence Engine ready");
+    console.log(`📡 Next execution per cron '${cronSpec}' in TZ ${timezone}`);
   }
 
   /**
@@ -869,7 +877,8 @@ DISCUSSION: [your call to discussion here]`;
         to: this.emailConfig.to,
         ccCount: this.emailConfig.cc.length,
       },
-      schedule: "8:30 AM IST daily",
+  schedule: process.env.INTEL_CRON || "30 6 * * *",
+  timezone: process.env.INTEL_TZ || "Asia/Kolkata",
       aiProvider: "Groq (FREE)",
       categories: Object.keys(this.categoryMapping),
       pipeline: [

@@ -29,6 +29,7 @@ import vendourRouter from "./routes/vendours.route.js";
 import workerRouter from "./routes/worker.route.js";
 
 import contactUsRoute from "./routes/contactUs.route.js";
+import intelRoute from "./routes/intel.route.js";
 
 app.use(express.json());
 app.use(cookieParser());
@@ -43,6 +44,12 @@ app.use("/api/site", siteRoute);
 app.use("/api/vendour", vendourRouter);
 app.use("/api/worker", workerRouter);
 app.use("/api/contactUs", contactUsRoute);
+app.use("/api/intel", intelRoute);
+
+// Load Developer Intelligence daily scheduler (runs in-process)
+// This import initializes and schedules the daily email job.
+// If you want to disable it, remove this line or guard with an env flag.
+import "./utils/AIContent.js";
 
 connectDb().then(() => {
   app.listen(PORT, () => {
