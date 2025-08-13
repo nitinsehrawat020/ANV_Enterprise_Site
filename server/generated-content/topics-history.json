@@ -1,0 +1,47 @@
+[
+  {
+    "topic": "Pino.js",
+    "category": "new_libraries_and_tools",
+    "firstSeenAt": "2025-08-13T12:14:20.202Z"
+  },
+  {
+    "topic": "RisingStack's Inspector",
+    "category": "new_libraries_and_tools",
+    "firstSeenAt": "2025-08-13T12:14:20.202Z"
+  },
+  {
+    "topic": "EJS-Builder",
+    "category": "new_libraries_and_tools",
+    "firstSeenAt": "2025-08-13T12:14:20.202Z"
+  },
+  {
+    "topic": "Serverless Architecture",
+    "category": "emerging_technologies_and_concepts",
+    "firstSeenAt": "2025-08-13T12:14:20.202Z"
+  },
+  {
+    "topic": "GraphQL APIs",
+    "category": "emerging_technologies_and_concepts",
+    "firstSeenAt": "2025-08-13T12:14:20.202Z"
+  },
+  {
+    "topic": "Kubernetes and Containerization",
+    "category": "emerging_technologies_and_concepts",
+    "firstSeenAt": "2025-08-13T12:14:20.202Z"
+  },
+  {
+    "topic": "Log4j CVE-2021-44228",
+    "category": "critical_issues_and_vulnerabilities",
+    "firstSeenAt": "2025-08-13T12:14:20.202Z"
+  },
+  {
+    "topic": "Istio's Pierre Faudre's talk at KubeCon 2021",
+    "category": "notable_tech_talks_and_articles",
+    "firstSeenAt": "2025-08-13T12:14:20.202Z"
+  },
+  {
+    "topic": "Ava Williams' article 'The Rise of Serverless Architecture in 2022'",
+    "category": "notable_tech_talks_and_articles",
+    "firstSeenAt": "2025-08-13T12:14:20.202Z"
+  }
+]
