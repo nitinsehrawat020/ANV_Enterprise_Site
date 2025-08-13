@@ -819,27 +819,34 @@ DISCUSSION: [your call to discussion here]`;
    * Default: every day at 6:30 AM IST
    */
   scheduleDaily() {
-    const enabled = (process.env.INTEL_ENABLE_SCHEDULER ?? 'true').toLowerCase() !== 'false';
+    const enabled =
+      (process.env.INTEL_ENABLE_SCHEDULER ?? "true").toLowerCase() !== "false";
     if (!enabled) {
-      console.log('⏸️  Intelligence scheduler disabled via INTEL_ENABLE_SCHEDULER=false');
+      console.log(
+        "⏸️  Intelligence scheduler disabled via INTEL_ENABLE_SCHEDULER=false"
+      );
       return;
     }
 
     // Prevent duplicate scheduling in the same process
     if (globalThis.__INTEL_SCHED_ACTIVE) {
-      console.log('ℹ️  Intelligence scheduler already active in this process');
+      console.log("ℹ️  Intelligence scheduler already active in this process");
       return;
     }
 
     const cronSpec = process.env.INTEL_CRON || "30 6 * * *"; // 06:30 daily
     const timezone = process.env.INTEL_TZ || "Asia/Kolkata";
 
-    console.log(`🕐 Scheduling Developer Intelligence Pipeline: '${cronSpec}' (${timezone})`);
+    console.log(
+      `🕐 Scheduling Developer Intelligence Pipeline: '${cronSpec}' (${timezone})`
+    );
 
     const job = cron.schedule(
       cronSpec,
       async () => {
-        console.log("⏰ Daily intelligence pipeline triggered by cron scheduler");
+        console.log(
+          "⏰ Daily intelligence pipeline triggered by cron scheduler"
+        );
         await this.runDailyPipeline();
       },
       { scheduled: true, timezone }
@@ -848,7 +855,9 @@ DISCUSSION: [your call to discussion here]`;
     globalThis.__INTEL_SCHED_ACTIVE = true;
     globalThis.__INTEL_SCHED_JOB = job;
 
-    console.log("✅ Daily scheduler activated - Developer Intelligence Engine ready");
+    console.log(
+      "✅ Daily scheduler activated - Developer Intelligence Engine ready"
+    );
     console.log(`📡 Next execution per cron '${cronSpec}' in TZ ${timezone}`);
   }
 
@@ -877,8 +886,8 @@ DISCUSSION: [your call to discussion here]`;
         to: this.emailConfig.to,
         ccCount: this.emailConfig.cc.length,
       },
-  schedule: process.env.INTEL_CRON || "30 6 * * *",
-  timezone: process.env.INTEL_TZ || "Asia/Kolkata",
+      schedule: process.env.INTEL_CRON || "30 6 * * *",
+      timezone: process.env.INTEL_TZ || "Asia/Kolkata",
       aiProvider: "Groq (FREE)",
       categories: Object.keys(this.categoryMapping),
       pipeline: [

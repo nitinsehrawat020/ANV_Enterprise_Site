@@ -1,10 +1,10 @@
-import { Router } from 'express';
-import intelligenceEngine from '../utils/AIContent.js';
+import { Router } from "express";
+import intelligenceEngine from "../utils/AIContent.js";
 
 const router = Router();
 
 // GET /api/intel/status – current scheduler and engine status
-router.get('/status', (req, res) => {
+router.get("/status", (req, res) => {
   try {
     const status = intelligenceEngine.getStatus();
     res.json({ ok: true, status });
@@ -14,7 +14,7 @@ router.get('/status', (req, res) => {
 });
 
 // POST /api/intel/run – manually trigger the pipeline now
-router.post('/run', async (req, res) => {
+router.post("/run", async (req, res) => {
   try {
     const result = await intelligenceEngine.runNow();
     res.json({ ok: true, result });
