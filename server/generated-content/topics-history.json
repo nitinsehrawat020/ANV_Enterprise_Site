@@ -1,47 +1,47 @@
 [
   {
-    "topic": "Pino.js",
+    "topic": "Ejs",
     "category": "new_libraries_and_tools",
-    "firstSeenAt": "2025-08-13T12:14:20.202Z"
+    "firstSeenAt": "2025-08-13T12:22:19.377Z"
   },
   {
-    "topic": "RisingStack's Inspector",
+    "topic": "TypeORM",
     "category": "new_libraries_and_tools",
-    "firstSeenAt": "2025-08-13T12:14:20.202Z"
+    "firstSeenAt": "2025-08-13T12:22:19.377Z"
   },
   {
-    "topic": "EJS-Builder",
+    "topic": "Pino",
     "category": "new_libraries_and_tools",
-    "firstSeenAt": "2025-08-13T12:14:20.202Z"
+    "firstSeenAt": "2025-08-13T12:22:19.377Z"
   },
   {
     "topic": "Serverless Architecture",
     "category": "emerging_technologies_and_concepts",
-    "firstSeenAt": "2025-08-13T12:14:20.202Z"
+    "firstSeenAt": "2025-08-13T12:22:19.377Z"
   },
   {
     "topic": "GraphQL APIs",
     "category": "emerging_technologies_and_concepts",
-    "firstSeenAt": "2025-08-13T12:14:20.202Z"
+    "firstSeenAt": "2025-08-13T12:22:19.377Z"
   },
   {
-    "topic": "Kubernetes and Containerization",
+    "topic": "Edge Computing",
     "category": "emerging_technologies_and_concepts",
-    "firstSeenAt": "2025-08-13T12:14:20.202Z"
+    "firstSeenAt": "2025-08-13T12:22:19.377Z"
   },
   {
-    "topic": "Log4j CVE-2021-44228",
+    "topic": "Prototype Pollution",
     "category": "critical_issues_and_vulnerabilities",
-    "firstSeenAt": "2025-08-13T12:14:20.202Z"
+    "firstSeenAt": "2025-08-13T12:22:19.377Z"
   },
   {
-    "topic": "Istio's Pierre Faudre's talk at KubeCon 2021",
+    "topic": "Building Scalable and Secure Node.js Applications with TypeScript",
     "category": "notable_tech_talks_and_articles",
-    "firstSeenAt": "2025-08-13T12:14:20.202Z"
+    "firstSeenAt": "2025-08-13T12:22:19.377Z"
   },
   {
-    "topic": "Ava Williams' article 'The Rise of Serverless Architecture in 2022'",
+    "topic": "The Future of Serverless: What's Next After Lambda and Azure Functions?",
     "category": "notable_tech_talks_and_articles",
-    "firstSeenAt": "2025-08-13T12:14:20.202Z"
+    "firstSeenAt": "2025-08-13T12:22:19.377Z"
   }
 ]
