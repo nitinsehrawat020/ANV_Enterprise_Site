@@ -1,5 +1,5 @@
-export const BASE_URL = "http://68.183.89.98/";
-// export const BASE_URL = " http://192.168.1.9:3000/";
+// export const BASE_URL = "http://localhost:3000";
+export const BASE_URL = " http://143.110.247.192:3000/";
 
 const SummaryApi = {
   user: {

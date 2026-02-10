@@ -1,4 +1,4 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import {
   forgotPasswordApi,
@@ -8,10 +8,10 @@ import {
   submitOtpApi,
 } from "../../services/userApi";
 import toast from "react-hot-toast";
-import { useQueryClient } from "@tanstack/react-query";
 
 export function useLogin() {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   const { mutate: login, isPending: isLoading } = useMutation({
     mutationFn: ({ email, password }) => loginApi({ email, password }),
@@ -19,6 +19,8 @@ export function useLogin() {
       localStorage.setItem("accessToken", res.data.data.accessToken);
       localStorage.setItem("refreshToken", res.data.data.refreshToken);
       toast.success(res.data.message);
+      // Invalidate and refetch user data so ProtectedRoute has updated auth state
+      queryClient.invalidateQueries({ queryKey: ["user"] });
       navigate("/");
     },
     onError: (error) => {
@@ -39,7 +41,7 @@ export function useForgotPassword() {
     },
     onError: (error) => {
       toast.error(
-        error?.response?.data?.message || error || "issue in userApi"
+        error?.response?.data?.message || error || "issue in userApi",
       );
     },
   });

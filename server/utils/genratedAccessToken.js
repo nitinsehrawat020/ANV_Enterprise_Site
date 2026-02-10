@@ -9,14 +9,14 @@ const generatedAccessToken = async (userId) => {
 
     if (!secret) {
       throw new Error(
-        "JWT_ACCESS_TOKEN_SECRET is not defined in environment variables"
+        "JWT_ACCESS_TOKEN_SECRET is not defined in environment variables",
       );
     }
 
     const token = jwt.sign(
       { userId },
       secret,
-      { expiresIn: "1d" } // Access token typically has shorter expiry
+      { expiresIn: "1h" }, // Access token typically has shorter expiry
     );
 
     return token;

@@ -35,7 +35,7 @@ export async function registerUserController(req, res) {
         success: false,
       });
     }
-    const salt = await bcrypt.genSalt(32);
+    const salt = await bcrypt.genSalt(16);
     const hashedPassword = await bcrypt.hash(password, salt);
     const payload = {
       firstName,
@@ -98,7 +98,7 @@ export async function verifyEmailController(req, res) {
 
     const updateUser = await UserModel.updateOne(
       { _id: code },
-      { verify_email: true }
+      { verify_email: true },
     );
   } catch (error) {
     return res
@@ -119,6 +119,7 @@ export async function loginUserController(req, res) {
       });
     }
     const user = await UserModel.findOne({ email });
+
     if (!user) {
       return res
         .status(400)
@@ -165,11 +166,13 @@ export async function loginUserController(req, res) {
       error: false,
       success: true,
       data: {
-        accessToken: accessToken,
-        refreshToken: refreshToken,
+        accessToken,
+        refreshToken,
       },
     });
   } catch (error) {
+    console.log(error);
+
     return res
       .status(500)
       .json({ message: error.message || error, error: true, success: false });
@@ -194,7 +197,7 @@ export async function logoutController(request, response) {
       { _id: userid },
       {
         refreshToken: "",
-      }
+      },
     );
 
     return response.json({
@@ -222,7 +225,7 @@ export async function uploadAvatarController(req, res) {
       { _id: userId },
       {
         avatar: upload?.secure_url,
-      }
+      },
     );
 
     return res.json({
@@ -252,7 +255,7 @@ export async function updateUserDetialsController(req, res) {
         ...(lastName && { lastName: lastName }),
         ...(phoneNumber && { mobileNumber: phoneNumber }),
         ...(address && { address: address }),
-      }
+      },
     );
 
     res.status(200).json({
@@ -437,7 +440,7 @@ export async function refreshToken(req, res) {
     }
     const verifyToken = jwt.verify(
       refreshToken,
-      process.env.JWT_REFRESH_TOKEN_SECRET
+      process.env.JWT_REFRESH_TOKEN_SECRET,
     );
 
     if (!verifyToken) {
@@ -563,7 +566,7 @@ export async function removeFromFav(req, res) {
 
         const update = await FavoriteModel.findOneAndUpdate(
           { userId: new mongoose.Types.ObjectId(userId) },
-          { designId: updatedDesignId }
+          { designId: updatedDesignId },
         );
 
         return res.status(200).json({
