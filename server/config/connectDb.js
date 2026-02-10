@@ -10,9 +10,7 @@ if (!process.env.MONGODB_URI) {
 
 async function connectDb() {
   try {
-    await mongoose.connect(
-      "mongodb+srv://nitinsehrawat:15nov2004@anv-enterprise.vogrlyt.mongodb.net/?appName=ANV-ENTERPRISE",
-    );
+    await mongoose.connect(process.env.MONGODB_URI);
     setupMonthlyAttendanceScheduler();
 
     console.log("CONNECTED");
